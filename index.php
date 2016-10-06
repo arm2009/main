@@ -157,7 +157,7 @@ body {background:url(Grph/bkg/pattern_texture_b.jpg);}
     </table></td>
   </tr>
 </table>
-<div style="background-image:url(Grph/bkg/pattern_texture_r.jpg);color:white;text-align:center;-webkit-box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.5);-moz-box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.5);box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.5);">
+<div style="background-image:url(Grph/bkg/pattern_texture_r.jpg);color:white;text-align:center;-webkit-box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.5);-moz-box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.5);box-shadow: inset 0px 0px 15px 0px rgba(0,0,0,0.5);" class="spec_block">
 	<div style="width:715px;display:inline-block;text-align:left;margin-top:3em;margin-bottom:3em;">
 <h1>АРМ 2009 - стал открытым!</h1>
 <p>
@@ -170,7 +170,7 @@ body {background:url(Grph/bkg/pattern_texture_b.jpg);}
 	Если вы являетесь экспертом или просто заинтересованы в оформлении материалов специальной оценки условий труда, то с 1 октября 2017 года - Вы можете использовать АРМ 2009 совершенно бесплатно и без каких-либо ограничений.
 </p>
 <p>
-	Если вы разработчик, то Вы можете присоединится к работе над проектом на <a href="#">GitHub</a>!
+	Если вы разработчик, то Вы можете присоединится к работе над проектом на <a href="https://github.com/arm2009/main" target="_blank">GitHub</a>!
 </p>
 <hr style="background-color:#e68c74;">
 <p>

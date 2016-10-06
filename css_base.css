@@ -17,6 +17,15 @@ body,td,th {
 	color: #0099CC;
 }
 
+/*Спец блок*/
+.spec_block a, .spec_block a:active, .spec_block a:visited
+{
+	color: #fff;
+}
+.spec_block a:hover
+{
+	color: #ccc;
+}
 /*Ссылки*/
 a:link {
 	color: #0099CC;
