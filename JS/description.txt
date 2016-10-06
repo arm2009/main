@@ -1,0 +1,2 @@
+InputValidate.js - Библиотека проверки данных в полях ввода
+jquery-ui-1.10.4.custom.min.js - JSQuery UI

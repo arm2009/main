@@ -1,0 +1,10 @@
+*.xml
+*.chb
+*.sql
+addemail.php
+DownloadDoc/*
+LowLevel/*
+dbConnect.php
+test.php
+testlist.php
+.ftpconfig

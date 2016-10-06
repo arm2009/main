@@ -1,0 +1,1 @@
+<table width="50%" height="95%" border="0" align="center" cellpadding="0" cellspacing="0"><tr><td align="center" valign="middle"><img src="Grph/sLogo_bg.png" width="400" height="80" /></tr></table>
