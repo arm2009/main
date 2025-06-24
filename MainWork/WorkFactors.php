@@ -17,7 +17,7 @@
       $iMaterialTime = 0;
 			$sql = "SELECT fWorkDay FROM Arm_workplace WHERE id =".$idRm.";";
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-			while($vRow = mysql_fetch_assoc($vResult))
+			while($vRow = mysqli_fetch_assoc($vResult))
 			{
 			    $iTotalTime = $vRow[fWorkDay];
 			}
@@ -25,7 +25,7 @@
             //З
 			$sql2 = "SELECT SUM(sTime) as sTime FROM Arm_rmPointsRm JOIN Arm_rmPoints ON Arm_rmPoints.id = Arm_rmPointsRm.idPoint WHERE idRm =".$idRm." AND Arm_rmPoints.iType = 0;";
 			$vResult2 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql2);
-			while($vRow2 = mysql_fetch_assoc($vResult2))
+			while($vRow2 = mysqli_fetch_assoc($vResult2))
 			{
 				if ($vRow2[sTime] != '')
 				{
@@ -36,7 +36,7 @@
             //О
 			$sql2 = "SELECT SUM(sTime) as sTime FROM Arm_rmPointsRm JOIN Arm_rmPoints ON Arm_rmPoints.id = Arm_rmPointsRm.idPoint WHERE idRm =".$idRm." AND Arm_rmPoints.iType = 1;";
 			$vResult2 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql2);
-			while($vRow2 = mysql_fetch_assoc($vResult2))
+			while($vRow2 = mysqli_fetch_assoc($vResult2))
 			{
 				if ($vRow2[sTime] != '')
 				{
@@ -47,7 +47,7 @@
             //М
 			$sql2 = "SELECT SUM(sTime) as sTime FROM Arm_rmPointsRm JOIN Arm_rmPoints ON Arm_rmPoints.id = Arm_rmPointsRm.idPoint WHERE idRm =".$idRm." AND Arm_rmPoints.iType = 2;";
 			$vResult2 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql2);
-			while($vRow2 = mysql_fetch_assoc($vResult2))
+			while($vRow2 = mysqli_fetch_assoc($vResult2))
 			{
 				if ($vRow2[sTime] != '')
 				{
@@ -85,7 +85,7 @@
 		{
 			$aList = null;
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT Arm_rmPoints.id as id, Arm_rmPoints.sName as sName, Arm_rmPointsRm.sTime as sTime, Arm_rmPoints.iType FROM Arm_rmPoints, Arm_rmPointsRm WHERE Arm_rmPoints.id = Arm_rmPointsRm.idPoint AND Arm_rmPointsRm.idRm = '.$idRm.' ORDER BY Arm_rmPoints.iType, Arm_rmPoints.sName;');
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				$aList[] = array($vRow['id'], $vRow['idRm'],$vRow['sName'], $vRow['sTime'], $vRow['iType']);
 			}
@@ -97,9 +97,10 @@
 		{
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT Arm_rmPoints.id as id, Arm_rmPoints.sName as sName, Arm_rmPointsRm.sTime as sTime, Arm_rmPoints.iType as iType FROM Arm_rmPoints, Arm_rmPointsRm WHERE Arm_rmPoints.id = Arm_rmPointsRm.idPoint AND Arm_rmPointsRm.idRm = '.$idRm.' AND Arm_rmPoints.id = '.$idPoint.' ORDER BY `Arm_rmPoints`.`sName`;');
 			$result = array();
-			$result['sName'] = mysql_result($vResult, 0,1);
-			$result['sTime'] = mysql_result($vResult, 0,2);
-			$result['iType'] = mysql_result($vResult, 0,3);
+			$res = MYSQLI_FETCH_ASSOC($vResult);
+			$result['sName'] = $res[array_keys($res)[1]];
+			$result['sTime'] = $res[array_keys($res)[2]];
+			$result['iType'] = $res[array_keys($res)[3]];
 			return $result;
 		}
 
@@ -118,7 +119,7 @@
 		{
 			$sql = "SELECT `idPoint` FROM `Arm_rmFactors` WHERE `id` = ".$idFactor.";";
 			$idPoint = DbConnect::GetSqlCell($sql);
-			$sql = "UPDATE `kctrud_arm2009`.`Arm_rmPoints` SET `sLightPolygone` = '".$sLightPolygone."', `sLightHeight` = '".$sLightHeight."', `sLightDark` = '".$sLightDark."', `sLightType` = '".$sLightType."' WHERE `Arm_rmPoints`.`id` = ".$idPoint.";";
+			$sql = "UPDATE `Arm_rmPoints` SET `sLightPolygone` = '".$sLightPolygone."', `sLightHeight` = '".$sLightHeight."', `sLightDark` = '".$sLightDark."', `sLightType` = '".$sLightType."' WHERE `Arm_rmPoints`.`id` = ".$idPoint.";";
 			UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
 		}
 
@@ -148,7 +149,7 @@
 			$tmpSetFact = str_replace("'`", "', `", $tmpSetFact);
 			if(strlen(trim($tmpSetFact)) > 0)
 			{
-				$sql = "UPDATE `kctrud_arm2009`.`Arm_rmFactorsPdu` SET ".$tmpSetFact." WHERE `Arm_rmFactorsPdu`.`idFactor` = ".$inIdFactor." AND `Arm_rmFactorsPdu`.`idRm` = ".$inIdRm.";";
+				$sql = "UPDATE `Arm_rmFactorsPdu` SET ".$tmpSetFact." WHERE `Arm_rmFactorsPdu`.`idFactor` = ".$inIdFactor." AND `Arm_rmFactorsPdu`.`idRm` = ".$inIdRm.";";
 				UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
 			}
 
@@ -156,7 +157,7 @@
 			$sql = "SELECT `idRm` FROM `Arm_rmFactorsPdu` WHERE `idFactor` = ".$inIdFactor.";";
 			$vReturn = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
 			//Перерасчет оценок
-			while ($vRow = mysql_fetch_assoc($vReturn))
+			while ($vRow = mysqli_fetch_assoc($vReturn))
 			{
 				WorkFactors::SetAssetRm($vRow[idRm]);
 			}
@@ -169,21 +170,22 @@
 		{
 			//Проверка на существование этой точки
 			$vReturn1 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT Arm_rmPoints.id, Arm_rmPoints.sName FROM Arm_rmPoints, Arm_rmPointsRm, Arm_workplace WHERE Arm_workplace.id = Arm_rmPointsRm.idRm AND Arm_rmPoints.id = Arm_rmPointsRm.idPoint AND Arm_rmPoints.sName = "'.$sName.'" AND Arm_workplace.idGroup = '.$idGroup.';');
-			if (mysql_num_rows($vReturn1) > 0)
+			$res = MYSQLI_FETCH_ASSOC($vReturn1);
+			if (mysqli_num_rows($vReturn1) > 0)
 			{
 				//Если точка существует
-				$idPoint = mysql_result($vReturn1, 0, 0);
+				$idPoint = $res[array_keys($res)[0]];
 			}
 			else
 			{
 				//Если точки не существует, создаем
-				UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_rmPoints (sName, iType, sLightPolygone, sLightHeight, sLightDark, sLightType) VALUES ("'.$sName.'", '.$iType.', "Г-0,8", "2,5", "0", "ЛЛ");');
-				$idPoint = mysql_insert_id();
+				$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_rmPoints (sName, iType, sLightPolygone, sLightHeight, sLightDark, sLightType) VALUES ("'.$sName.'", '.$iType.', "Г-0,8", "2,5", "0", "ЛЛ");');
+				$idPoint = $vResult;
 			}
 
 			//Проверка на существование этой точки для текущего рабочего места
 			$vReturn1 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT id FROM Arm_rmPointsRm WHERE idRm = '.$idRm.' AND idPoint = "'.$idPoint.'";');
-			if (mysql_num_rows($vReturn1) > 0)
+			if (mysqli_num_rows($vReturn1) > 0)
 			{
 				//Если в этом рабочем месте точка существует, возвращаем ошибку
 				return -1;
@@ -196,7 +198,7 @@
 				//Если у этой точки уже есть факторы нужно проставить дефолтные значения норматива для этого рабочего места
 				$sql = "SELECT `id` FROM `Arm_rmFactors` WHERE `idPoint` = ".$idPoint.";";
 				$vReturn = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-				while ($vRow = mysql_fetch_assoc($vReturn))
+				while ($vRow = mysqli_fetch_assoc($vReturn))
 				{
 					WorkFactors::SetDefaultAsset($idRm, $vRow[id]);
 				}
@@ -215,7 +217,7 @@
 				//Удаление нормативов для текущего места
 				$sql = "SELECT `id` FROM `Arm_rmFactors` WHERE `idPoint` = ".$idPoint.";";
 				$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-				while ($vRow = mysql_fetch_assoc($vResult))
+				while ($vRow = mysqli_fetch_assoc($vResult))
 				{
 					$sql = "DELETE FROM `Arm_rmFactorsPdu` WHERE `idRm` = ".$idRm." AND `idFactor` = ".$vRow[id].";";
 					UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
@@ -223,11 +225,11 @@
 
 				//Проверка на полное удаление точки измерений и полное удаление точки измерений
 				$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT id FROM Arm_rmPointsRm WHERE idPoint = '.$idPoint.';');
-				if (mysql_num_rows($vResult) == 0)
+				if (mysqli_num_rows($vResult) == 0)
 				{
 					$sql = "SELECT `id` FROM `Arm_rmFactors` WHERE `idPoint` = ".$idPoint.";";
 					$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-					while ($vRow = mysql_fetch_assoc($vResult))
+					while ($vRow = mysqli_fetch_assoc($vResult))
 					{
 						WorkFactors::DelFactor($vRow[id]);
 					}
@@ -254,10 +256,19 @@
 		{
 			$aList = null;
 
-			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT `Arm_rmFactors`.*, `Arm_rmFactorsPdu`.`fPdu1`, `Arm_rmFactorsPdu`.`fPdu2`, `Arm_rmFactorsPdu`.`fPdu3`, `Arm_rmFactorsPdu`.`fPdu4`, `Arm_rmFactorsPdu`.`fPdu5`, `Arm_rmFactorsPdu`.`iAsset`, `Arm_rmFactorsPdu`.`sAddonAsset` FROM `Arm_rmFactors` LEFT JOIN `Arm_rmFactorsPdu` ON (`Arm_rmFactors`.`id` = `Arm_rmFactorsPdu`.`idFactor` AND `Arm_rmFactorsPdu`.`idRm` = '.$idRm.') WHERE `idPoint` = '.$idPoint.' ORDER BY `Arm_rmFactors`.`idFactorGroup`, `Arm_rmFactors`.`idFactor` ;');
+			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT Nd_gn1313.sClass, Nd_gn1313.sFeat, `Arm_rmFactors`.*, `Arm_rmFactorsPdu`.`fPdu1`, `Arm_rmFactorsPdu`.`fPdu2`, `Arm_rmFactorsPdu`.`fPdu3`, `Arm_rmFactorsPdu`.`fPdu4`, `Arm_rmFactorsPdu`.`fPdu5`, `Arm_rmFactorsPdu`.`iAsset`, `Arm_rmFactorsPdu`.`sAddonAsset` FROM `Arm_rmFactors` 
+				LEFT JOIN `Arm_rmFactorsPdu` ON (`Arm_rmFactors`.`id` = `Arm_rmFactorsPdu`.`idFactor` AND `Arm_rmFactorsPdu`.`idRm` = '.$idRm.')
+				LEFT JOIN Nd_gn1313 ON (Nd_gn1313.id = Arm_rmFactors.idFactor)
+				WHERE `idPoint` = '.$idPoint.' ORDER BY `Arm_rmFactors`.`idFactorGroup`, `Arm_rmFactors`.`idFactor` ;');
 
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
+				
+				//Название с уточнением для фиброгенов
+				if ($vRow['idFactorGroup'] == 8)
+				{
+					$vRow['sName'] = $vRow['sName'].' (класс опасности '.$vRow['sClass'].', '.$vRow['sFeat'].')';
+				}
 				//Формирование листа для передачи
 				//$vRow['id']																						- 0
 				//$vRow['idPoint']																			- 1
@@ -280,7 +291,26 @@
 				//$vRow['iAsset']																				- 18
 				//$vRow['dtControl']																		- 19
 				//if($bFullData)
-				$aList[] = array($vRow['id'], $vRow['idPoint'],$vRow['sName'],$vRow['var1'],StringWork::StrToDateFormatLite($vRow['dtControl']),$vRow['fPdu1'],StringWork::iToClassNameLite($vRow['iAsset']), $vRow['var2'],$vRow['var3'],$vRow['var4'],$vRow['var5'],$vRow['fPdu2'],$vRow['fPdu3'],$vRow['fPdu4'],$vRow['fPdu5'],$vRow[idFactor],$vRow[idFactorGroup],$vRow[sAddonAsset],$vRow['iAsset'],$vRow['dtControl']);
+				$aList[] = array(
+					$vRow['id'], 
+					$vRow['idPoint'],
+					$vRow['sName'],
+					$vRow['var1'],
+					StringWork::StrToDateFormatLite($vRow['dtControl']),
+					$vRow['fPdu1'],
+					StringWork::iToClassNameLite($vRow['iAsset']), 
+					$vRow['var2'],$vRow['var3'],
+					$vRow['var4'],
+					$vRow['var5'],
+					$vRow['fPdu2'],
+					$vRow['fPdu3'],
+					$vRow['fPdu4'],
+					$vRow['fPdu5'],
+					$vRow[idFactor],
+					$vRow[idFactorGroup],
+					$vRow[sAddonAsset],
+					$vRow['iAsset'],
+					$vRow['dtControl']);
 			}
 			return $aList;
 		}
@@ -293,12 +323,34 @@
 			`Arm_rmFactorsPdu`.`iAsset`, `Arm_rmFactorsPdu`.`sAddonAsset`, `Arm_rmPoints`.`sLightPolygone`,
 			`Arm_rmPoints`.`sLightHeight`, `Arm_rmPoints`.`sLightDark`, `Arm_rmPoints`.`sLightType`
 			FROM `Arm_rmFactors` LEFT JOIN `Arm_rmFactorsPdu` ON (`Arm_rmFactors`.`id` = `Arm_rmFactorsPdu`.`idFactor` AND `Arm_rmFactorsPdu`.`idRm` = '.$idRm.') LEFT JOIN `Arm_rmPoints` ON (`Arm_rmFactors`.`idPoint` = `Arm_rmPoints`.`id`) WHERE `Arm_rmFactors`.`id` = '.$idFactor.';');
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				//Формирование листа для передачи
-				$aList = array($vRow['id'], $vRow['idPoint'],$vRow['sName'],$vRow['var1'],
-				StringWork::StrToDateFormatLite($vRow['dtControl']),$vRow['fPdu1'],
-				StringWork::iToClassNameLite($vRow['iAsset']), $vRow['var2'],$vRow['var3'],$vRow['var4'],$vRow['var5'],$vRow['fPdu2'],$vRow['fPdu3'],$vRow['fPdu4'],$vRow['fPdu5'],$vRow[idFactor],$vRow[idFactorGroup],$vRow[sAddonAsset],$vRow[sLightPolygone],$vRow[sLightHeight],$vRow[sLightDark],$vRow[sLightType]);//18,19,20,21
+				$aList = array(
+					$vRow['id'], 
+				$vRow['idPoint'],
+				$vRow['sName'],
+				$vRow['var1'],
+				
+				StringWork::StrToDateFormatLite($vRow['dtControl']),
+				$vRow['fPdu1'],
+				
+				StringWork::iToClassNameLite($vRow['iAsset']), 
+				$vRow['var2'],
+				$vRow['var3'],
+				$vRow['var4'],
+				$vRow['var5'],
+				$vRow['fPdu2'],
+				$vRow['fPdu3'],
+				$vRow['fPdu4'],
+				$vRow['fPdu5'],
+				$vRow[idFactor],
+				$vRow[idFactorGroup],
+				$vRow[sAddonAsset],
+				$vRow[sLightPolygone],
+				$vRow[sLightHeight],
+				$vRow[sLightDark],
+				$vRow[sLightType]);//18,19,20,21
 			}
 			return $aList;
 		}
@@ -309,14 +361,16 @@
 			if ($sType == 'class')
 			{
 				$vResult1 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT sName, idParent FROM Nd_factors WHERE id ='.$sIdFactor.';');
-				$idGroup = mysql_result($vResult1, 0, 1);
+				$res = MYSQLI_FETCH_ASSOC($vResult1);
+				$idGroup = $res[array_keys($res)[1]];
 				$sPdu1 = '0.0';
 			}
 			else
 			{
 				$vResult1 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT sName, sFeat,sPdk, sFeatCode FROM Nd_gn1313 WHERE id ='.$sIdFactor.';');
-				$sPdu1 = mysql_result($vResult1, 0, 2);
-				$sFeat = mysql_result($vResult1, 0, 1);
+				$res = MYSQLI_FETCH_ASSOC($vResult1);
+				$sPdu1 = $res[array_keys($res)[2]];
+				$sFeat = $res[array_keys($res)[1]];
 				//echo ($sFeat.':'.strpos($sFeat,'Ф'));
 				if (strpos($sFeat,"Ф") > -1 || strpos($sFeat,"ф") > -1)
 				{
@@ -327,18 +381,18 @@
 					$idGroup = 31;
 				}
 			}
-
-			$sName = mysql_result($vResult1, 0, 0);
+			
+			$sName = $res[array_keys($res)[0]];
 			if($sIdFactor != '13')
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_rmFactors (idPoint, sName, idFactor, idFactorGroup, dtControl) VALUES ('.$idPoint.',"'.$sName.'", '.$sIdFactor.','.$idGroup.', NOW());');
 			else
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_rmFactors (idPoint, sName, idFactor, idFactorGroup, dtControl, var5) VALUES ('.$idPoint.',"'.$sName.'", '.$sIdFactor.','.$idGroup.', NOW(), 2);');
-			$iFactorsId = mysql_insert_id();
+			$iFactorsId = $vResult;
 
 			//Проставление дефолтных нормативов для всех рабочих мест где появилась эта точка
 			$sql = "SELECT `idRm` FROM `Arm_rmPointsRm` WHERE `idPoint` = ".$idPoint.";";
 			$vReturn = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-			while ($vRow = mysql_fetch_assoc($vReturn))
+			while ($vRow = mysqli_fetch_assoc($vReturn))
 			{
 				WorkFactors::SetDefaultAsset($vRow[idRm], $iFactorsId);
 				WorkFactors::SetAssetRm($vRow[idRm]);
@@ -360,7 +414,7 @@
 			UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'DELETE FROM Arm_rmFactorsPdu WHERE `idFactor` = '.$id.';');
 
 			//Перерасчет оценок
-			while ($vRow = mysql_fetch_assoc($vReturn))
+			while ($vRow = mysqli_fetch_assoc($vReturn))
 			{
 				WorkFactors::SetAssetRm($vRow[idRm]);
 			}
@@ -375,8 +429,9 @@
 			//Получение типа фактора
 			$sql = "SELECT `idFactor`, `idFactorGroup` FROM `Arm_rmFactors` WHERE `id` = ".$idFactors.";";
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-			$idFactor = mysql_result($vResult, 0, 0);
-			$idFactorGroup = mysql_result($vResult, 0, 1);
+			$res = MYSQLI_FETCH_ASSOC($vResult);
+			$idFactor = $res[array_keys($res)[0]];
+			$idFactorGroup = $res[array_keys($res)[1]];
 
 			//Подбор норматива
 			switch ($idFactorGroup)
@@ -468,7 +523,8 @@
 		{
 			$sql = "SELECT `iAsset` FROM `Arm_rmFactorsPdu` WHERE `idRm` = ".$idRm." AND `idFactor` = ".$idFactors.";";
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-			$iAsset = mysql_result($vResult, 0, 0);
+			$res = MYSQLI_FETCH_ASSOC($vResult);
+			$iAsset = $res[array_keys($res)[0]];
 			if($isReturnString)
 			return StringWork::iToClassNameLite($iAsset);
 			else
@@ -478,7 +534,7 @@
 		public static function SetAllAsset($inIdGroup)
 		{
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT id FROM Arm_workplace WHERE idGroup = '.$inIdGroup.' AND idParent <> -1 ORDER BY iNumber DESC;');
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				WorkFactors::SetAssetRm($vRow[id]);
 			}
@@ -545,7 +601,7 @@
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
 			$dSuspNoise = 0;
 			//Перебор выборки
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				//Перебор по факторам
 				if($vRow[idFactorGroup] != 8 && $vRow[idFactorGroup] != 31)
@@ -1189,7 +1245,7 @@
 			if($iA6 > 1) {$arrAssets[iATotal] = max($arrAssets[iATotal], 7);}
 
 			//Сохранение оценок
-			$sql = "UPDATE `kctrud_arm2009`.`Arm_workplace` SET `iAChem` = '".$arrAssets[iAChem]."',
+			$sql = "UPDATE `Arm_workplace` SET `iAChem` = '".$arrAssets[iAChem]."',
 			`iABio` = '".$arrAssets[iABio]."', `iAAPFD` = '".$arrAssets[iAAPFD]."',
 			`iANoise` = '".$arrAssets[iANoise]."', `iAInfraNoise` = '".$arrAssets[iAInfraNoise]."',
 			`iAUltraNoise` = '".$arrAssets[iAUltraNoise]."', `iAVibroO` = '".$arrAssets[iAVibroO]."',
@@ -1232,7 +1288,7 @@
 		//АПФД - Высокофиброгенные
 		public static function GetFactorAsset_APFD_Hi($fVar, $fVar1, $fPdu, $fPdu1)
 		{
-			if($fPdu > -1)
+			if($fPdu > -1 && $fPdu != 0)
 			{
 				$iAsset = 2;
 				$tmpLevel = $fVar / $fPdu;
@@ -1241,7 +1297,7 @@
 				if($tmpLevel > 4 && $tmpLevel <= 10){$iAsset = 5;}
 				if($tmpLevel > 10){$iAsset = 6;}
 			}
-			if($fPdu1 > -1)
+			if($fPdu1 > -1 && $fPdu1 != 0)
 			{
 				$iAsset1 = 2;
 				$tmpLevel = $fVar1 / $fPdu1;
@@ -2061,8 +2117,15 @@ function SrLight ($aLightTime, $aLightMaxAsset, $fLongDay = 8)
 }
 
 function Summ_Add_Chem($sFeatCode, $sVar1, $sVar2, $sPdu1, $sPdu2, $aChemMr, $aChemSs)
-{
-	(float)$vOtnMr = $sVar1 / $sPdu1;
+{	
+	if ($sPdu1 != 0)
+	{
+		(float)$vOtnMr = $sVar1 / $sPdu1;
+	}
+	else
+	{
+		(float)$vOtnMr = 0;
+	}
 //	DbConnect::Log($sFeatCode,'Debug');
 	if (strpos($sFeatCode, 'a') > -1 && $sPdu1 != -1) {array_push($aChemMr[0], $vOtnMr);}
 	if (strpos($sFeatCode, 'b') > -1 && $sPdu1 != -1) {array_push($aChemMr[1], $vOtnMr);}
@@ -2082,7 +2145,14 @@ function Summ_Add_Chem($sFeatCode, $sVar1, $sVar2, $sPdu1, $sPdu2, $aChemMr, $aC
 	if (strpos($sFeatCode, 'p') > -1 && $sPdu1 != -1) {array_push($aChemMr[15], $vOtnMr);}
 	if (strpos($sFeatCode, 'q') > -1 && $sPdu1 != -1) {array_push($aChemMr[16], $vOtnMr);}
 
-	(float)$vOtnSs = $sVar2 / $sPdu2;
+	if ($sPdu2 != 0)
+	{
+		(float)$vOtnSs = $sVar2 / $sPdu2;
+	}
+	else
+	{
+		(float)$vOtnSs = 0;	
+	}
 	if (strpos($sFeatCode, 'a') > -1 && $sPdu2 != -1) {array_push($aChemSs[0], $vOtnSs);}
 	if (strpos($sFeatCode, 'b') > -1 && $sPdu2 != -1) {array_push($aChemSs[1], $vOtnSs);}
 	if (strpos($sFeatCode, 'c') > -1 && $sPdu2 != -1) {array_push($aChemSs[2], $vOtnSs);}

@@ -5,7 +5,7 @@
 	include_once('LowLevel/emailSend.php');
 
 	UserControl::isUserValidExit();
-	
+
 	//Вывод информации о выбранных параметрах
 	if(isset($_POST[RadioGroup1]))
 	{
@@ -35,19 +35,19 @@
 				$sTarif .= 'Сетевой тариф<br /><span class="comment">Совместная работа без ограничений</span>';
 				$iSum = round($_POST[RadioGroup2] * 4500 - UserTariff::GetTariffMoneys(),0);
 				//UserTariff::ChangeTariffData($_POST[RadioGroup2], 4500, $_POST[RadioGroup1], 100);
-			break;									
+			break;
 		}
-		
+
 		switch($_POST[RadioGroup2])
 		{
 			case 1:
 				$sTime .= $_POST[RadioGroup2].' месяц';
 				$sSum = $iSum .' рублей';
-			break;			
+			break;
 			case 3:
 				$sTime .= $_POST[RadioGroup2].' месяца';
 				$sSum = $iSum .' рублей';
-			break;			
+			break;
 			case 6:
 				$sTime .= $_POST[RadioGroup2].' месяцев';
 				$sSum = $iSum .' рублей';
@@ -56,10 +56,10 @@
 				$sTime .= '1 год';
 				$sSum = $iSum * 0.95 .' рублей';
 				$iSum = $iSum * 0.95;
-			break;									
+			break;
 		}
-		
-		
+
+
 		if($iSum > 0)
 		{
 			//Оплата
@@ -68,7 +68,7 @@
 				//Банковский перевод
 				$style1 = ' style="display:none;"';
 				$style3 = ' style="display:none;"';
-				
+
 				//Сохранение информации о платеже
 				$_POST[sOrgName] = DbConnect::ToBaseStr($_POST[sOrgName]);
 				$_POST[sAdress] = DbConnect::ToBaseStr($_POST[sAdress]);
@@ -79,7 +79,7 @@
 				$sql = "INSERT INTO `kctrud_arm2009`.`Arm_PayOut` (`iNum`, `dtStamp`, `iState`, `sTarif`, `iMonth`, `sOrgName`, `sAdress`, `sInn`, `sKpp`, `sBank`, `sBik`, `iSum`, `iUserId`)
 				VALUES (NULL, NOW(), '0', '".$_POST[RadioGroup1]."', '".$_POST[RadioGroup2]."', '".$_POST[sOrgName]."', '".$_POST[sAdress]."', '".$_POST[sInn]."', '".$_POST[sKpp]."', '".$_POST[sBank]."', '".$_POST[sBik]."', ".round($iSum).", ".UserControl::GetUserLoginId().");";
 				$vResult = DbConnect::GetSqlQuery($sql);
-				$iInsertedKey = mysql_insert_id();
+				$iInsertedKey = $vResult;
 				DbConnect::Log("Создан счёт № ".$iInsertedKey, "pay_bank_create");
 				$iInsertedKeyCrypt = ($iInsertedKey*1255);
 			}
@@ -87,7 +87,7 @@
 			{
 				//Пластиковые карты и платежные системы
 				$style2 = ' style="display:none;"';
-				$style3 = ' style="display:none;"';	
+				$style3 = ' style="display:none;"';
 			}
 		}
 		else
@@ -95,7 +95,7 @@
 			//Установка бесплатного тарифа
 			$style1 = ' style="display:none;"';
 			$style2 = ' style="display:none;"';
-			
+
 				//Сохранение информации о платеже
 				$iSum = $iSum + UserTariff::GetTariffMoneys();
 				$_POST[sOrgName] = DbConnect::ToBaseStr($_POST[sOrgName]);
@@ -107,11 +107,11 @@
 				$sql = "INSERT INTO `kctrud_arm2009`.`Arm_PayOut` (`iNum`, `dtStamp`, `iState`, `sTarif`, `iMonth`, `sOrgName`, `sAdress`, `sInn`, `sKpp`, `sBank`, `sBik`, `iSum`, `iUserId`)
 				VALUES (NULL, NOW(), '1', '".$_POST[RadioGroup1]."', '".$_POST[RadioGroup2]."', '".$_POST[sOrgName]."', '".$_POST[sAdress]."', '".$_POST[sInn]."', '".$_POST[sKpp]."', '".$_POST[sBank]."', '".$_POST[sBik]."', ".round($iSum).", ".UserControl::GetUserLoginId().");";
 				$vResult = DbConnect::GetSqlQuery($sql);
-				$iInsertedKey = mysql_insert_id();
+				$iInsertedKey = $vResult;
 				DbConnect::Log("Создана заявка на изменение тарифа № ".$iInsertedKey, "pay_bank_create");
 		}
 	}
-	
+
 	Email::CommunicationNewmail('mail@kctrud.ru', 'АРМ 2009 | Выставлен новый счет', 'Здравствуйте!<br /><br />В системме АРМ 2009 выставлен новый счет на оплату.<br /><br />Пожалуйста, проигнорируйте данное письмо, если оно попало к Вам по ошибке.');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -136,7 +136,7 @@
         </tr>
         <tr>
 			<td class="nowBlock">
-            
+
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td><? echo($sTarif); ?></td>
@@ -148,7 +148,7 @@
               <td>&nbsp;</td>
             </tr>
             <tr>
-              <td>Вам выставлен счет с номером <? if(isset($iInsertedKey) && !empty($iInsertedKey))echo($iInsertedKey); ?>/АРМ от 25.02.2014.<br />                
+              <td>Вам выставлен счет с номером <? if(isset($iInsertedKey) && !empty($iInsertedKey))echo($iInsertedKey); ?>/АРМ от 25.02.2014.<br />
                 Оригинал счета будет выслан по почте на указанный адрес.<br />
                 Вы можете распечатать копию счета в формате PDF.<br />
                 <br />
@@ -165,21 +165,21 @@
               <td>&nbsp;</td>
             </tr>
             <td><input name="button" type="submit" class="input_button" id="button" value="Распечатать копию счета в формате PDF" onclick="gotourl();"/></td>
-            </tr>        
+            </tr>
       </table>
     </form>
-    
+
     <table width="715" border="0" align="center" cellpadding="0" cellspacing="0" class="blockmargin" <? echo($style1); ?>>
         <tr>
           <td><h1>К оплате <? echo($sSum); ?></h1></td>
         </tr>
         <tr>
 			<td class="nowBlock">
-  
-  
-<? //Таблица текста для платежа по карте ?>    
-  
-<form action="https://money.yandex.ru/eshop.xml" method="post"> 
+
+
+<? //Таблица текста для платежа по карте ?>
+
+<form action="https://money.yandex.ru/eshop.xml" method="post">
 
 <!-- Обязательные поля -->
 <input name="shopId" value="" type="hidden"/>
@@ -222,11 +222,11 @@
               <td>
             <input name="button" type="submit" class="input_button" id="button" value="Перейти к оплате" onclick="gotourl();"/>
               </td>
-            </tr>        
+            </tr>
       </table>
 </form>
-      
-      
+
+
     <table width="715" border="0" align="center" cellpadding="0" cellspacing="0" class="blockmargin" <? echo($style3); ?>>
       <tr>
         <td><h1>Бесплатно</h1></td>
@@ -257,15 +257,15 @@
       <tr>
         <td><input name="button2" type="submit" class="input_button" id="button2" value="Вернутся на главную страницу" onclick="gotourl();"/></td>
       </tr>
-    </table>   
-    
+    </table>
+
     </td>
   </tr>
 </table>
 
 
 
-<? 
+<?
 /*Установка нижнего фрейма*/
 include('Frame/frame_Bottom.php');
 ?>
@@ -273,7 +273,7 @@ include('Frame/frame_Bottom.php');
 /*Место для скриптов*/
 function gotourl()
 {
-	setTimeout(function(){window.location = 'index.php';}, 1000);
+	setTimeout(function(){window.location = 'work_Space.php';}, 1000);
 }
 </script>
 </body>

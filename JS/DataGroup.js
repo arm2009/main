@@ -966,6 +966,11 @@ function ClickFactor(inId)
 						switch (data[16])
 						{
 							case '8':
+								var aPoupupFields = ['fMM','fSS', 'fPdkMM', 'fPdkSS', 'dControl'];
+								var aPoupupFieldsScribe = ['Максимально разовая концентрация','Среднесменная концентрация', 'ПКД максимально разовая', 'ПКД среднесменная', 'Дата проведения измерения'];
+								var aPoupupFieldsDefoultValue = [data[3],data[7],data[5],data[11],data[4]];
+								var s = 'EditFactor('+inId+','+idRM+',$(\'#dControl\').val(),$(\'#fMM\').val(),$(\'#fPdkMM\').val(),$(\'#fSS\').val(),$(\'#fPdkSS\').val(),-1,-1,-1,-1,-1,-1)';
+							break;
 							case '31':
 								var aPoupupFields = ['fMM','fSS','dControl'];
 								var aPoupupFieldsScribe = ['Максимально разовая концентрация','Среднесменная концентрация','Дата проведения измерения'];

@@ -58,9 +58,7 @@ function OnChangeNum()
 
 	if (iNumWomen > iNum) {$('#sCountWoman').val(iNum.toString());}
 	if (iNum18 > iNum) {$('#sCountYouth').val(iNum.toString());}
-	if (iNumDisabled > iNum) {$('#sCountDisabled').val(iNum.toString());}
-	
-	
+	if (iNumDisabled > iNum) {$('#sCountDisabled').val(iNum.toString());}	
 }
 
 function OnChangeWorkDay()

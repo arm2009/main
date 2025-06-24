@@ -23,9 +23,9 @@
 		//Получение новых значений
 		$sql = "SELECT `tmp_Etks_Razd`.* FROM `tmp_Etks_Razd` WHERE `tmp_Etks_Razd`.`id` = ".$_GET[num].";";
 		$result = DbConnect::GetSqlQuery($sql);
-		if (mysql_num_rows($result) > 0)
+		if (mysqli_num_rows($result) > 0)
 		{		
-			while($vRow = mysql_fetch_array($result))
+			while($vRow = mysqli_fetch_array($result))
 			{
 				$tmpRow = $vRow;
 			}
@@ -81,9 +81,9 @@
 	//LoadNew
 	$sql = "SELECT `tmp_Etks_Razd`.`id`, `tmp_Etks_Razd`.`sDolgnName`, `tmp_Etks_Razd`.`sRazdel`, `Nd_Etks`.`sName` FROM `tmp_Etks_Razd`, `Nd_Etks` WHERE `tmp_Etks_Razd`.`iBegin` = 0 AND `tmp_Etks_Razd`.`sKS` = `Nd_Etks`.`iCode` ORDER BY `tmp_Etks_Razd`.`sKS` DESC LIMIT 0, 1;";
 	$result = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($result) > 0)
+	if (mysqli_num_rows($result) > 0)
 	{		
-		while($vRow = mysql_fetch_array($result))
+		while($vRow = mysqli_fetch_array($result))
 		{
 			$qRow = $vRow;			
 			$sql = "UPDATE `kctrud_arm2009`.`tmp_Etks_Razd` SET `iBegin` = '1' WHERE `tmp_Etks_Razd`.`id` = ".$vRow[id].";";
@@ -133,13 +133,13 @@
 <?
 	$sql = "SELECT `iEnd` FROM `tmp_Etks_Razd` WHERE `iEnd` <> 0 AND `iBegin` <> 0 AND `iEnd` <> -1 ORDER BY `iEnd`;";
 	$result = DbConnect::GetSqlQuery($sql);
-	$total = mysql_num_rows($result);
+	$total = mysqli_num_rows($result);
 
 	$sql = "SELECT DISTINCT (iEnd) FROM `tmp_Etks_Razd` WHERE `iEnd` <> 0 AND `iBegin` <> 0 AND `iEnd` <> -1 ORDER BY `iEnd`;";
 	$result = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($result) > 0)
+	if (mysqli_num_rows($result) > 0)
 	{		
-		while($vRow = mysql_fetch_array($result))
+		while($vRow = mysqli_fetch_array($result))
 		{
 			if($vRow[iEnd] != -1)
 			$username = UserControl::GetUserFieldValueFromId('sName1',$vRow[iEnd]);
@@ -148,7 +148,7 @@
 			
 			$sql = "SELECT `id` FROM `tmp_Etks_Razd` WHERE `iEnd` = ".$vRow[iEnd].";";
 			$resultTMP = DbConnect::GetSqlQuery($sql);
-			$resultTMP = mysql_num_rows($resultTMP);
+			$resultTMP = mysqli_num_rows($resultTMP);
 			echo('
 			  <tr>
 				<td width="100" class="comment">'.$username.' - '.$resultTMP.'</td>

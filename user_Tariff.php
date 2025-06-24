@@ -92,13 +92,13 @@
                     <table width="100%" border="0" cellspacing="0" cellpadding="10" class="table_round_corner shawdow_min">
                       <tr class="table_odd pointer" onclick="setfocus(3,3);">
                         <td width="48" class="table_round_corner_LU"><input type="radio" name="RadioGroup3" value="BankPay" id="RadioGroup3_3" checked="checked"/></td>
-                        <td class="table_round_corner_RU"><i class="fa fa-university"></i> Банковский перевод<br />
-                          <span class="comment">Формирование счета на оплату  для юридических лиц</span></td>
+                        <td class="table_round_corner_RU">Банковский перевод<br />
+                          <span class="comment"><i class="fa fa-university"></i> Формирование счета на оплату  для юридических лиц</span></td>
                       </tr>
                       <tr class="table_odd pointer" onclick="setfocus(3,1);">
                         <td width="48"><input type="radio" name="RadioGroup3" value="Card" id="RadioGroup3_1"/></td>
-                        <td class="table_round_corner_RB"><i class="fa fa-cc-visa"></i> Банковская карта<br />
-                            <span class="comment"> Оплата с использованием банковских карт</span></td>
+                        <td class="table_round_corner_RB">Банковская карта<br />
+                            <span class="comment"><i class="fa fa-cc-visa"></i> <i class="fa fa-cc-mastercard"></i> Оплата с использованием банковских карт</span></td>
                       </tr>
 
                     </table></p>
@@ -151,15 +151,15 @@
               <td>&nbsp;</td>
             </tr>
             <td>
- <input name="button" type="submit" class="input_button" id="button" value="Продолжить"/> 
+ <input name="button" type="submit" class="input_button" id="button" value="Продолжить"/>
 
 </td>
-            </tr>        
+            </tr>
       </table>
     </form></td>
   </tr>
 </table>
-<? 
+<?
 /*Установка нижнего фрейма*/
 include('Frame/frame_Bottom.php');
 ?>
@@ -181,12 +181,12 @@ function setfocus(innum, incheck)
 	{
 		if(innum == 3){$("#endprice").slideUp();}
 	}
-	
+
 	if(innum == 3 && incheck == 1)
 	{
 		$("#f1").attr('action', 'user_Tariff_PayU.php');
 	}
-	
+
 	if(innum == 1 || innum == 2)
 	{
 		repay();
@@ -196,7 +196,7 @@ function setfocus(innum, incheck)
 function setprice()
 {
 	var innum = $("input:radio[name ='RadioGroup1']:checked").val();
-	
+
 	switch (innum)
 	{
 		case 'Pers':
@@ -212,12 +212,12 @@ function setprice()
 		innum = 4500;
 		break;
 	}
-	
+
 	$("#1").fadeOut();
 	$("#3").fadeOut();
 	$("#6").fadeOut();
 	$("#1y").fadeOut("slow", function() {
-		
+
 		if(nowprice==0)
 		{
 			/*Пересчет без скидок*/
@@ -275,7 +275,7 @@ function repay()
 		$("#paymethod").slideDown();
 		if($("input:radio[name ='RadioGroup3']:checked").val() == 'BankPay' && !$("#endprice").is(':visible'))
 		$("#endprice").show();
-	}	
+	}
 }
 function reprice(iInSum)
 {
@@ -286,19 +286,19 @@ function reprice(iInSum)
 }
 function IsFormValidate()
 {
-	
+
 	if($("input:radio[name ='RadioGroup3']:checked").val() == 'BankPay' && $("#paymethod").is(':visible'))
 	{
 		var sErrHeader = 'Недостаточно информации';
 		var sErrReport = 'Для корректного выставления счета необходимо указать все реквизиты';
-		
+
 		IsInputValidNotNull('#sOrgName');
 		IsInputValidNotNull('#sAdress');
 		IsInputValidNotNull('#sInn');
 		IsInputValidNotNull('#sKpp');
 		IsInputValidNotNull('#sBank');
 		IsInputValidNotNull('#sBik');
-		
+
 		if(bInputValidError)
 		{
 			SetInputValidFocusOnFirstErrorInput();

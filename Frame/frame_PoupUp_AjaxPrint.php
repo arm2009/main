@@ -17,7 +17,7 @@
       <tr>
         <td><div id="print_PF_div" style="display:block;overflow:auto;margin:10px;border:#09C solid 1px;padding:10px;max-height:300px;" class="comment">
 
-<div id="header_prSOUT" onclick="RoollClick('prSOUT');" class="rollDown" title="В соответствии с приказом Министерства труда и социальной защиты Российской Федерации от 24 января 2014 года № 33н">Отчет о проведении специальной оценки условий труда</div>
+<div id="header_prSOUT" onclick="RoollClick('prSOUT');" class="rollDown" title="В соответствии с приказом Министерства труда и социальной защиты Российской Федерации от 21.11.2023 года № 817н">Отчет о проведении специальной оценки условий труда</div>
 <div id="body_prSOUT" style="display:none;margin:10px; margin-left:30px;">
     <label><input type="checkbox" name="print_PF" value="S0" id="print_PF_0" />Титульный лист отчета о проведении СОУТ</label><br />
     <label><input type="checkbox" name="print_PF" value="S1" id="print_PF_1" />Сведения об организации проводящей СОУТ</label><br />

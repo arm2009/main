@@ -83,10 +83,10 @@ class userTariffPage
 	{
 		$vResult = UserTariff::GetSoWorkersResult();
 		$sResult = '';
-		//$vResult = mysql_fetch_assoc($vResult);
-		if (mysql_num_rows($vResult) > 0)
+		//$vResult = mysqli_fetch_assoc($vResult);
+		if (mysqli_num_rows($vResult) > 0)
 		{
-			while($vRow = mysql_fetch_array($vResult))
+			while($vRow = mysqli_fetch_array($vResult))
 			{
 				if((int)$vRow['idChild'] > 0)
 				{

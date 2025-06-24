@@ -37,7 +37,7 @@
             $sql = "SELECT DISTINCT(Arm_Siz.SizName), Arm_Siz.Sert FROM Arm_Siz LEFT JOIN Arm_workplace ON Arm_workplace.id = Arm_Siz.rmId WHERE Arm_workplace.idGroup = $idGroup ORDER BY Arm_Siz.SizName";
             $vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
             $iNum = 0;
-            while($vRow = mysql_fetch_assoc($vResult)): ?>
+            while($vRow = mysqli_fetch_assoc($vResult)): ?>
         <tr>
             <td class="comment SpecialTableRow">
                 <? echo($vRow['SizName']); ?>

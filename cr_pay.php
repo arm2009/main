@@ -1,58 +1,17 @@
 <?
-	include('../kcapi/api.php');
+	require_once('../LowLevel/dbConnect.php');
+	require_once('../LowLevel/dataCrypt.php');
+//	require_once('../UserControl/userTariff.php');
+	require_once('../Util/String.php');
 	require_once 'tcpdf/tcpdf.php';
-	
-	
-	if(isset($_POST[sch_contsuim]))
+
+	if(isset($_GET[pay]) && !empty($_GET[pay]))
 	{
-		//Информация в систему
-		$sql = "SELECT MAX(`pay_num`) FROM `ae_pay_data` WHERE `user_id` = ".ClearSqlVarInteger($_POST[sch_contsuim]).";";
-		$numtmp = SQLString($sql);
-		
-		if($numtmp == null)
-		{
-			$numtmp = 1;
-		}
-		else
-		{
-			$numtmp++;
-		}
-		
-		$date = date('d.m.Y');
-		$schsum = $_POST[sch_sum];
-		
-		$sql = "SELECT * FROM `ae_users` WHERE `id` = ".ClearSqlVarInteger($_SESSION[us_id]).";";
-		$result = SQLquery($sql);
-		if($result->num_rows > 0)
-		{	
-			$row = mysqli_fetch_array($result);
-		}
-		
-		$sql = "INSERT INTO `ae_pay_data` (`user_id`, `pay_num`, `pay_state`, `pay_sum`, `pay_name`, `pay_adres`, `pay_inn`, `pay_kpp`, `pay_sch`, `pay_bank`, `pay_bik`, `pay_crsch`) VALUES ('".$row[id]."', '".$numtmp."', '0', '".$_POST[sch_sum]."', '".$row[workout]."', '".$row[adress]."', '".$row[inn]."', '".$row[kpp]."', '".$row[rs]."', '".$row[bank]."', '".$row[bik]."', '".$row[ks]."');";
-		SQLquery($sql);
+		$_GET[pay] = DataCrypt::Encode((string) $_GET[pay]);
+		$sql = "SELECT * FROM `Arm_PayOut` WHERE `iNum` = ".$_GET[pay].";";
+		$vResult = DbConnect::GetSqlRow($sql);
 	}
-	
-	if(isset($_GET[payid]))
-	{
-		$sql = "SELECT * FROM `ae_pay_data` WHERE `id` = ".ClearSqlVarInteger($_GET[payid]).";";
-		$result = SQLquery($sql);
-		if($result->num_rows > 0)
-		{	
-			$rowpay = mysqli_fetch_array($result);
-		}
-		
-		$sql = "SELECT * FROM `ae_users` WHERE `id` = ".ClearSqlVarInteger($rowpay[user_id]).";";
-		$result = SQLquery($sql);
-		if($result->num_rows > 0)
-		{	
-			$row = mysqli_fetch_array($result);
-		}
-		
-		$date = date('d.m.Y', strtotime($rowpay[crtime]));
-		$schsum = $rowpay[pay_sum];
-		$numtmp = $rowpay[pay_num];
-	}
-	
+
 	// создаем объект TCPDF - документ с размерами формата A4
 	// ориентация - книжная
 	// единицы измерения - миллиметры
@@ -62,15 +21,15 @@
 	$pdf->SetAuthor('ООО "Консалтинговый центр "Труд"');
 	$pdf->SetTitle('Счет на оплату.');
 	$pdf->SetSubject('Счет на оплату.');
-	
-	$fontname = $pdf->addTTFfont('tcpdf/fonts/utils/CALIBRI.TTF', 'UTF-8', 'UTF-8', 32, '', 3, 1);
 
-	$pdf->SetMargins(15, 25, 15, 15); // устанавливаем отступы (20 мм - слева, 25 мм - сверху, 25 мм - справа)
-	$pdf->SetHeaderMargin(5);
+	$fontname = $pdf->addTTFfont('tcpdf/fonts/utils/calibri.ttf', 'UTF-8', 'UTF-8', 32, '', 3, 1);
+
+	$pdf->SetMargins(15, 35, 15, false); // устанавливаем отступы (20 мм - слева, 25 мм - сверху, 25 мм - справа)
+	$pdf->SetHeaderMargin(10);
 //	$pdf->SetFooterMargin(10);
 	$pdf->setPrintFooter(false);
-	
-	$pdf->SetHeaderData('testlogo.jpg', '50', '', '');
+
+	$pdf->SetHeaderData('testlogo.jpg', '80', '', '', array(0,153,204), array(0,153,204));
 
 	$pdf->setHeaderFont(Array($fontname, '', 10));
 	$pdf->setFooterFont(Array($fontname, '', 10));
@@ -80,8 +39,9 @@
 	$pdf->AddPage(); // создаем первую страницу, на которой будет содержимое
 
 	$html = '
-<p>ООО «Консалтинговый центр «Труд», Адрес: 660032, г. Красноярск, ул. Дубенского, 4-219<br />тел.: (391) 252-47-14, 202-01-79<br>
-Образец заполнения платежного поручения:</p>
+<p style="color:#FF4444;"><strong>Счет на оплату действителен в течении 5 дней.</strong></p>
+<p>ООО «Консалтинговый центр «Труд», Адрес: 660032, г. Красноярск, ул. Дубенского, 4-219<br />тел.: (391) 228-73-58</p>
+<p>Образец заполнения платежного поручения:</p>
 <table width="100%" border="1" cellspacing="0" cellpadding="5" style="border:1px solid #666666;">
   <tr>
     <td width="65%" align="left" valign="middle">ИНН 2465093756 КПП 246501001</td>
@@ -104,7 +64,7 @@
   </tr>
 </table>
 <p>&nbsp;</p>
-<h1 align="center">СЧЕТ № '.$numtmp.'/'.$row[id].' от '.$date.'</h1>
+<h1 align="center">СЧЕТ № '.$vResult[iNum].'/АРМ от '.date('d.m.Y', strtotime($vResult[dtStamp])).'</h1>
 <table width="100%" border="0" cellspacing="0" cellpadding="5">
   <tr>
     <td width="15%" align="left" valign="top">Поставщик:</td>
@@ -112,7 +72,7 @@
   </tr>
   <tr>
     <td width="15%" align="left" valign="top">Покупатель:</td>
-    <td width="85%" align="left" valign="top">'.$row[workout].', ИНН '.$row[inn].', КПП '.$row[kpp].'<br>'.$row[adress].'<br>'.$row[bank].', БИК '.$row[bik].'</td>
+    <td width="85%" align="left" valign="top">'.ConvCod($vResult[sOrgName]).', ИНН '.ConvCod($vResult[sInn]).', КПП '.ConvCod($vResult[sKpp]).'<br>'.ConvCod($vResult[sAdress]).'<br>'.ConvCod($vResult[sBank]).', БИК '.ConvCod($vResult[sBik]).'</td>
   </tr>
 </table>
 <table border="0" cellspacing="0" cellpadding="5" width="100%">
@@ -126,18 +86,18 @@
   </tr>
   <tr>
     <td width="5%" nowrap="nowrap" style="border:1px solid #000;">1</td>
-    <td width="45%" valign="top" style="border:1px solid #000;">Дистанционные образовательные услуги с использованием системы дистанционного образования Обучениевсем.рф (для зачисления на личный счет, № '.$row[id].').</td>
+    <td width="45%" valign="top" style="border:1px solid #000;">Предоставление услуг информационного обеспечения специальной оценки условий труда, '.GetTariffNameRus($vResult[sTarif]).', '.$vResult[iMonth].' мес.</td>
     <td width="10%" nowrap="nowrap" style="border:1px solid #000;">-</td>
     <td width="10%" nowrap="nowrap" style="border:1px solid #000;">1</td>
-    <td width="15%" nowrap="nowrap" style="border:1px solid #000;">'.$schsum.'</td>
-    <td width="15%" nowrap="nowrap" style="border:1px solid #000;">'.$schsum.'</td>
+    <td width="15%" nowrap="nowrap" style="border:1px solid #000;">'.$vResult[iSum].'</td>
+    <td width="15%" nowrap="nowrap" style="border:1px solid #000;">'.$vResult[iSum].'</td>
   </tr>
   <tr>
     <td width="5%" nowrap="nowrap" valign="bottom">&nbsp;</td>
     <td width="45%" nowrap="nowrap" valign="bottom">&nbsp;</td>
     <td width="10%" nowrap="nowrap" valign="bottom">&nbsp;</td>
     <td colspan="2" valign="bottom" nowrap="nowrap" style="border:1px solid #000;">Итого:</td>
-    <td width="15%" nowrap="nowrap" style="border:1px solid #000;">'.$schsum.'</td>
+    <td width="15%" nowrap="nowrap" style="border:1px solid #000;">'.$vResult[iSum].'</td>
   </tr>
   <tr>
     <td width="5%" nowrap="nowrap" valign="bottom">&nbsp;</td>
@@ -151,23 +111,23 @@
     <td width="45%" nowrap="nowrap" valign="bottom">&nbsp;</td>
     <td width="10%" nowrap="nowrap" valign="bottom">&nbsp;</td>
     <td colspan="2" valign="bottom" nowrap="nowrap" style="border:1px solid #000;">Всего к оплате:</td>
-    <td width="15%" nowrap="nowrap" style="border:1px solid #000;">'.$schsum.'</td>
+    <td width="15%" nowrap="nowrap" style="border:1px solid #000;">'.$vResult[iSum].'</td>
   </tr>
 </table>
 <p>&nbsp;</p>
-<p>Всего наименований 1, на сумму '.$schsum.' рублей. ('.num2str($schsum).')</p>
+<p>Всего наименований 1, на сумму '.$vResult[iSum].' рублей. ('.num2str($vResult[iSum]).')</p>
 <table border="0" cellpadding="5" cellspacing="0">
   <tr>
     <td valign="middle">Директор<br />
     (Гайдук А.И.) <br /></td>
-    <td align="center" valign="middle">________________________________________________</td>
+    <td align="center" valign="middle"><img src="tcpdf/images/AG.png" width="149" height="57" /></td>
   </tr>
 </table>
 <table border="0" cellpadding="5" cellspacing="0">
   <tr>
     <td valign="middle">Главный бухгалтер<br />
     (Антонова С.Н.)<br /></td>
-    <td align="center" valign="middle">________________________________________________</td>
+    <td align="center" valign="middle"><img src="tcpdf/images/SNend.png" width="111" height="75" /></td>
   </tr>
 </table>
 
@@ -176,6 +136,26 @@
 ';
 	$pdf->writeHTML($html, true, false, true, false, '');
 
-	$filename = GetNowFileName() .'.pdf';
+	$filename = 'art.pdf';
 	$pdf->Output($filename, 'I'); // выводим документ в браузер, заставляя его включить плагин для отображения PDF (если имеется)
+	/*
+I: send the file inline to the browser (default). The plug-in is used if available. The name given by name is used when one selects the "Save as" option on the link generating the PDF.
+D: send to the browser and force a file download with the name given by name.
+F: save to a local server file with the name given by name.
+S: return the document as a string (name is ignored).
+FI: equivalent to F + I option
+FD: equivalent to F + D option
+E: return the document as base64 mime multi-part email attachment (RFC 2045)
+	*/
+
+	//Полное наименование тарифа
+	function GetTariffNameRus($sBaseName)
+	{
+		$sBaseName = str_replace ("Demo", "Демонстрационный&nbsp;режим",$sBaseName);
+		$sBaseName = str_replace ("Base", "Тариф&nbsp;Базовый",$sBaseName);
+		$sBaseName = str_replace ("Profi", "Тариф&nbsp;Профессиональный",$sBaseName);
+		$sBaseName = str_replace ("Corp", "Тариф&nbsp;Корпоративный",$sBaseName);
+		$sBaseName = str_replace ("Net", "Тариф&nbsp;Сетевой",$sBaseName);
+		return $sBaseName;
+	}
 ?>

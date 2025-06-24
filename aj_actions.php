@@ -7,9 +7,9 @@
 	/*$sql ="SELECT `sName` FROM `Nd_factors` WHERE `sName` LIKE '%".DbConnect::ToBaseStr($_GET['term'])."%' ORDER BY `sName`;";
  	$result = DbConnect::GetSqlQuery($sql);
 
-	if (mysql_num_rows($result) > 0)
+	if (mysqli_num_rows($result) > 0)
 	{
-		while($vRow = mysql_fetch_array($result))
+		while($vRow = mysqli_fetch_array($result))
 		{
 			$row['value']=$vRow[sName];
 			$aResult[] = $row;
@@ -24,17 +24,17 @@
 		
 		$sHtml = '';
 		
-		if (mysql_num_rows($result) > 0)
+		if (mysqli_num_rows($result) > 0)
 		{
-			while($vRow = mysql_fetch_array($result))
+			while($vRow = mysqli_fetch_array($result))
 			{
 				$sHtml = $sHtml.'<div id="header_h1_'.$vRow['id'].'" onclick="RoollClick(\'h1_'.$vRow['id'].'\')" class="rollDown" title=""><strong>'.$vRow['Razdel'].'</strong></div>        
 		        <div id="body_h1_'.$vRow['id'].'" style="display:none;margin:10px; margin-left:30px;">';
 				$sql2 = "SELECT * FROM Nd_162 WHERE Razdel LIKE '".$vRow['Razdel']."' AND PRazdel NOT LIKE '' GROUP BY PRazdel ORDER BY NPunkt;";
 				$result2 = DbConnect::GetSqlQuery($sql2);
-				if (mysql_num_rows($result2) > 0)
+				if (mysqli_num_rows($result2) > 0)
 				{
-					while($vRow2 = mysql_fetch_array($result2))
+					while($vRow2 = mysqli_fetch_array($result2))
 					{
 						$sHtml = $sHtml.'<div id="header_hh1_'.$vRow2['id'].'" onclick="RoollClick(\'hh1_'.$vRow2['id'].'\')" class="rollDown" title=""><strong>'.$vRow2['PRazdel'].'</strong></div>        
 			        <div id="body_hh1_'.$vRow2['id'].'" style="display:none;margin:10px; margin-left:30px;">';
@@ -44,9 +44,9 @@
 					
 					$sql3 = "SELECT * FROM Nd_162 WHERE PRazdel LIKE '".$vRow2['PRazdel']."';";
 					$result3 = DbConnect::GetSqlQuery($sql3);
-					if (mysql_num_rows($result3) > 0)
+					if (mysqli_num_rows($result3) > 0)
 					{
-						while($vRow3 = mysql_fetch_array($result3))
+						while($vRow3 = mysqli_fetch_array($result3))
 						{
 								$sHtml = $sHtml.'<label><input type="checkbox" name="162" value="'.$vRow3['id'].'" id="162_'.$vRow3['id'].'" />'.$vRow3['NPunkt'].'. '.$vRow3['Punkt'].'</label><br />';
 						}
@@ -60,9 +60,9 @@
 				
 				$sql4 = "SELECT * FROM Nd_162 WHERE Razdel LIKE '".$vRow['Razdel']."' AND PRazdel LIKE '';";
 				$result4 = DbConnect::GetSqlQuery($sql4);
-				if (mysql_num_rows($result4) > 0)
+				if (mysqli_num_rows($result4) > 0)
 				{
-					while($vRow4 = mysql_fetch_array($result4))
+					while($vRow4 = mysqli_fetch_array($result4))
 					{
 						/*$sHtml = $sHtml.'<div id="header_hh1_'.$vRow2['id'].'" onclick="Slide("hh1_'.$vRow2['id'].'")" class="rollDown" title="11">'.$vRow2['PRazdel'].'</div>        
 			        <div id="body_hh1_'.$vRow2['id'].'" style="display:none;margin:10px; margin-left:30px;"></div>';*/
@@ -85,17 +85,17 @@
 		
 		$sHtml = '';
 		
-		if (mysql_num_rows($result) > 0)
+		if (mysqli_num_rows($result) > 0)
 		{
-			while($vRow = mysql_fetch_array($result))
+			while($vRow = mysqli_fetch_array($result))
 			{
 				$sHtml = $sHtml.'<div id="header_h1_'.$vRow['id'].'" onclick="RoollClick(\'h1_'.$vRow['id'].'\')" class="rollDown" title=""><strong>'.$vRow['Razdel'].'</strong></div>        
 		        <div id="body_h1_'.$vRow['id'].'" style="display:none;margin:10px; margin-left:30px;">';
 				$sql2 = "SELECT * FROM Nd_163 WHERE Razdel LIKE '".$vRow['Razdel']."' AND PRazdel NOT LIKE '' GROUP BY PRazdel ORDER BY NPunkt;";
 				$result2 = DbConnect::GetSqlQuery($sql2);
-				if (mysql_num_rows($result2) > 0)
+				if (mysqli_num_rows($result2) > 0)
 				{
-					while($vRow2 = mysql_fetch_array($result2))
+					while($vRow2 = mysqli_fetch_array($result2))
 					{
 						$sHtml = $sHtml.'<div id="header_hh1_'.$vRow2['id'].'" onclick="RoollClick(\'hh1_'.$vRow2['id'].'\')" class="rollDown" title=""><strong>'.$vRow2['PRazdel'].'</strong></div>        
 			        <div id="body_hh1_'.$vRow2['id'].'" style="display:none;margin:10px; margin-left:30px;">';
@@ -105,9 +105,9 @@
 					
 					$sql3 = "SELECT * FROM Nd_163 WHERE PRazdel LIKE '".$vRow2['PRazdel']."';";
 					$result3 = DbConnect::GetSqlQuery($sql3);
-					if (mysql_num_rows($result3) > 0)
+					if (mysqli_num_rows($result3) > 0)
 					{
-						while($vRow3 = mysql_fetch_array($result3))
+						while($vRow3 = mysqli_fetch_array($result3))
 						{
 								$sHtml = $sHtml.'<label><input type="checkbox" name="163" value="'.$vRow3['id'].'" id="163_'.$vRow3['id'].'" />'.$vRow3['NPunkt'].'. '.$vRow3['Punkt'].'</label><br />';
 						}
@@ -121,9 +121,9 @@
 				
 				$sql4 = "SELECT * FROM Nd_163 WHERE Razdel LIKE '".$vRow['Razdel']."' AND PRazdel LIKE '';";
 				$result4 = DbConnect::GetSqlQuery($sql4);
-				if (mysql_num_rows($result4) > 0)
+				if (mysqli_num_rows($result4) > 0)
 				{
-					while($vRow4 = mysql_fetch_array($result4))
+					while($vRow4 = mysqli_fetch_array($result4))
 					{
 						/*$sHtml = $sHtml.'<div id="header_hh1_'.$vRow2['id'].'" onclick="Slide("hh1_'.$vRow2['id'].'")" class="rollDown" title="11">'.$vRow2['PRazdel'].'</div>        
 			        <div id="body_hh1_'.$vRow2['id'].'" style="display:none;margin:10px; margin-left:30px;"></div>';*/
@@ -155,9 +155,9 @@
 		
 		$sResult = '';
 		
-		if (mysql_num_rows($result) > 0)
+		if (mysqli_num_rows($result) > 0)
 				{
-					while($vRow = mysql_fetch_array($result))
+					while($vRow = mysqli_fetch_array($result))
 					{
 						$sPRazdel = '';
 						if ($vRow['PRazdel'] != '') {$sPRazdel = ' - '.$vRow['PRazdel'];}

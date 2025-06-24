@@ -4,9 +4,9 @@
 	include_once 'LowLevel/userValidator.php';
 	include_once('LowLevel/emailSend.php');
 	include_once "Payu/PayU.cls.php";
-$option  = array( 'merchant' => 'armndkma', 
-                  'secretkey' => 'Fw16k2^1S5?@K6?!h9|n', 
-                  'debug' => 1
+	$option  = array( 'merchant' => 'armndkma',
+                  'secretkey' => 'Fw16k2^1S5?@K6?!h9|n',
+                  //'debug' => 0
                 );
 
 //Сообщение в логи
@@ -16,36 +16,44 @@ foreach ($_POST as $id=>$value){
 
 //Пополнение счета
 if(isset($_POST[ORDERSTATUS]))
-{	
+{
 	switch($_POST[ORDERSTATUS])
 	{
 		//Тестирование
-		case 'TEST':		
+		case 'TEST':
 			//Добавление и уведомление
 
 			//Почтовый адрес пользователя
 			$sUserEmail = UserControl::GetUserFieldValueFromId('sName',$_POST[REFNOEXT]);
-			
-			//Сообщение в логи		
+
+			//Сообщение в логи
 			$aTariffCode = explode(';', $_POST[IPN_PCODE][0]);
 			DbConnect::Log($aTariffCode[1].'|'.$_POST[IPN_TOTALGENERAL].'|'.$aTariffCode[0].'|'.$_POST[REFNOEXT], 'pay_tariff');
-			if ($_POST[REFNOEXT] == '6')
-			{
-				UserTariff::ChangeTariff($aTariffCode[1],$_POST[IPN_TOTALGENERAL], $aTariffCode[0],$_POST[REFNOEXT]);
-			}
+//			if ($_POST[REFNOEXT] == '6')
+//			{
+			UserTariff::ChangeTariff($aTariffCode[1],$_POST[IPN_TOTALGENERAL], $aTariffCode[0],$_POST[REFNOEXT]);
+//			}
 			DbConnect::Log($_POST[ORDERSTATUS].$_POST[REFNOEXT].';'.$_POST[IPN_TOTALGENERAL].';'.$_POST[REFNOEXT].'|'.$aTariffCode[0].';'.$aTariffCode[1], 'pay_plus');
-			
+
 			//Отправка сообщения пользователю
+			$endData = DbConnect::GetSqlCell('SELECT dTariffDate FROM Arm_users WHERE id = '.$_POST[REFNOEXT]);
+			//
 			Email::CommunicationNewmail($sUserEmail, 'ARM2009 - оплата тарифа.', '<p><span class="TextHeaderSmall" style="border-radius: 10px 10px 0 0;">Поступление средств на личный счет</span></p>
-			<p>На Ваш личный счет в системе ARM2009 поступили средства в размере ('.$_POST[IPN_TOTALGENERAL].' руб.).<br />
-			Спасибо за то, что Вы выбрали нас! </p>');	
-						
+			<p>Произведена оплата в системе ARM2009 на сумму ('.$_POST[IPN_TOTALGENERAL].' руб.).<br />
+			Установлен '.UserTariff::GetTariffNameRus($aTariffCode[0]).' до '.StringWork::StrToDateFormatFull($endData).'<br />
+			Спасибо за то, что Вы выбрали нас! </p>');
+
+			Email::CommunicationNewmail('mail@kctrud.ru', 'ARM2009 - оплата тарифа.', '<p><span class="TextHeaderSmall" style="border-radius: 10px 10px 0 0;">Поступление средств на личный счет</span></p>
+			<p>Пользователем '.$sUserEmail.' произведена оплата в системе ARM2009 на сумму ('.$_POST[IPN_TOTALGENERAL].' руб.).<br />
+			Установлен '.UserTariff::GetTariffNameRus($aTariffCode[0]).' до '.StringWork::StrToDateFormatFull($endData).'<br />
+			</p>');
+
 			//Подтверждение транзакции
 			$forSend = array (
 			'ORDER_REF' => $_POST[REFNO],
 			'ORDER_AMOUNT' => $_POST[IPN_TOTALGENERAL],
-			'ORDER_CURRENCY' => "RUB"  # Валюта мерчанта (Внимание! Должно соответствовать валюте мерчанта. )
-			);					
+			'ORDER_CURRENCY' => "RUB" # Валюта мерчанта (Внимание! Должно соответствовать валюте мерчанта. )
+			);
 			$pay = PayU::getInst()->setOptions($option)->setData($forSend)->IDN();
 
 			DbConnect::Log($_POST[REFNOEXT], 'pay_plus_payu_autorized');
@@ -56,24 +64,32 @@ if(isset($_POST[ORDERSTATUS]))
 
 			//Почтовый адрес пользователя
 			$sUserEmail = UserControl::GetUserFieldValueFromId('sName',$_POST[REFNOEXT]);
-			
-			//Сообщение в логи		
+
+			//Сообщение в логи
 			$aTariffCode = explode(';', $_POST[IPN_PCODE][0]);
 			DbConnect::Log($aTariffCode[1].'|'.$_POST[IPN_TOTALGENERAL].'|'.$aTariffCode[0].'|'.$_POST[REFNOEXT], 'pay_tariff');
 			UserTariff::ChangeTariff($aTariffCode[1],$_POST[IPN_TOTALGENERAL], $aTariffCode[0],$_POST[REFNOEXT]);
 			DbConnect::Log($_POST[ORDERSTATUS].$_POST[REFNOEXT].';'.$_POST[IPN_TOTALGENERAL].';'.$_POST[REFNOEXT].'|'.$aTariffCode[0].';'.$aTariffCode[1], 'pay_plus');
-			
+
 			//Отправка сообщения пользователю
+			$endData = DbConnect::GetSqlCell('SELECT dTariffDate FROM Arm_users WHERE id = '.$_POST[REFNOEXT]);
+
 			Email::CommunicationNewmail($sUserEmail, 'ARM2009 - оплата тарифа.', '<p><span class="TextHeaderSmall" style="border-radius: 10px 10px 0 0;">Поступление средств на личный счет</span></p>
-			<p>На Ваш личный счет в системе ARM2009 поступили средства в размере ('.$_POST[IPN_TOTALGENERAL].' руб.).<br />
-			Спасибо за то, что Вы выбрали нас! </p>');	
-						
+			<p>Произведена оплата в системе ARM2009 на сумму ('.$_POST[IPN_TOTALGENERAL].' руб.).<br />
+			Установлен '.UserTariff::GetTariffNameRus($aTariffCode[0]).' до '.StringWork::StrToDateFormatFull($endData).'<br />
+			Спасибо за то, что Вы выбрали нас! </p>');
+
+			Email::CommunicationNewmail('mail@kctrud.ru', 'ARM2009 - оплата тарифа.', '<p><span class="TextHeaderSmall" style="border-radius: 10px 10px 0 0;">Поступление средств на личный счет</span></p>
+			<p>Пользователем '.$sUserEmail.' произведена оплата в системе ARM2009 на сумму ('.$_POST[IPN_TOTALGENERAL].' руб.).<br />
+			Установлен '.UserTariff::GetTariffNameRus($aTariffCode[0]).' до '.StringWork::StrToDateFormatFull($endData).'<br />
+			</p>');
+
 			//Подтверждение транзакции
 			$forSend = array (
 			'ORDER_REF' => $_POST[REFNO],
 			'ORDER_AMOUNT' => $_POST[IPN_TOTALGENERAL],
 			'ORDER_CURRENCY' => "RUB"  # Валюта мерчанта (Внимание! Должно соответствовать валюте мерчанта. )
-			);					
+			);
 			$pay = PayU::getInst()->setOptions($option)->setData($forSend)->IDN();
 
 			DbConnect::Log($_POST[REFNOEXT], 'pay_plus_payu_autorized');
@@ -86,11 +102,11 @@ if(isset($_POST[ORDERSTATUS]))
 		case 'REVERSED':
 			//Сообщение в логи
 			DbConnect::Log($_POST[REFNOEXT], 'PayU_Reversed' );
-		break;		
+		break;
 		case 'REFUND':
 			//Сообщение в логи
 			DbConnect::Log($_POST[REFNOEXT], 'PayU_Refund' );
-		break;								
+		break;
 	}
 
 	//Отчет о доставке

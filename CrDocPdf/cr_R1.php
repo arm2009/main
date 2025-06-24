@@ -9,14 +9,14 @@
 	$sql = "SELECT `id`,`iNumber`, `sName`, `iCount` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `iATotal` <= 2 AND `idParent` > -1;";
 	$vRmResult = DbConnect::GetSqlQuery($sql);
 	$RMlist = "";
-	if (mysql_num_rows($vRmResult) > 0)
+	if (mysqli_num_rows($vRmResult) > 0)
 	{
 
-		while($vRow = mysql_fetch_array($vRmResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vRmResult))
 		{/*
 			$sql2 = "SELECT id FROM Arm_rmPointsRm WHERE idRm = ".$vRow[id].";";
 			$vRmPResult = DbConnect::GetSqlQuery($sql2);
-			if (mysql_num_rows($vRmPResult) == 0)
+			if (mysqli_num_rows($vRmPResult) == 0)
 			{*/
 				if(strlen($RMlist) > 0) $RMlist .= ',<br />';
 				$RMlist .= $vRow[iNumber].'. '.$vRow[sName].' - '.$vRow[iCount].' '.morph($vRow[iCount], 'занятый работник', 'занятых работника', 'занятых работников');
@@ -48,9 +48,9 @@
 	'.$vResult[sFullName].', находящийся и осуществляющий деятельность по адресу
 	'.$vResult[sPlace].', ИНН
 	'.$vResult[sInn].', ОГРН
-	'.$vResult[sOgrn].' заявляет, что на '.morph(mysql_num_rows($vRmResult), 'рабочем месте', 'рабочих местах', 'рабочих местах').':<br /><br />
+	'.$vResult[sOgrn].' заявляет, что на '.morph(mysqli_num_rows($vRmResult), 'рабочем месте', 'рабочих местах', 'рабочих местах').':<br /><br />
 	<font face="calibrib">'.StringWork::CheckNullStrFull($RMlist).'</font><br /><br />
-	не выявлены вредные и (или) опасные производственные факторы, условия труда соответствуют государственным нормативным требованиям охраны труда.
+	по результатам идентификации не выявлены вредные и (или) опасные производственные факторы или условия труда по результатам исследований (испытаний) и измерений вредных и (или) опасных производственных факторов признаны оптимальными или допустимыми, условия труда соответствуют государственным нормативным требованиям охраны труда.
 	</td>
   </tr>
   <tr>

@@ -85,9 +85,9 @@
 	$sql = "SELECT * FROM `Arm_Siz` WHERE `rmId` = ".$target." ORDER BY `SizName`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
 	$tmpNum = 1;
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			if($vRow[Fact] == 1) $vRow[Fact] ='Есть.'; else $vRow[Fact] ='Нет.';
 			$html .='<tr nobr="true">
@@ -120,9 +120,9 @@ $html .='</table><br /><br />
 	$sql = "SELECT * FROM `Arm_Siz` WHERE `rmId` = ".$target." AND `protectFactor` NOT LIKE '';";
 	$vResult = DbConnect::GetSqlQuery($sql);
 	$tmpNum = 1;
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			if($vRow[Fact] == 1) $vRow[Fact] ='Есть.'; else $vRow[Fact] ='Нет.';
 			$html .='<tr nobr="true">

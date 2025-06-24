@@ -8,3 +8,4 @@ dbConnect.php
 test.php
 testlist.php
 .ftpconfig
+.vscode/sftp.json

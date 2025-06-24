@@ -48,9 +48,9 @@ function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold)
 	$sql = "SELECT `id`, `sName`, `idParent` FROM `Arm_workplace` WHERE `idGroup` = ".$idWorkGroup." AND `idParent` > -1 ORDER BY `iNumber`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
 	$bRow = false;
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			//Название подразделения
 			$tmpUnitName = DbConnect::GetSqlCell("SELECT `sName` FROM `Arm_workplace` WHERE `id` = ".$vRow[idParent].";").', '. $vRow[sName];
@@ -58,9 +58,9 @@ function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold)
 			$sqlA = "SELECT * FROM `Arm_activity` WHERE `iRmId` = ".$vRow[id]." AND `iType` = 0;";
 			$vResultA = DbConnect::GetSqlQuery($sqlA);
 			$firstRow = true;
-			if (mysql_num_rows($vResultA) > 0)
+			if (mysqli_num_rows($vResultA) > 0)
 			{
-			while($vRowA = mysql_fetch_array($vResultA))
+			while($vRowA = MYSQLI_FETCH_ASSOC($vResultA))
 			{
 				$bRow = true;
 				if (strlen($vRow[sNumAnalog]) > 0)

@@ -15,17 +15,17 @@
 	$vResultRM = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
 
 	//Количество рабочих мест
-	$sNumRm = mysql_num_rows($vResultRM);
+	$sNumRm = mysqli_num_rows($vResultRM);
 
 	//Имена экспертов
 	$sStuffNames = '';
 
 	//Массив имен экспертов
 	$aNames = array();
-	if (mysql_num_rows($vResultStuff) > 0)
+	if (mysqli_num_rows($vResultStuff) > 0)
 	{
                                         	
-		while($vRowStuff = mysql_fetch_array($vResultStuff))
+		while($vRowStuff = MYSQLI_FETCH_ASSOC($vResultStuff))
 		{
 			array_push($aNames, $vRowStuff[sName]);
 		}
@@ -40,10 +40,10 @@
 	$iRm33Count = 0;
 	$iRm4Count = 0;
 
-	if (mysql_num_rows($vResultRM) > 0)
+	if (mysqli_num_rows($vResultRM) > 0)
 	{
 		$aNames = array();                                        	
-		while($vRowRM = mysql_fetch_array($vResultRM))
+		while($vRowRM = MYSQLI_FETCH_ASSOC($vResultRM))
 		{
 			switch ($vRowRM[iATotal])
 			{

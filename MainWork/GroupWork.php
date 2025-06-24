@@ -29,7 +29,7 @@
 		}
 
 		//Сохранение изменений группы данных
-		public static function SaveGroup($iId, $sName, $iParentKey, $sFullName, $sPlace, $sEmail, $sNameDirector, $sInn, $sOgrn, $sOkved, $sOkpo, $sOkogu, $sOkato, $sPredsName, $sPredsPost, $sPostDirector, $sPhone, $sPNumTenesy, $sPNumHeavy, $sPNumAir, $sPNumLight, $sPNumNoise, $sPNumNoiseNoise, $sPNumClimate, $sExpEndDoc, $sExpEndDate, $iRmTotalCount, $iWorkerTotal, $iWorkerTotalWoman, $iWorkerTotalYang, $iWorkerTotalMedical, $dStartDate, $dEndDate, $sDocName, $sNTens, $sNHeavy, $sNAir, $sNLight, $sNNoise, $sNClimate)
+		public static function SaveGroup($iId, $sName, $iParentKey, $sFullName, $sPlace, $sEmail, $sNameDirector, $sInn, $sOgrn, $sOkved, $sOkpo, $sOkogu, $sOkato, $sPredsName, $sPredsPost, $sPostDirector, $sPhone, $sPNumTenesy, $sPNumHeavy, $sPNumAir, $sPNumLight, $sPNumNoise, $sPNumNoiseNoise, $sPNumClimate, $sExpEndDoc, $sExpEndDate, $iRmTotalCount, $iWorkerTotal, $iWorkerTotalWoman, $iWorkerTotalYang, $iWorkerTotalMedical, $dStartDate, $dEndDate, $sDocName, $sNTens, $sNHeavy, $sNAir, $sNLight, $sNNoise, $sNClimate, $sKpp)
 		{
 			$sExpEndDate = new DateTime($sExpEndDate);
 			$dStartDate = new DateTime($dStartDate);
@@ -43,6 +43,7 @@
 			sEmail = "'.DbConnect::ToBaseStr($sEmail).'",
 			sNameDirector = "'.DbConnect::ToBaseStr($sNameDirector).'",
 			sInn = "'.DbConnect::ToBaseStr($sInn).'",
+			sKpp = "'.DbConnect::ToBaseStr($sKpp).'",
 			sOgrn = "'.DbConnect::ToBaseStr($sOgrn).'",
 			sOkved = "'.DbConnect::ToBaseStr($sOkved).'",
 			sOkpo = "'.DbConnect::ToBaseStr($sOkpo).'",
@@ -84,7 +85,7 @@
 		public static function GetMyGroupCount($sStatus = '')
 		{
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT `id` FROM `Arm_group` WHERE `Arm_group`.`idParent` = '.UserControl::GetUserLoginId().' AND `bTemp` = 0 AND Arm_group.sStatus = "'.$sStatus.'";');
-			return mysql_num_rows($vResult);
+			return mysqli_num_rows($vResult);
 		}
 
 		public static function FillGroupList($sStatus = '')
@@ -100,9 +101,9 @@
 
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT Arm_users.id as idUser, DECODE(Arm_users.sOrgName,"04022009") as sNameSpace, Arm_group.id as id, Arm_group.sName as sName FROM Arm_users, Arm_group WHERE Arm_users.id = Arm_group.idParent AND Arm_users.id IN ('.$idWorkSpaces.') AND Arm_group.sStatus = "'.$sStatus.'" AND `bTemp` = 0 ORDER BY `sName`;');
 
-			if (mysql_num_rows($vResult) > 0)
+			if (mysqli_num_rows($vResult) > 0)
 			{
-				while($vRow = mysql_fetch_array($vResult))
+				while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 				{
 					$aResult[] = array($vRow['id'], $vRow['sName'], $vRow['sNameSpace'], $vRow['idUser']);
 				}
@@ -114,47 +115,48 @@
 		//Чтение группы в массив
 		public static function ReadGroupFull($idGroup)
 		{
-			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT idParent, sName, sFullName, sPlace, sEmail, sNameDirector, sInn, sOgrn, sOkved, sOkpo, sOkogu, sOkato, sPredsName, sPredsPost, sPostDirector, `sPhone`, `sPNumTenesy`, `sPNumHeavy`, `sPNumAir`, `sPNumLight`, `sPNumNoise`, `sPNumNoiseNoise`, `sPNumClimate`, `sExpEndDoc`, `sExpEndDate`, `iRmTotalCount`, `iWorkerTotal`, `iWorkerTotalWoman`, `iWorkerTotalYang`, `iWorkerTotalMedical`, dStartDate, dEndDate, sDocName, sNTens, sNHeavy, sNAir, sNLight, sNNoise, sNClimate FROM Arm_group WHERE id = '.$idGroup.';');
-
-			$aReturn['idParent'] = mysql_result($vResult, 0, 0);
-			$aReturn['sName'] = mysql_result($vResult, 0, 1);
-			$aReturn['sFullName'] = mysql_result($vResult, 0, 2);
-			$aReturn['sPlace'] = mysql_result($vResult, 0, 3);
-			$aReturn['sEmail'] = mysql_result($vResult, 0, 4);
-			$aReturn['sNameDirector'] = mysql_result($vResult, 0, 5);
-			$aReturn['sInn'] = mysql_result($vResult, 0, 6);
-			$aReturn['sOgrn'] = mysql_result($vResult, 0, 7);
-			$aReturn['sOkved'] = mysql_result($vResult, 0, 8);
-			$aReturn['sOkpo'] = mysql_result($vResult, 0, 9);
-			$aReturn['sOkogu'] = mysql_result($vResult, 0, 10);
-			$aReturn['sOkato'] = mysql_result($vResult, 0, 11);
-			$aReturn['sPredsName'] = mysql_result($vResult, 0, 12);
-			$aReturn['sPredsPost'] = mysql_result($vResult, 0, 13);
-			$aReturn['sPostDirector'] = mysql_result($vResult, 0, 14);
-			$aReturn['sPhone'] = mysql_result($vResult, 0, 15);
-			$aReturn['sPNumTenesy'] = mysql_result($vResult, 0, 16);
-			$aReturn['sPNumHeavy'] = mysql_result($vResult, 0, 17);
-			$aReturn['sPNumAir'] = mysql_result($vResult, 0, 18);
-			$aReturn['sPNumLight'] = mysql_result($vResult, 0, 19);
-			$aReturn['sPNumNoise'] = mysql_result($vResult, 0, 20);
-			$aReturn['sPNumNoiseNoise'] = mysql_result($vResult, 0, 21);
-			$aReturn['sPNumClimate'] = mysql_result($vResult, 0, 22);
-			$aReturn['sExpEndDoc'] = mysql_result($vResult, 0, 23);
-			$aReturn['sExpEndDate'] = StringWork::StrToDateFormatLite(mysql_result($vResult, 0, 24));
-			$aReturn['iRmTotalCount'] = mysql_result($vResult, 0, 25);
-			$aReturn['iWorkerTotal'] = mysql_result($vResult, 0, 26);
-			$aReturn['iWorkerTotalWoman'] = mysql_result($vResult, 0, 27);
-			$aReturn['iWorkerTotalYang'] = mysql_result($vResult, 0, 28);
-			$aReturn['iWorkerTotalMedical'] = mysql_result($vResult, 0, 29);
-			$aReturn['dStartDate'] = StringWork::StrToDateFormatLite(mysql_result($vResult, 0, 30));
-			$aReturn['dEndDate'] = StringWork::StrToDateFormatLite(mysql_result($vResult, 0, 31));
-			$aReturn['sDocName'] = mysql_result($vResult, 0, 32);
-			$aReturn['sNTens'] = mysql_result($vResult, 0, 33);
-			$aReturn['sNHeavy'] = mysql_result($vResult, 0, 34);
-			$aReturn['sNAir'] = mysql_result($vResult, 0, 35);
-			$aReturn['sNLight'] = mysql_result($vResult, 0, 36);
-			$aReturn['sNNoise'] = mysql_result($vResult, 0, 37);
-			$aReturn['sNClimate'] = mysql_result($vResult, 0, 38);
+			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT idParent, sName, sFullName, sPlace, sEmail, sNameDirector, sInn, sOgrn, sOkved, sOkpo, sOkogu, sOkato, sPredsName, sPredsPost, sPostDirector, `sPhone`, `sPNumTenesy`, `sPNumHeavy`, `sPNumAir`, `sPNumLight`, `sPNumNoise`, `sPNumNoiseNoise`, `sPNumClimate`, `sExpEndDoc`, `sExpEndDate`, `iRmTotalCount`, `iWorkerTotal`, `iWorkerTotalWoman`, `iWorkerTotalYang`, `iWorkerTotalMedical`, dStartDate, dEndDate, sDocName, sNTens, sNHeavy, sNAir, sNLight, sNNoise, sNClimate, sKpp FROM Arm_group WHERE id = '.$idGroup.';');
+			$result = MYSQLI_FETCH_ASSOC($vResult);        	
+			$aReturn['idParent'] = $result[array_keys($result)[0]];
+			$aReturn['sName'] = $result[array_keys($result)[1]];
+			$aReturn['sFullName'] = $result[array_keys($result)[2]];
+			$aReturn['sPlace'] = $result[array_keys($result)[3]];
+			$aReturn['sEmail'] = $result[array_keys($result)[4]];
+			$aReturn['sNameDirector'] = $result[array_keys($result)[5]];
+			$aReturn['sInn'] = $result[array_keys($result)[6]];
+			$aReturn['sOgrn'] = $result[array_keys($result)[7]];
+			$aReturn['sOkved'] = $result[array_keys($result)[8]];
+			$aReturn['sOkpo'] = $result[array_keys($result)[9]];
+			$aReturn['sOkogu'] = $result[array_keys($result)[10]];
+			$aReturn['sOkato'] = $result[array_keys($result)[11]];
+			$aReturn['sPredsName'] = $result[array_keys($result)[12]];
+			$aReturn['sPredsPost'] = $result[array_keys($result)[13]];
+			$aReturn['sPostDirector'] = $result[array_keys($result)[14]];
+			$aReturn['sPhone'] = $result[array_keys($result)[15]];
+			$aReturn['sPNumTenesy'] = $result[array_keys($result)[16]];
+			$aReturn['sPNumHeavy'] = $result[array_keys($result)[17]];
+			$aReturn['sPNumAir'] = $result[array_keys($result)[18]];
+			$aReturn['sPNumLight'] = $result[array_keys($result)[19]];
+			$aReturn['sPNumNoise'] = $result[array_keys($result)[20]];
+			$aReturn['sPNumNoiseNoise'] = $result[array_keys($result)[21]];
+			$aReturn['sPNumClimate'] = $result[array_keys($result)[22]];
+			$aReturn['sExpEndDoc'] = $result[array_keys($result)[23]];
+			$aReturn['sExpEndDate'] = StringWork::StrToDateFormatLite($result[array_keys($result)[24]]);
+			$aReturn['iRmTotalCount'] = $result[array_keys($result)[25]];
+			$aReturn['iWorkerTotal'] = $result[array_keys($result)[26]];
+			$aReturn['iWorkerTotalWoman'] = $result[array_keys($result)[27]];
+			$aReturn['iWorkerTotalYang'] = $result[array_keys($result)[28]];
+			$aReturn['iWorkerTotalMedical'] = $result[array_keys($result)[29]];
+			$aReturn['dStartDate'] = StringWork::StrToDateFormatLite($result[array_keys($result)[30]]);
+			$aReturn['dEndDate'] = StringWork::StrToDateFormatLite($result[array_keys($result)[31]]);
+			$aReturn['sDocName'] = $result[array_keys($result)[32]];
+			$aReturn['sNTens'] = $result[array_keys($result)[33]];
+			$aReturn['sNHeavy'] = $result[array_keys($result)[34]];
+			$aReturn['sNAir'] = $result[array_keys($result)[35]];
+			$aReturn['sNLight'] = $result[array_keys($result)[36]];
+			$aReturn['sNNoise'] = $result[array_keys($result)[37]];
+			$aReturn['sNClimate'] = $result[array_keys($result)[38]];
+			$aReturn['sKpp'] = $result[array_keys($result)[39]];
 
 			return $aReturn;
 		}
@@ -163,12 +165,12 @@
 		public static function FillWorkSpace()
 		{
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT DECODE(sOrgName,"'.UserControl::GetSalt().'") FROM Arm_users WHERE id ='.UserControl::GetUserLoginId());
-			$aResult[] = array(UserControl::GetUserLoginId(),mysql_result($vResult, 0, 0));
-
+			$vResult = MYSQLI_FETCH_ASSOC($vResult);
+            $aResult[] = array(UserControl::GetUserLoginId(),$vResult[key($vResult)]);
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT Arm_users.id as id, DECODE(Arm_users.sOrgName,"'.UserControl::GetSalt().'") as name FROM Arm_users, Arm_soworkers WHERE Arm_soworkers.idChild = '.UserControl::GetUserLoginId().' AND Arm_users.id = Arm_soworkers.idParent;');
-			if (mysql_num_rows($vResult) > 0)
+			if (mysqli_num_rows($vResult) > 0)
 			{
-				while($vRow = mysql_fetch_array($vResult))
+				while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 				{
 					$aResult[] = array($vRow['id'], $vRow['name']);
 				}
@@ -180,7 +182,7 @@
 		{
 			$iInsertedKey = -1;
 			$vReturn = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_group (idParent, sName, bTemp, sExpEndDate, dStartDate, dEndDate) VALUES ('.UserControl::GetUserLoginId().', "Новая группа данных", "1", NOW(), NOW(), NOW());');
-			$iInsertedKey = mysql_insert_id();
+			$iInsertedKey = $vReturn;
 			GroupWork::SetLastChangeStamp($iInsertedKey);
 			return $iInsertedKey;
 		}
@@ -189,9 +191,9 @@
 		public static function ReadGroup()
 		{
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT id, sName FROM Arm_group WHERE idParent ='.$iParentKey);
-			if (mysql_num_rows($vResult) > 0)
+			if (mysqli_num_rows($vResult) > 0)
 			{
-				while($vRow = mysql_fetch_array($vResult))
+				while($vRow = mysqli_fetch_array($vResult))
 				{
 					$aResult[] = array($vRow['id'], $vRow['sName']);
 				}
@@ -212,9 +214,9 @@
 		public static function ReadComiss($iParentKey)
 		{
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT id, sName, sPost FROM Arm_comiss WHERE idParent ='.$iParentKey);
-			if (mysql_num_rows($vResult) > 0)
+			if (mysqli_num_rows($vResult) > 0)
 			{
-				while($vRow = mysql_fetch_array($vResult))
+				while($vRow = mysqli_fetch_array($vResult))
 				{
 					$aResult[] = array($vRow['id'], $vRow['sName'], $vRow['sPost']);
 				}
@@ -225,9 +227,10 @@
 		public static function ReadOneComiss($id)
 		{
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT id, sName, sPost FROM Arm_comiss WHERE id ='.$id);
-			if (mysql_num_rows($vResult) > 0)
+			$res = MYSQLI_FETCH_ASSOC($vResult);
+			if (mysqli_num_rows($vResult) > 0)
 			{
-				$aResult = array(mysql_result($vResult,0, 0), mysql_result($vResult,0, 1), mysql_result($vResult,0, 2));
+				$aResult = array($res[array_keys($res)[0]], $res[array_keys($res)[1]], $res[array_keys($res)[2]]);
 			}
 
 
@@ -259,9 +262,9 @@
 			{
 				$sqlWP = 'SELECT idGroup FROM Arm_workplace WHERE id = '.$idWorkPlace.';';
 				$vResultWP = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sqlWP);
-				if (mysql_num_rows($vResultWP) > 0)
+				if (mysqli_num_rows($vResultWP) > 0)
 				{
-					while($vRow = mysql_fetch_array($vResultWP))
+					while($vRow = mysqli_fetch_array($vResultWP))
 					{
 						$idGroup = $vRow['idGroup'];
 					}
@@ -276,9 +279,9 @@
 			$aRetValues = array();
 			$sql = 'SELECT idLastChangeUser, dLastChangeDate FROM Arm_group WHERE id = '.$idGroup.';';
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-			if (mysql_num_rows($vResult) > 0)
+			if (mysqli_num_rows($vResult) > 0)
 			{
-			while($vRow = mysql_fetch_array($vResult))
+			while($vRow = mysqli_fetch_array($vResult))
 				{
 					if ($vRow['idLastChangeUser'] != '0')
 					{

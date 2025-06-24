@@ -15,38 +15,48 @@
 <?
 	$sql = "SELECT `id`, `sName`, `sPP`, `tScribe` FROM `Nd_factors` WHERE `idParent` = 0 ORDER BY `sPP`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			echo('<div id="header_factors_'. $vRow[id].'" onclick="RoollClick(\'factors_'. $vRow[id].'\');" class="rollDown" title="'.$vRow[tScribe].'">'.$vRow[sPP].' '.$vRow[sName].'</div><div id="body_factors_'. $vRow[id].'" style="display:none;margin:10px; margin-left:30px;">');
 			if($vRow[sPP] == '1.2.' || $vRow[sPP] == '2.')
 			{
 				//Химия
 				if($vRow[sPP] == '1.2.')
-				$sql = "SELECT `id`, `sName` FROM `Nd_gn1313` WHERE `bFirstSelect` > 0 AND `sFeat` LIKE '%Ф%' AND Nd_gn1313.gnversion = '1' ORDER BY `sName`;";
+				$sql = "SELECT `id`, `sName`, sClass, sFeat FROM `Nd_gn1313` WHERE (id >= 8681 OR id = 6773)AND sFeat LIKE 'Ф' ORDER BY `sName`;";
 				else
-				$sql = "SELECT `id`, `sName` FROM `Nd_gn1313` WHERE `bFirstSelect` > 0 AND `sFeat` NOT LIKE 'Ф' AND Nd_gn1313.gnversion = '1' ORDER BY `sName`;";
+				$sql = "SELECT `id`, `sName`, sClass, sFeat FROM `Nd_gn1313` WHERE `bFirstSelect` > 0 AND `sFeat` NOT LIKE 'Ф' AND Nd_gn1313.gnversion = '1' ORDER BY `sName`;";
 				
 				$fResult = DbConnect::GetSqlQuery($sql);
-				if (mysql_num_rows($fResult) > 0)
+				if (mysqli_num_rows($fResult) > 0)
 				{
-					while($fRow = mysql_fetch_array($fResult))
+					while($fRow = mysqli_fetch_array($fResult))
 					{
-						echo('<label><input type="checkbox" name="factors_gn" value="'.$fRow[id].'" id="factors_gn_'.$fRow[id].'" />'.$fRow[sName].'</label><br />');
+						if ($vRow[sPP] == '1.2.')
+						{
+							echo('<label><input type="checkbox" name="factors_gn" value="'.$fRow[id].'" id="factors_gn_'.$fRow[id].'" />'.$fRow[sName].' (класс опасности '.$fRow[sClass].', '.$fRow[sFeat].')</label><br />');
+						}
+						else
+						{
+							echo('<label><input type="checkbox" name="factors_gn" value="'.$fRow[id].'" id="factors_gn_'.$fRow[id].'" />'.$fRow[sName].'</label><br />');
+						}
 					}
 				}
 				
-				echo('<div class="falselink" onclick="factors_show_all(\''.$vRow[id].'\');" style="margin-top:15px;margin-bottom:15px;">Не нашли нужное вещество среди часто используемых? Показать весь справочник...</div>');
+				if ($vRow[sPP] == '2.')
+				{
+					echo('<div class="falselink" onclick="factors_show_all(\''.$vRow[id].'\');" 	style="margin-top:15px;margin-bottom:15px;">Не нашли нужное вещество среди часто используемых? Показать весь справочник...</div>');
+				}
 			}
 			else
 			{
 				//Физика
 				$sql = "SELECT `id`, `sName`, `sPP`, `tScribe` FROM `Nd_factors` WHERE `idParent` = ".$vRow[id]." ORDER BY `sPP`;";
 				$fResult = DbConnect::GetSqlQuery($sql);
-				if (mysql_num_rows($fResult) > 0)
+				if (mysqli_num_rows($fResult) > 0)
 				{
-					while($fRow = mysql_fetch_array($fResult))
+					while($fRow = mysqli_fetch_array($fResult))
 					{
 						if(strlen($fRow[tScribe]) > 0){
 							if(strpos($fRow[tScribe],"АРМ 2009")>-1){$addonclass = ' class="red"';}else{$addonclass = '';}

@@ -15,9 +15,9 @@
 	$vResult = DbConnect::GetSqlQuery($sql);
 	
 	$sDateIzm = '';
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			if(strlen($sDateIzm) > 0) $sDateIzm .= '<br />';
 			$sDateIzm .= StringWork::StrToDateFormatLite($vRow[DC]);
@@ -48,7 +48,7 @@
 <tr>
 <td width="35%" align="center" valign="middle" bgcolor="#d9d9d9"><h5><font face="calibrib">Регистрационный номер аттестата аккредитации организации</font></h5></td>
 <td width="35%" align="center" valign="middle" bgcolor="#d9d9d9"><h5><font face="calibrib">Дата выдачи аттестата аккредитации организации</font></h5></td>
-<td width="30%" align="center" valign="middle" bgcolor="#d9d9d9"><h5><font face="calibrib">Дата истечения срока действия аттестата  аккредитации организации</font></h5></td>
+<td width="30%" align="center" valign="middle" bgcolor="#d9d9d9"><h5><font face="calibrib">Дата истечения срока действия аттестата аккредитации организации</font></h5></td>
 </tr>
 <tr>
 <td width="35%" align="center" valign="middle" bgcolor="#d9d9d9"><h5><font face="calibrib">1</font></h5></td>
@@ -59,14 +59,14 @@
 	$sql = "SELECT * FROM `Arm_groupAcredit` WHERE `idGroup` = ".$target.";";
 	$vResult = DbConnect::GetSqlQuery($sql);
 	
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			$html .='<tr nobr="true">
 			<td width="35%" align="center">'.$vRow[sName].'</td>
 			<td width="35%" align="center">'.StringWork::StrToDateFormatLite($vRow[dDateCreate]).'</td>
-			<td width="30%" align="center">'.StringWork::StrToDateFormatLite($vRow[dDateFinish]).'</td>
+			<td width="30%" align="center">-</td>
 			</tr>';			
 		}
 	}
@@ -110,11 +110,11 @@
 	$sql = "SELECT * FROM `Arm_groupStuff` WHERE `idGroup` = ".$target.";";
 	$vResult = DbConnect::GetSqlQuery($sql);
 	$aStuff = array();
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
 		//Счетчик
 		$iNum = 1;
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			if(!in_array($vRow[sName], $aStuff))
 			{
@@ -179,11 +179,11 @@
 	$sql = "SELECT * FROM `Arm_groupDevices` WHERE `idGroup` = ".$target.";";
 	$vResult = DbConnect::GetSqlQuery($sql);
 	
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
 		//Счетчик
 		$iNum = 1;
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			$html .='<tr>
 <td width="4%" align="center">'.$iNum.'.</td>

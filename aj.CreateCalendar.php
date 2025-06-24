@@ -73,10 +73,10 @@ $aGroups = WorkCalc::Get_Event_List($_GET['dBegin'], $_GET['dEnd'], $idWorkSpace
 	$pdf->MultiCell(85,$rowheighta,'Содержание',1,'C',1,0);
 	$pdf->MultiCell(37,$rowheighta,'Примечание',1,'C',1,1);
 
-if (mysql_num_rows($aGroups) > 0)
+if (mysqli_num_rows($aGroups) > 0)
 {
 	$num = 1;
-	while($row = mysql_fetch_array($aGroups))
+	while($row = MYSQLI_FETCH_ASSOC($aGroups))
 	{
 		
 		//Начало цикла вставки

@@ -13,44 +13,44 @@
 	//Данные общие
 	$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	$tmpRMCount = mysql_num_rows($vResult);
+	$tmpRMCount = mysqli_num_rows($vResult);
 	if($agroup['iRmTotalCount'] < $tmpRMCount) $agroup['iRmTotalCount'] = $tmpRMCount;
 	
 	$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1  AND `iATotal` = 1;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	$tmpRMCount1 = mysql_num_rows($vResult);
+	$tmpRMCount1 = mysqli_num_rows($vResult);
 	
 	$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1  AND `iATotal` = 2;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	$tmpRMCount2 = mysql_num_rows($vResult);
+	$tmpRMCount2 = mysqli_num_rows($vResult);
 	
 	$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1  AND `iATotal` = 3;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	$tmpRMCount3 = mysql_num_rows($vResult);
+	$tmpRMCount3 = mysqli_num_rows($vResult);
 	
 	$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1  AND `iATotal` = 4;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	$tmpRMCount4 = mysql_num_rows($vResult);
+	$tmpRMCount4 = mysqli_num_rows($vResult);
 	
 	$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1  AND `iATotal` = 5;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	$tmpRMCount5 = mysql_num_rows($vResult);
+	$tmpRMCount5 = mysqli_num_rows($vResult);
 	
 	$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1  AND `iATotal` = 6;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	$tmpRMCount6 = mysql_num_rows($vResult);
+	$tmpRMCount6 = mysqli_num_rows($vResult);
 	
 	$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1  AND `iATotal` = 7;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	$tmpRMCount7 = mysql_num_rows($vResult);
+	$tmpRMCount7 = mysqli_num_rows($vResult);
 
 	//Аккредитация
 	$sql = "SELECT * FROM `Arm_groupAcredit` WHERE `idGroup` = ".$target.";";
 	$vResult = DbConnect::GetSqlQuery($sql);
 	
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			if(strlen($orgAccr)>0) $orgAccr .= ', ';
 			$orgAccr .= $vRow[sName].' действителен c '.StringWork::StrToDateFormatLite($vRow[dDateCreate]).' по '.StringWork::StrToDateFormatLite($vRow[dDateFinish]);
@@ -61,9 +61,9 @@
 	$sql = "SELECT * FROM `Arm_groupStuff` WHERE `idGroup` = ".$target." AND `bExpert` = 1;";
 	$vResult = DbConnect::GetSqlQuery($sql);
 	$aStuff = array();
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			if(strlen($orgPersonal)>0) $orgPersonal .= ', ';
 			if(strlen(trim($vRow[sReestrNum]))>0)
@@ -78,9 +78,9 @@
 	$vResult = DbConnect::GetSqlQuery($sql);
 	
 	$sDateIzm = '';
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			if(strlen($sDateIzm) > 0) $sDateIzm .= ', ';
 			$sDateIzm .= StringWork::StrToDateFormatLite($vRow[DC]);
@@ -91,9 +91,9 @@
 	$sql = "SELECT * FROM `Arm_groupDevices` WHERE `idGroup` = ".$target.";";
 	$vResult = DbConnect::GetSqlQuery($sql);
 	
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			if(strlen($orgDevice)>0) $orgDevice .= ', ';
 			$orgDevice .= StringWork::CheckNullStrLite($vRow[sName]).' № '.StringWork::CheckNullStrLite($vRow[sReestrNum]).' в Федеральном информационном фонде по обеспечению единства измерений, заводской номер '.StringWork::CheckNullStrLite($vRow[sFactoryNum]).' поверка до '.StringWork::CheckNullStrLite(StringWork::StrToDateFormatLite($vRow[dCheckDate])).' ('.StringWork::CheckNullStrLite($vRow[sFactName]).')';			
@@ -143,9 +143,9 @@ $pdf->writeHTML($html, true, false, true, false, '');
 $sql = "SELECT * FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1 ORDER BY `iNumber`;";
 $vResult = DbConnect::GetSqlQuery($sql);
 $tmphtml = '';
-if (mysql_num_rows($vResult) > 0)
+if (mysqli_num_rows($vResult) > 0)
 {
-	while($vRow = mysql_fetch_array($vResult))
+	while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 	{
 		if($vRow[iCompPension] == 0) $vRow[sCompBasePension] = StringWork::CheckNullStrLite('');
 		$num = StringWork::CheckNullStrLite($vRow[iNumber]).'.';
@@ -175,9 +175,9 @@ if (mysql_num_rows($vResult) > 0)
 		//Факторы
 		$sql = "SELECT `Arm_rmFactors`.*, `Arm_rmFactorsPdu`.`fPdu1`, `Arm_rmFactorsPdu`.`fPdu2`, `Arm_rmFactorsPdu`.`fPdu3`, `Arm_rmFactorsPdu`.`fPdu4`, `Arm_rmFactorsPdu`.`fPdu5`, (`Arm_rmFactorsPdu`.`id`) AS `PduId`, `Arm_rmPointsRm`.`sTime`, `Arm_rmFactorsPdu`.`sAddonAsset`, `Arm_rmFactorsPdu`.`iAsset` FROM `Arm_rmFactorsPdu` LEFT JOIN `Arm_rmFactors` ON `Arm_rmFactorsPdu`.`idFactor` = `Arm_rmFactors`.`id` LEFT JOIN `Arm_rmPointsRm` ON (`Arm_rmPointsRm`.`idPoint` = `Arm_rmFactors`.`idPoint` AND `Arm_rmPointsRm`.`idRm` = `Arm_rmFactorsPdu`.`idRm`) WHERE `Arm_rmFactorsPdu`.`idRm` = ".$vRow[id].";";
 		$vResultf = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-		if (mysql_num_rows($vResultf) > 0)
+		if (mysqli_num_rows($vResultf) > 0)
 		{
-			while($vRowf = mysql_fetch_array($vResultf))
+			while($vRowf = MYSQLI_FETCH_ASSOC($vResultf))
 			{
 				
 //================================================
@@ -453,9 +453,9 @@ function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold)
 	$sql = "SELECT * FROM `Arm_workplace` WHERE `idGroup` = ".$idWorkGroup." AND `idParent` > -1 ORDER BY `iNumber`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
 	
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			if (strlen($vRow[sNumAnalog]) > 0)
 			{
@@ -576,7 +576,7 @@ function PDF_isFactorGroup($idPoint,$idGroupID,$rTimeHour)
 {
 	$sql = "SELECT `id` FROM `Arm_rmFactors` WHERE `idPoint` = ".$idPoint." AND `idFactorGroup` = ".$idGroupID.";";
 	$vResultP = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResultP) > 0)
+	if (mysqli_num_rows($vResultP) > 0)
 	{	
 		return $rTimeHour .' ч.';
 	}
@@ -589,7 +589,7 @@ function PDF_isFactorId($idPoint,$idFactor,$rTimeHour)
 {
 	$sql = "SELECT `id` FROM `Arm_rmFactors` WHERE `idPoint` = ".$idPoint." AND `idFactor` = ".$idFactor.";";
 	$vResultP = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResultP) > 0)
+	if (mysqli_num_rows($vResultP) > 0)
 	{	
 		return $rTimeHour .' ч.';
 	}
@@ -603,7 +603,7 @@ function PDF_isFactorIds($idPoint,$idFactor,$rTimeHour)
 	$sql = "SELECT `id` FROM `Arm_rmFactors` WHERE `idPoint` = ".$idPoint." AND `idFactor` IN (".$idFactor.");";
 //	echo($sql);
 	$vResultP = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResultP) > 0)
+	if (mysqli_num_rows($vResultP) > 0)
 	{	
 		return $rTimeHour .' ч.';
 	}

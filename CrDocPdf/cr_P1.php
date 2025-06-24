@@ -22,9 +22,9 @@
 	$vResult = DbConnect::GetSqlQuery($sql);
 	
 	$sDateIzm = '';
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			if(strlen($sDateIzm) > 0) $sDateIzm .= 'г., ';
 			$sDateIzm .= StringWork::StrToDateFormatLite($vRow[DC]);
@@ -40,7 +40,7 @@
 	$sql = "SELECT * FROM `Arm_groupDevices` WHERE `idGroup` = ".$target." AND `sFactName` LIKE '%Напряженность трудового процесса%';";
 	$vResult = DbConnect::GetSqlQuery($sql);
 	
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
 		$sOborud ='<br /><br /><table width="100%" border="0.5" cellspacing="0" cellpadding="2" bordercolor="#000">
 		<tr>
@@ -50,7 +50,7 @@
 		</tr>';
 		//Счетчик
 		$iNum = 1;
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			if(strlen(trim($vRow[sMethodName]))>0) $sOborudMethod .= '<li>'.$vRow[sMethodName].'</li>';
 			$sOborud .='<tr>
@@ -73,21 +73,21 @@
 <td align="center"><h2><font face="calibrib">'.StringWork::CheckNullStrFull(UserControl::GetUserFieldValueFromId('sOrgName',$sSOUTORGid)).'</font></h2></td>
 </tr>
 <tr>
-<td align="center"><font face="calibrib">Юридический адрес: '.StringWork::CheckNullStrFull(UserControl::GetUserFieldValueFromId('sOrgPlace',$sSOUTORGid)).', Телефон: '.StringWork::CheckNullStrFull(UserControl::GetUserFieldValueFromId('sOrgPhone',$sSOUTORGid)).'.</font></td>
+<td align="center"><font face="calibrib">'.StringWork::CheckNullStrFull(UserControl::GetUserFieldValueFromId('sOrgPlace',$sSOUTORGid)).', Телефон: '.StringWork::CheckNullStrFull(UserControl::GetUserFieldValueFromId('sOrgPhone',$sSOUTORGid)).'.</font></td>
 </tr>
 <tr>
-<td align="center"><font face="calibrib">№ '.UserControl::GetUserFieldValueFromId('sOrgRegNum',$sSOUTORGid).' в реестре аккредитованных организаций, оказывающие услуги в области охраны труда от '.StringWork::StrToDateFormatLite(UserControl::GetUserFieldValueFromId('sOrgDate',$sSOUTORGid)).' г.</font></td>
+<td align="center"><font face="calibrib">№ '.UserControl::GetUserFieldValueFromId('sOrgRegNum',$sSOUTORGid).' в реестре аккредитованных организаций, проводящих специальную оценку условий труда от '.StringWork::StrToDateFormatLite(UserControl::GetUserFieldValueFromId('sOrgDate',$sSOUTORGid)).' г.</font></td>
 </tr>';
 
 	$sql = "SELECT * FROM `Arm_groupAcredit` WHERE `idGroup` = ".$target.";";
 	$vResult = DbConnect::GetSqlQuery($sql);
 	
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			
-			$html .='<tr><td align="center"><font face="calibrib">Аттестат аккредитации: '.$vRow[sName].' от '.StringWork::StrToDateFormatLite($vRow[dDateCreate]).', действителен до '.StringWork::StrToDateFormatLite($vRow[dDateFinish]).'.</font></td></tr>';		
+			$html .='<tr><td align="center"><font face="calibrib">Аттестат аккредитации: '.$vRow[sName].' от '.StringWork::StrToDateFormatLite($vRow[dDateCreate]).'.</font></td></tr>';		
 		}
 	}
 
@@ -102,7 +102,8 @@ $html .='<tr style="border-bottom:1px #000000 solid;">
 <tr><td align="Left">2. Место нахождения и место осуществления деятельности работодателя: <font face="calibrib">'.StringWork::CheckNullStrFull($agroup[sPlace]).'</font></td></tr>
 <tr><td align="Left">3. Дата проведения исследований, измерений: <font face="calibrib">'.StringWork::CheckNullStrFull($sDateIzm).'</font></td></tr>
 <tr><td align="Left">4. Сведения о применяемых средствах измерений: '.$sOborud.'</td></tr>
-<tr nobr="true"><td align="Left">5. Наименование примененных методов исследований, измерений, нормативно правовых актов регламентирующих нормативные уровни (ПДК/ПДУ): <font face="calibrib"><ul><li>Приказ Минтруда России №33н от 24 января 2014 г. "Об утверждении методики проведения специальной оценки условий труда, классификатора вредных и (или) опасных производственных факторов, формы отчета о проведении специальной оценки условий труда и инструкции по её заполнению"</li>'.$sOborudMethod.'</ul></font></td></tr>
+<tr style="border-bottom:1pt solid black;"><td align="center" valign="middle"><font face="calibrib">Протокол не может быть полностью или частично воспроизведен и распространен без разрешения заказчика или Испытательной лаборатории. Запрещается вносить дополнения или исправления в данный протокол.</font></td></tr>
+<tr nobr="true"><td align="Left">5. Наименование примененных методов исследований, измерений, нормативно правовых актов регламентирующих нормативные уровни (ПДК/ПДУ): <font face="calibrib"><ul>'.$sOborudMethod.'</ul></font></td></tr>
 </table>
 ';		
 	//====================================================================================================
@@ -117,47 +118,61 @@ $pdf->AddPage();
 
 $pdf->SetAutoPageBreak(True, 25);
 $pdf->SetFont($fontname, 'BI', 10, '', 'false');
-PDF_insert_RM($pdf, $target, $fontname, $fontname_bold);
+PDF_insert_RM($pdf, $target, $fontname, $fontname_bold, $sDateIzm);
 PDF_insert_Podpis_Protocol($pdf, $target);
 //PDF_insert_EndText($pdf, '', 25, 20, '1, 2, 3, 4', $target);
 $pdf->SetFont($fontname, 'BI', 10, '', 'false');
 $html ='';
 	
-function PDF_insert_EndText($inPDF, $sPrime, $iCountAll, $iCountDanger, $sWarningNum, $iTarget)
+function PDF_insert_EndText($inPDF, $sPrime, $iCountAll, $iCountDanger, $sWarningNum, $iTarget, $date)
 {	
+	$date = DateTime::createFromFormat('d.m.Y', str_replace('г.', '', $date));
+	$date_val = DateTime::createFromFormat('d.m.Y', '01.09.2019');
+
 	$html ='<table width="100%" border="0" cellspacing="0" cellpadding="0">';
 
-	if(strlen(trim($sPrime)) > 0)
+	if ($date <= $date_val)
 	{
-		$html .='<tr><td align="Left"><font face="calibrib">Примечание:</font> '.$sPrime.'</td></tr>';
+	$html .= 
+'<tr><td align="Left"><font face="calibrib">Примечание:</font>Значения оценки приведены по требованию заказчика в соответствии с требованиями Федерального закона от 28.12.2013 г. №426-ФЗ «О специальной оценке условий труда» и методикой проведения специальной оценки условий труда (утв. Приказ Минтруда России №817н от 21.11.2023 г.), и необходимы для толкования результатов испытаний в соответствии с п. 7.8.1.2 и п. 7.8.3.1 ГОСТ ISO/IEC 17025-2019
+<br>
+'.$sPrime.'</td></tr>';
+	}
+	else
+	{
+	$html .= 
+'<tr><td align="Left"><font face="calibrib">Примечание:</font>Значения оценки приведены по требованию заказчика в соответствии с требованиями Федерального закона от 28.12.2013 г. №426-ФЗ «О специальной оценке условий труда» и методикой проведения специальной оценки условий труда (утв. Приказ Минтруда России №817н от 21.11.2023 г.), и необходимы для толкования результатов испытаний в соответствии с п. 7.8.1.2 и п. 7.8.3.1 ГОСТ ISO/IEC 17025-2019.
+<br>
+'.$sPrime.'</td></tr>';		
 	}
 
 	if($iCountDanger == 0)
 	{
 		//Соответсвует
-		$html .='<tr><td align="Left"><font face="calibrib">Заключение:</font> По результатам исследования, измерения и оценки, условия труда на '.StringWork::Rms($iCountAll).' - соответствуют требованиям нормативных документов.</td></tr>';
+		$html .='<tr><td align="Left"> По результатам исследования, измерения и оценки, условия труда на '.StringWork::Rms($iCountAll).' - соответствуют требованиям нормативных документов.</td></tr>';
 	}
 	else
 	{
 		//Не соответсвует
-		$html .='<tr><td align="Left"><font face="calibrib">Заключение:</font> По результатам исследования, измерения и оценки, условия труда на '.$iCountDanger.' из '.StringWork::Rms($iCountAll).' р.м. (№ '.$sWarningNum.') не соответствует требованиям нормативных документов.</td></tr>';
+		$html .='<tr><td align="Left"> По результатам исследования, измерения и оценки, условия труда на '.$iCountDanger.' из '.StringWork::Rms($iCountAll).' р.м. (№ '.$sWarningNum.') не соответствует требованиям нормативных документов.</td></tr>';
 	}
 	
 	//Примечания
 	$sql2 = "SELECT `sNTens` FROM `Arm_group` WHERE `id` = ".$iTarget.";";
 	$sNote = DbConnect::GetSqlCell($sql2);
 
-        if ($sNote != '')
+	if ($sNote != '')
 	{
 		$html .='<br><tr><td align="Left"><font face="calibrib">Примечание:</font> '.$sNote.'</td></tr>';
 	}
+
 
 	$html .='</table>';
 	$inPDF->Ln();
 	$inPDF->writeHTML($html, true, false, true, false, '');
 }
 
-function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold)
+function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold, $date)
 {
 	//Стандартные переменные
 	$iRmCount = 0;
@@ -182,13 +197,13 @@ function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold)
 	$sql = "SELECT `id`, `sName`, `idParent`, `iNumber`, `sNumAnalog`, `iATennese` FROM `Arm_workplace` WHERE `idGroup` = ".$idWorkGroup." AND `idParent` > -1 ORDER BY `iNumber`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
 	$bRow = false;
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			$sql = "SELECT `Arm_rmFactors`.`idFactorGroup`,`Arm_rmFactors`.`idFactor`,`Arm_rmFactors`.`sName`, `Arm_rmFactors`.`var1`, `Arm_rmFactors`.`var2`, `Arm_rmFactors`.`var3`, `Arm_rmFactors`.`var4`, `Arm_rmFactors`.`var5`, `Arm_rmFactorsPdu`.`fPdu1`, `Arm_rmFactorsPdu`.`fPdu2`, `Arm_rmFactorsPdu`.`fPdu3`, `Arm_rmFactorsPdu`.`fPdu4`, `Arm_rmFactorsPdu`.`fPdu5`, `Arm_rmFactorsPdu`.`iAsset` FROM `Arm_rmFactors` LEFT JOIN `Arm_rmFactorsPdu` ON (`Arm_rmFactors`.`id` = `Arm_rmFactorsPdu`.`idFactor`) LEFT JOIN `Arm_workplace` ON (`Arm_workplace`.`id` = `Arm_rmFactorsPdu`.`idRm`) WHERE `Arm_workplace`.`id` = ".$vRow[id]." AND `Arm_rmFactors`.`idFactorGroup` = 46 ORDER BY `Arm_rmFactors`.`idFactor`;";
 			$vResultF = DbConnect::GetSqlQuery($sql);
-			if (mysql_num_rows($vResultF) > 0)
+			if (mysqli_num_rows($vResultF) > 0)
 			{
 				$bRow = true;
 				$iRmCount++;
@@ -244,7 +259,7 @@ function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold)
 				$aTenneseTotal = array(1=>-1,2=>-1,3=>-1,4=>-1,5=>-1,6=>-1);
 				$aTenneseTotalAll = array(1=>0,2=>0,3=>0,4=>0,5=>0,6=>0);
 
-				while($vRowF = mysql_fetch_array($vResultF))
+				while($vRowF = MYSQLI_FETCH_ASSOC($vResultF))
 				{
 					//Подготовка
 					switch($vRowF[idFactor])
@@ -304,7 +319,7 @@ function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold)
 	else
 	{
 		$inPDF->SetFont($infontname, 'BI', 12, '', 'false');
-		PDF_insert_EndText($inPDF, '', $iRmCount, $iRmCountWarning, $sRmCountWarning, $idWorkGroup);
+		PDF_insert_EndText($inPDF, '', $iRmCount, $iRmCountWarning, $sRmCountWarning, $idWorkGroup, $date);
 		$inPDF->SetFont($infontname, 'BI', 10, '', 'false');
 	}
 }

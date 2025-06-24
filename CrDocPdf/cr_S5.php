@@ -36,7 +36,7 @@ $pdf->SetFillColor(217,217,217);
 	$pdf->MultiCell	(23,10,'3.3',1,'C',1,0,'207','50',1,0,0,1,10,'M');
 	$pdf->MultiCell	(23,10,'3.4',1,'C',1,0,'230','50',1,0,0,1,10,'M');
 	$pdf->MultiCell	(29,20,'Класс 4',1,'C',1,0,'253','40',1,0,0,1,20,'M');
-
+	
 	$pdf->MultiCell	(50,5,'1',1,'C',1,0,'15','60',1,0,0,1,5,'M');
 	$pdf->MultiCell	(20,5,'2',1,'C',1,0,'65','60',1,0,0,1,5,'M');
 	$pdf->MultiCell	(30,5,'3',1,'C',1,0,'85','60',1,0,0,1,5,'M');
@@ -47,56 +47,56 @@ $pdf->SetFillColor(217,217,217);
 	$pdf->MultiCell	(23,5,'8',1,'C',1,0,'207','60',1,0,0,1,5,'M');
 	$pdf->MultiCell	(23,5,'9',1,'C',1,0,'230','60',1,0,0,1,5,'M');
 	$pdf->MultiCell	(29,5,'10',1,'C',1,0,'253','60',1,0,0,1,5,'M');
-
+	
 	//Данные общие
 	$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	$tmpRMCount = mysql_num_rows($vResult);
+	$tmpRMCount = mysqli_num_rows($vResult);
 	$sql = "SELECT SUM(`iCount`) AS iCount, SUM(`iCountWoman`) AS iCountWoman, SUM(`iCountYouth`) AS iCountYouth, SUM(`iCountDisabled`) AS iCountDisabled FROM `Arm_workplace` WHERE `idParent` > -1 AND `idGroup` = ".$target.";";
 	$vResultCount = DbConnect::GetSqlRow($sql);
-
+	
 	$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1  AND `iATotal` = 1;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	$tmpRMCount1 = mysql_num_rows($vResult);
+	$tmpRMCount1 = mysqli_num_rows($vResult);
 	$sql = "SELECT SUM(`iCount`) AS iCount, SUM(`iCountWoman`) AS iCountWoman, SUM(`iCountYouth`) AS iCountYouth, SUM(`iCountDisabled`) AS iCountDisabled FROM `Arm_workplace` WHERE `idParent` > -1 AND `idGroup` = ".$target." AND `iATotal` = 1;";
 	$vResultCount1 = DbConnect::GetSqlRow($sql);
-
+	
 	$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1  AND `iATotal` = 2;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	$tmpRMCount2 = mysql_num_rows($vResult);
+	$tmpRMCount2 = mysqli_num_rows($vResult);
 	$sql = "SELECT SUM(`iCount`) AS iCount, SUM(`iCountWoman`) AS iCountWoman, SUM(`iCountYouth`) AS iCountYouth, SUM(`iCountDisabled`) AS iCountDisabled FROM `Arm_workplace` WHERE `idParent` > -1 AND `idGroup` = ".$target." AND `iATotal` = 2;";
 	$vResultCount2 = DbConnect::GetSqlRow($sql);
-
+	
 	$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1  AND `iATotal` = 3;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	$tmpRMCount3 = mysql_num_rows($vResult);
+	$tmpRMCount3 = mysqli_num_rows($vResult);
 	$sql = "SELECT SUM(`iCount`) AS iCount, SUM(`iCountWoman`) AS iCountWoman, SUM(`iCountYouth`) AS iCountYouth, SUM(`iCountDisabled`) AS iCountDisabled FROM `Arm_workplace` WHERE `idParent` > -1 AND `idGroup` = ".$target." AND `iATotal` = 3;";
 	$vResultCount3 = DbConnect::GetSqlRow($sql);
-
+	
 	$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1  AND `iATotal` = 4;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	$tmpRMCount4 = mysql_num_rows($vResult);
+	$tmpRMCount4 = mysqli_num_rows($vResult);
 	$sql = "SELECT SUM(`iCount`) AS iCount, SUM(`iCountWoman`) AS iCountWoman, SUM(`iCountYouth`) AS iCountYouth, SUM(`iCountDisabled`) AS iCountDisabled FROM `Arm_workplace` WHERE `idParent` > -1 AND `idGroup` = ".$target." AND `iATotal` = 4;";
 	$vResultCount4 = DbConnect::GetSqlRow($sql);
-
+	
 	$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1  AND `iATotal` = 5;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	$tmpRMCount5 = mysql_num_rows($vResult);
+	$tmpRMCount5 = mysqli_num_rows($vResult);
 	$sql = "SELECT SUM(`iCount`) AS iCount, SUM(`iCountWoman`) AS iCountWoman, SUM(`iCountYouth`) AS iCountYouth, SUM(`iCountDisabled`) AS iCountDisabled FROM `Arm_workplace` WHERE `idParent` > -1 AND `idGroup` = ".$target." AND `iATotal` = 5;";
 	$vResultCount5 = DbConnect::GetSqlRow($sql);
-
+	
 	$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1  AND `iATotal` = 6;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	$tmpRMCount6 = mysql_num_rows($vResult);
+	$tmpRMCount6 = mysqli_num_rows($vResult);
 	$sql = "SELECT SUM(`iCount`) AS iCount, SUM(`iCountWoman`) AS iCountWoman, SUM(`iCountYouth`) AS iCountYouth, SUM(`iCountDisabled`) AS iCountDisabled FROM `Arm_workplace` WHERE `idParent` > -1 AND `idGroup` = ".$target." AND `iATotal` = 6;";
 	$vResultCount6 = DbConnect::GetSqlRow($sql);
-
+	
 	$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$target." AND `idParent` > -1  AND `iATotal` = 7;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	$tmpRMCount7 = mysql_num_rows($vResult);
+	$tmpRMCount7 = mysqli_num_rows($vResult);
 	$sql = "SELECT SUM(`iCount`) AS iCount, SUM(`iCountWoman`) AS iCountWoman, SUM(`iCountYouth`) AS iCountYouth, SUM(`iCountDisabled`) AS iCountDisabled FROM `Arm_workplace` WHERE `idParent` > -1 AND `idGroup` = ".$target." AND `iATotal` = 7;";
 	$vResultCount7 = DbConnect::GetSqlRow($sql);
-
+	
 	$y = 65;
 	$h = 10;
 	if($agroup['iRmTotalCount'] < $tmpRMCount) $agroup['iRmTotalCount'] = $tmpRMCount;
@@ -185,12 +185,12 @@ $pdf->SetFillColor(217,217,217);
 	$pdf->MultiCell	(55,10,'Ультразвук воздушный',1,'L',1,1,'62','130',1,0,0,1,10,'M');
 	$pdf->MultiCell	(55,10,'Вибрация общая',1,'L',1,1,'62','140',1,0,0,1,10,'M');
 	$pdf->MultiCell	(55,10,'Вибрация локальная',1,'L',1,1,'62','150',1,0,0,1,10,'M');
-
+	
 	$pdf->MultiCell	(55,10,'Неионизирующие излучения',1,'L',1,1,'62','160',1,0,0,1,10,'M');
 //	$pdf->MultiCell	(45,10,'Ультрафиолетовое излучение фактора неионизирующие поля и излучения',1,'L',1,1,'122','180',1,0,0,1,10,'M');
 //	$pdf->MultiCell	(45,10,'Лазерное излучение фактора неионизирующие поля и излучения',1,'L',1,1,'122','190',1,0,0,1,10,'M');
 	$pdf->StopTransform();
-
+	
 	$pdf->StartTransform();
 	$pdf->Rotate(90, 152, 80);
 	$pdf->MultiCell	(55,10,'Ионизирующие излучения',1,'L',1,1,'152','80',1,0,0,1,10,'M');
@@ -201,7 +201,7 @@ $pdf->SetFillColor(217,217,217);
 	$pdf->MultiCell	(60,10,'Итоговый класс (подкласс) условий труда',1,'L',1,1,'152','130',1,0,0,1,10,'M');
 	$pdf->MultiCell	(60,10,'Итоговый класс (подкласс) условий труда с учетом эффективного применения СИЗ',1,'L',1,1,'152','140',1,0,0,1,10,'M');
 	$pdf->StopTransform();
-
+	
 	$pdf->StartTransform();
 	$pdf->Rotate(90, 222, 80);
 	$pdf->MultiCell	(60,10,'Повышенный размер оплаты труда (да,нет)',1,'L',1,1,'222','80',1,0,0,1,10,'M');
@@ -212,46 +212,46 @@ $pdf->SetFillColor(217,217,217);
 	$pdf->MultiCell	(60,10,'Льготное пенсионное обеспечение (да/нет)',1,'L',1,1,'222','130',1,0,0,1,10,'M');
 	$pdf->StopTransform();
 	$pdf->SetFont($fontname, 'BI', 8, '', 'false');
-
+	
 	$pdf->MultiCell	(140,5,'Классы (подклассы) условий труда',1,'C',1,1,'62','20',1,0,0,1,5,'M');
 
 	$pdf->SetXY(15,80);
 	$pdf->SetFont($fontname, 'BI', 8, '', 'false');
 	PDF_insert_RM($pdf, $target, $fontname, $fontname_bold);
 	$pdf->SetFont($fontname, 'BI', 10, '', 'false');
-
+	
 	//Date
 	$sql = "SELECT MAX(`dCreateDate`) FROM `Arm_workplace` WHERE `idGroup` = '".$target."' AND `idParent` <> -1;";
 	$vResultDataCreate = DbConnect::GetSqlRow($sql);
-
+	
 	$pdf->MultiCell	(0,5,'Дата составления: '.StringWork::StrToDateFormatFull($vResultDataCreate[0]),0,'L',0,1,'','',1,0,0,1,5,'M');
 	$pdf->Ln();
-
+	
 	//Коммисия!
 	PDF_insert_Podpis($pdf, $target);
 
 	$pdf->SetFont($fontname, 'BI', 10, '', 'false');
 	$html ='';
-
+	
 function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold)
 {
-	PDF_InsertHeaderRmList($inPDF);
+	PDF_InsertHeaderRmList($inPDF);	
 	$sql = "SELECT * FROM `Arm_workplace` WHERE `idGroup` = ".$idWorkGroup." AND `idParent` > -1 ORDER BY `iNumber`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-
-	if (mysql_num_rows($vResult) > 0)
+	
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			if (strlen($vRow[sNumAnalog]) > 0)
 			{
 				$vRow[iNumber] = $vRow[iNumber].'А';
 			}
-
+			
 			//Начало цикла вставки
 			$num_pages = $inPDF->getNumPages();
             $inPDF->startTransaction();
-
+			
 			//Вставка содержимого
 			$rowcount = $inPDF->getNumLines($vRow[sName], 37);
 			$rowheight = $rowcount*3.8;
@@ -282,14 +282,14 @@ function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold)
 			$inPDF->MultiCell(10,$rowheight,StringWork::iToCompString($vRow[iCompMilk]),1,'C',0,0);
 			$inPDF->MultiCell(10,$rowheight,StringWork::iToCompString($vRow[iCompFood]),1,'C',0,0);
 			$inPDF->MultiCell(10,$rowheight,StringWork::iToCompString($vRow[iCompPension]),1,'C',0,1);
-
+			
 			if($num_pages < $inPDF->getNumPages())
             {
 				$inPDF->rollbackTransaction(true);
 				$inPDF->AddPage();
-				//Вставка заголовка
-				PDF_InsertHeaderRmList($inPDF);
-
+				//Вставка заголовка	
+				PDF_InsertHeaderRmList($inPDF);		
+				
 				//Вставка содержимого
 				$rowcount = $inPDF->getNumLines($vRow[sName], 37);
 				$rowheight = $rowcount*3.8;
@@ -309,7 +309,7 @@ function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold)
 				$inPDF->MultiCell(10,$rowheight,StringWork::iToClassNameLite($vRow[iALight]),1,'C',0,0);
 				$inPDF->MultiCell(10,$rowheight,StringWork::iToClassNameLite($vRow[iAHeavy]),1,'C',0,0);
 				$inPDF->MultiCell(10,$rowheight,StringWork::iToClassNameLite($vRow[iATennese]),1,'C',0,0);
-
+				
 				$inPDF->SetFont($infontnamebold, 'BI', 8, '', 'false');
 				$inPDF->MultiCell(10,$rowheight,StringWork::iToClassNameLite($vRow[iATotal]),1,'C',0,0);
 				$inPDF->SetFont($infontname, 'BI', 8, '', 'false');
@@ -362,8 +362,8 @@ function PDF_isFactorGroup($idPoint,$idGroupID,$rTimeHour)
 {
 	$sql = "SELECT `id` FROM `Arm_rmFactors` WHERE `idPoint` = ".$idPoint." AND `idFactorGroup` = ".$idGroupID.";";
 	$vResultP = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResultP) > 0)
-	{
+	if (mysqli_num_rows($vResultP) > 0)
+	{	
 		return $rTimeHour .' ч.';
 	}
 	else
@@ -375,8 +375,8 @@ function PDF_isFactorId($idPoint,$idFactor,$rTimeHour)
 {
 	$sql = "SELECT `id` FROM `Arm_rmFactors` WHERE `idPoint` = ".$idPoint." AND `idFactor` = ".$idFactor.";";
 	$vResultP = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResultP) > 0)
-	{
+	if (mysqli_num_rows($vResultP) > 0)
+	{	
 		return $rTimeHour .' ч.';
 	}
 	else
@@ -389,8 +389,8 @@ function PDF_isFactorIds($idPoint,$idFactor,$rTimeHour)
 	$sql = "SELECT `id` FROM `Arm_rmFactors` WHERE `idPoint` = ".$idPoint." AND `idFactor` IN (".$idFactor.");";
 //	echo($sql);
 	$vResultP = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResultP) > 0)
-	{
+	if (mysqli_num_rows($vResultP) > 0)
+	{	
 		return $rTimeHour .' ч.';
 	}
 	else

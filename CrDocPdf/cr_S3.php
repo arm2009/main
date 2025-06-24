@@ -30,7 +30,7 @@
 
 	//Наименование рабочего места
 	if(strlen(trim($vResultRm[sOk])) > 0)
-	$vResultRm[sName] = $vResultRm[sName] .' ('.$vResultRm[sOk].')';
+	$vResultRm[sName] = $vResultRm[sName];
 	
 	if (strlen($vResultRm[sNumAnalog]) > 0)
 	{
@@ -98,9 +98,9 @@
 	//Список оборудования и сырья
 	$sqlP = "SELECT `Arm_rmPoints`.`sName`, `Arm_rmPointsRm`.`sTime` FROM `Arm_rmPoints`, `Arm_rmPointsRm` WHERE `Arm_rmPoints`.`id` = `Arm_rmPointsRm`.`idPoint` AND `Arm_rmPointsRm`.`idRm` = ".$target." AND `Arm_rmPoints`.`iType` <> 0 ORDER BY `Arm_rmPoints`.`iType`;";
 	$vResultP = DbConnect::GetSqlQuery($sqlP);
-	if (mysql_num_rows($vResultP) > 0)
+	if (mysqli_num_rows($vResultP) > 0)
 	{				
-		while($vRowP = mysql_fetch_array($vResultP))
+		while($vRowP = MYSQLI_FETCH_ASSOC($vResultP))
 		{
 			if(strlen($vResultOborud) > 0){$vResultOborud .= ', ';}
 			$vResultOborud .= $vRowP[sName];
@@ -132,7 +132,7 @@
 	$sql = "SELECT `sActivityName` FROM `Arm_activity` WHERE `iRmId` = ".$target.";";
 	$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
 	$sActivity = '';
-	while ($vRow = mysql_fetch_assoc($vResult))
+	while ($vRow = MYSQLI_FETCH_ASSOC($vResult))
 	{
 		if(strlen($sActivity) > 0){$sActivity .= ';<br />';}
 		$sActivity .= $vRow[sActivityName];
@@ -171,6 +171,10 @@
   <tr>
     <td width="30%" valign="top" bgcolor="#d9d9d9" style="border-top:solid 1px #000000"><font face="calibrib">Строка 010.</font><br />Выпуск ЕТКС, ЕКС</td>
     <td width="70%" valign="top"><font face="calibrib">'.$vResultRm[sETKS].'</font></td>
+  </tr>
+  <tr>
+    <td width="30%" valign="top" bgcolor="#d9d9d9" style="border-top:solid 1px #000000"><font face="calibrib">Строка 011.</font><br />Код профессии (должности)</td>
+    <td width="70%" valign="top"><font face="calibrib">'.$vResultRm[sOk].$vResultRm[sPrefix].'</font></td>
   </tr>
 </table>
 <br /><br />

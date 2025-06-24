@@ -31,12 +31,12 @@
 	$vResultT = DbConnect::GetSqlQuery($sqlT);
 	
 	//Подсчет общего количества страниц и округление в большую сторону
-	$iPageCount = ceil(mysql_num_rows($vResultT) / $iCountOnPage);
+	$iPageCount = ceil(mysqli_num_rows($vResultT) / $iCountOnPage);
 	
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
 		$aResult = array();
-		while($row = mysql_fetch_array($vResult))
+		while($row = mysqli_fetch_array($vResult))
 				{
 					array_push($aResult, $row);
 				}

@@ -47,9 +47,10 @@
 			{
 				$vResult = $vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT sName, dDateCreate, dDateFinish FROM Arm_acredit WHERE id ='.$_POST['id']);
 				$result = array();
-				$result['sName'] = mysql_result($vResult, 0,0);
-				$result['dDateCreate'] = StringWork::DateFormatLite(new DateTime(mysql_result($vResult, 0,1)));
-				$result['dDateFinish'] = StringWork::DateFormatLite(new DateTime(mysql_result($vResult, 0,2)));
+				$res = MYSQLI_FETCH_ASSOC($vResult); 
+				$result['sName'] = $res[array_keys($res)[0]];
+				$result['dDateCreate'] = StringWork::DateFormatLite(new DateTime($res[array_keys($res)[1]]));
+				$result['dDateFinish'] = StringWork::DateFormatLite(new DateTime($res[array_keys($res)[2]]));
 				
 				echo json_encode($result);
 			}
@@ -65,11 +66,12 @@
 			{
 				$vResult = $vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT sName, sSertNum, dSertDate, sPost, sReestrNum FROM Arm_stuff WHERE id ='.$_POST['id']);
 				$result = array();
-				$result['sName'] = mysql_result($vResult, 0,0);
-				$result['sSertNum'] = mysql_result($vResult, 0,1);
-				$result['dSertDate'] = StringWork::DateFormatLite(new DateTime(mysql_result($vResult, 0,2)));
-				$result['sPost'] = mysql_result($vResult, 0,3);
-				$result['sReestrNum'] = mysql_result($vResult, 0,4);
+				$res = MYSQLI_FETCH_ASSOC($vResult);       
+				$result['sName'] = $res[array_keys($res)[0]];
+				$result['sSertNum'] = $res[array_keys($res)[1]];
+				$result['dSertDate'] = StringWork::DateFormatLite(new DateTime($res[array_keys($res)[2]]));
+				$result['sPost'] = $res[array_keys($res)[3]];
+				$result['sReestrNum'] = $res[array_keys($res)[4]];
 				
 				echo json_encode($result);
 			}
@@ -85,13 +87,14 @@
 			{
 				$vResult = $vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT sName, sReestrNum, dCheckDate, sCheckNum, sFactoryNum, sFactName, sMethodName FROM Arm_devices WHERE id ='.$_POST['id']);
 				$result = array();
-				$result['sName'] = mysql_result($vResult, 0,0);
-				$result['sReestrNum'] = mysql_result($vResult, 0,1);
-				$result['dCheckDate'] = StringWork::DateFormatLite(new DateTime(mysql_result($vResult, 0,2)));
-				$result['sCheckNum'] = mysql_result($vResult, 0,3);
-				$result['sFactoryNum'] = mysql_result($vResult, 0,4);
-				$result['sFactName'] = mysql_result($vResult, 0,5);
-				$result['sMethodName'] = mysql_result($vResult, 0,6);
+				$res = MYSQLI_FETCH_ASSOC($vResult);
+				$result['sName'] = $res[array_keys($res)[0]];
+				$result['sReestrNum'] = $res[array_keys($res)[1]];
+				$result['dCheckDate'] = StringWork::DateFormatLite(new DateTime($res[array_keys($res)[2]]));
+				$result['sCheckNum'] = $res[array_keys($res)[3]];
+				$result['sFactoryNum'] = $res[array_keys($res)[4]];
+				$result['sFactName'] = $res[array_keys($res)[5]];
+				$result['sMethodName'] = $res[array_keys($res)[6]];
 				
 				echo json_encode($result);
 			}
@@ -113,10 +116,10 @@
 				
 				$vResultEx = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT * FROM Arm_devices WHERE sName LIKE "'.$_POST['sDeviceName'].'" AND idParent = '.UserControl::GetUserLoginId());
 				
-				if (mysql_num_rows($vResultEx) == 0)
+				if (mysqli_num_rows($vResultEx) == 0)
 				{
 					$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_devices (sName, sReestrNum, dCheckDate, sCheckNum, idParent, sFactoryNum, sFactName, sMethodName) VALUES ("'.$_POST['sDeviceName'].'","'.$_POST['sDeviceReestrNum'].'","'.$sDeviceCheckDate.'","'.$_POST['sDeviceCheckNum'].'","'.UserControl::GetUserLoginId().'", "'.$_POST['sFactoryNum'].'", "'.$_POST['sFactName'].'", "'.$_POST['sMethodName'].'")');
-					$sIdTag = mysql_insert_id();
+					$sIdTag = $vResult;
 					echo SuotWork::AddDivDevice($_POST['sDeviceName'],  $_POST['sDeviceReestrNum'], $_POST['dDeviceCheckDate'], $_POST['sDeviceCheckNum'], $sIdTag);
 				}
 				else
@@ -146,11 +149,11 @@
 				
 				$vResultEx = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT * FROM Arm_stuff WHERE sName LIKE "'.$_POST['sStuffName'].'" AND idParent = '.UserControl::GetUserLoginId());
 				
-				if (mysql_num_rows($vResultEx) == 0)
+				if (mysqli_num_rows($vResultEx) == 0)
 				{
 				
 					$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_stuff (sName, sSertNum, dSertDate, sPost, sReestrNum, idParent) VALUES ("'.$_POST['sStuffName'].'","'.$_POST['sStuffSertNum'].'","'.$sStuffSertDate.'","'.$_POST['sStuffPost'].'","'.$_POST['sStuffReestrNum'].'","'.UserControl::GetUserLoginId().'")');
-					$sIdTag = mysql_insert_id();
+					$sIdTag = $vResult;
 					echo SuotWork::AddDivStuff($_POST['sStuffName'], $_POST['sStuffPost'], $_POST['dStuffSertDate'], $_POST['sStuffSertNum'], $_POST['sStuffReestrNum'], $sIdTag);
 				}
 				else
@@ -188,10 +191,10 @@
 				
 				$vResultEx = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT * FROM Arm_acredit WHERE sName LIKE "'.$_POST['sAcrName'].'" AND idParent = '.UserControl::GetUserLoginId());
 				
-				if (mysql_num_rows($vResultEx) == 0)
+				if (mysqli_num_rows($vResultEx) == 0)
 				{			
 					$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_acredit (sName, dDateCreate, dDateFinish, idParent) VALUES ("'.$_POST['sAcrName'].'","'.$sBaseAcrDateCreate.'","'.$sBaseAcrDateFinish.'","'.UserControl::GetUserLoginId().'")');
-					$sIdTag = mysql_insert_id();
+					$sIdTag = $vResult;
 					echo SuotWork::AddDivAcredit($_POST['sAcrName'], $_POST['sAcrDateCreate'], $_POST['sAcrDateFinish'], $sIdTag);
 				}
 				else
@@ -256,9 +259,9 @@
 			$sReturnDivs = '';
  			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT id, sName, dDateCreate, dDateFinish FROM Arm_acredit WHERE idParent ='.UserControl::GetUserLoginId());
 
-			if (mysql_num_rows($vResult) > 0)
+			if (mysqli_num_rows($vResult) > 0)
 			{
-				while($vRow = mysql_fetch_array($vResult))
+				while($vRow = mysqli_fetch_array($vResult))
 				{
 
 					$dDateCreate = StringWork::DateFormatLite(new DateTime($vRow['dDateCreate']));
@@ -275,9 +278,9 @@
 		{
 			$sReturnDivs = '';
  			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT id, sName, sPost, sSertNum, dSertDate, sReestrNum FROM Arm_stuff WHERE idParent ='.UserControl::GetUserLoginId());
-			if (mysql_num_rows($vResult) > 0)
+			if (mysqli_num_rows($vResult) > 0)
 			{
-				while($vRow = mysql_fetch_array($vResult))
+				while($vRow = mysqli_fetch_array($vResult))
 				{
 					$sSertDate = StringWork::DateFormatLite(new DateTime($vRow['dSertDate']));
 					$sReturnDivs = $sReturnDivs.SuotWork::AddDivStuff($vRow['sName'], $vRow['sPost'], $sSertDate, $vRow['sSertNum'], $vRow['sReestrNum'], $vRow['id'], 'display: yes;');
@@ -290,9 +293,9 @@
 		{
 			$sReturnDivs = '';
  			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT id, sName, sReestrNum, dCheckDate, sCheckNum FROM Arm_devices WHERE idParent ='.UserControl::GetUserLoginId());
-			if (mysql_num_rows($vResult) > 0)
+			if (mysqli_num_rows($vResult) > 0)
 			{
-				while($vRow = mysql_fetch_array($vResult))
+				while($vRow = mysqli_fetch_array($vResult))
 				{
 					$dCheckDate = StringWork::DateFormatLite(new DateTime($vRow['dCheckDate']));
 					$sReturnDivs = $sReturnDivs.SuotWork::AddDivDevice($vRow['sName'], $vRow['sReestrNum'], $dCheckDate, $vRow['sCheckNum'], $vRow['id'], 'display: yes;');
@@ -353,33 +356,33 @@
 				case 'device':
 				{
 					$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT sName, sReestrNum, dCheckDate, sCheckNum, sFactoryNum, sFactName, sMethodName FROM Arm_devices WHERE id ='.$id);
-					
-					$sName = mysql_result($vResult, 0,0);
+					$res = MYSQLI_FETCH_ASSOC($vResult);
+					$sName = $res[array_keys($res)[0]];
 					
 					$sql2 = 'SELECT * FROM Arm_groupDevices WHERE idGroup = '.$idGroup.' AND sName LIKE "'.$sName.'";';
 					$vResult2 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql2);
 								
-					if (mysql_num_rows($vResult2) == 0)
+					if (mysqli_num_rows($vResult2) == 0)
 					{
 					
-					UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_groupDevices (sName, sReestrNum, dCheckDate, sCheckNum, idGroup, sFactoryNum, sFactName, sMethodName) VALUES ("'.mysql_result($vResult, 0,0).'","'.mysql_result($vResult, 0,1).'","'.mysql_result($vResult, 0,2).'","'.mysql_result($vResult, 0,3).'",'.$idGroup.',"'.mysql_result($vResult, 0,4).'","'.mysql_result($vResult, 0,5).'","'.mysql_result($vResult, 0,6).'");');
-					return SuotWork::AddInfoDevDiv(mysql_insert_id(), mysql_result($vResult, 0,0), mysql_result($vResult, 0,1), mysql_result($vResult, 0,3), mysql_result($vResult, 0,2));}
+					$insertid = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_groupDevices (sName, sReestrNum, dCheckDate, sCheckNum, idGroup, sFactoryNum, sFactName, sMethodName) VALUES ("'.$res[array_keys($res)[0]].'","'.$res[array_keys($res)[1]].'","'.$res[array_keys($res)[2]].'","'.$res[array_keys($res)[3]].'",'.$idGroup.',"'.$res[array_keys($res)[4]].'","'.$res[array_keys($res)[5]].'","'.$res[array_keys($res)[6]].'");');
+					return SuotWork::AddInfoDevDiv($insertid, $res[array_keys($res)[0]], $res[array_keys($res)[1]], $res[array_keys($res)[3]], $res[array_keys($res)[2]]);}
 			break;
 					}
 
 				case 'stuff':
 				{
 					$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT sName, sPost, sSertNum, dSertDate, sReestrNum FROM Arm_stuff WHERE id ='.$id);
-					
-					$sName = mysql_result($vResult, 0,0);
+					$res = MYSQLI_FETCH_ASSOC($vResult);
+					$sName = $res[array_keys($res)[0]];
 					
 					$sql2 = 'SELECT * FROM Arm_groupStuff WHERE idGroup = '.$idGroup.' AND sName LIKE "'.$sName.'" AND bExpert = 0;';
 					$vResult2 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql2);
 								
-					if (mysql_num_rows($vResult2) == 0)
+					if (mysqli_num_rows($vResult2) == 0)
 					{				
-					UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_groupStuff (sName, sPost, sSertNum, dSertDate, sReestrNum, idGroup) VALUES ("'.mysql_result($vResult, 0,0).'", "'.mysql_result($vResult, 0,1).'", "'.mysql_result($vResult, 0,2).'", "'.mysql_result($vResult, 0,3).'", "'.mysql_result($vResult, 0,4).'",'.$idGroup.');');
-					return SuotWork::AddInfoStuffDiv(mysql_insert_id(), mysql_result($vResult, 0,0), mysql_result($vResult, 0,1));
+					$insertid = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_groupStuff (sName, sPost, sSertNum, dSertDate, sReestrNum, idGroup) VALUES ("'.$res[array_keys($res)[0]].'", "'.$res[array_keys($res)[1]].'", "'.$res[array_keys($res)[2]].'", "'.$res[array_keys($res)[3]].'", "'.$res[array_keys($res)[4]].'",'.$idGroup.');');
+					return SuotWork::AddInfoStuffDiv($insertid, $res[array_keys($res)[0]], $res[array_keys($res)[1]]);
 					}
 					else
 					{
@@ -392,31 +395,33 @@
 					
 					
 					$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT sName, dDateCreate, dDateFinish FROM Arm_acredit WHERE id ='.$id);	
-					$sName = mysql_result($vResult, 0,0);
+					$res = MYSQLI_FETCH_ASSOC($vResult);
+					$sName = $res[array_keys($res)[0]];
 					
 					$sql2 = 'SELECT * FROM Arm_groupAcredit WHERE idGroup = '.$idGroup.' AND sName LIKE "'.$sName.'";';
 					$vResult2 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql2);
 								
-					if (mysql_num_rows($vResult2) == 0)
+					if (mysqli_num_rows($vResult2) == 0)
 					{
-						UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_groupAcredit (sName, dDateCreate, dDateFinish, idGroup) VALUES ("'.$sName.'", "'.mysql_result($vResult, 0,1).'", "'.mysql_result($vResult, 0,2).'",'.$idGroup.');');
-						return SuotWork::AddInfoAcrDiv(mysql_insert_id(), mysql_result($vResult, 0,0), mysql_result($vResult, 0,2));
+						$insertid = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_groupAcredit (sName, dDateCreate, dDateFinish, idGroup) VALUES ("'.$sName.'", "'.$res[array_keys($res)[1]].'", "'.$res[array_keys($res)[2]].'",'.$idGroup.');');
+						return SuotWork::AddInfoAcrDiv($insertid, $res[array_keys($res)[0]], $res[array_keys($res)[2]]);
 					}
 			break;
 				}
 				case 'expert':
 				{
 					$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT sName, sPost, sSertNum, dSertDate, sReestrNum FROM Arm_stuff WHERE id ='.$id);
-					$sName = mysql_result($vResult, 0,0);
+					$res = MYSQLI_FETCH_ASSOC($vResult);
+					$sName = $res[array_keys($res)[0]];
 					
 					$sql2 = 'SELECT * FROM Arm_groupStuff WHERE idGroup = '.$idGroup.' AND sName LIKE "'.$sName.'" AND bExpert = 1;';
 					$vResult2 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql2);
 								
-					if (mysql_num_rows($vResult2) == 0)
+					if (mysqli_num_rows($vResult2) == 0)
 					{	
 					
-					UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_groupStuff (sName, sPost, sSertNum, dSertDate, sReestrNum, idGroup, bExpert) VALUES ("'.mysql_result($vResult, 0,0).'", "'.mysql_result($vResult, 0,1).'", "'.mysql_result($vResult, 0,2).'", "'.mysql_result($vResult, 0,3).'", "'.mysql_result($vResult, 0,4).'",'.$idGroup.', 1);');
-					return SuotWork::AddInfoStuffDiv(mysql_insert_id(), mysql_result($vResult, 0,0), mysql_result($vResult, 0,1));
+					$insertid = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_groupStuff (sName, sPost, sSertNum, dSertDate, sReestrNum, idGroup, bExpert) VALUES ("'.$res[array_keys($res)[0]].'", "'.$res[array_keys($res)[1]].'", "'.$res[array_keys($res)[2]].'", "'.$res[array_keys($res)[3]].'", "'.$res[array_keys($res)[4]].'",'.$idGroup.', 1);');
+					return SuotWork::AddInfoStuffDiv($insertid, $res[array_keys($res)[0]], $res[array_keys($res)[1]]);
 					}
 			break;
 				}

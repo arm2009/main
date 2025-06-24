@@ -24,9 +24,9 @@
 	$vResult = DbConnect::GetSqlQuery($sql);
 	
 	$sDateIzm = '';
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			if(strlen($sDateIzm) > 0) $sDateIzm .= 'г., ';
 			$sDateIzm .= StringWork::StrToDateFormatLite($vRow[DC]);
@@ -42,7 +42,7 @@
 	$sql = "SELECT * FROM `Arm_groupDevices` WHERE `idGroup` = ".$target." AND `sFactName` LIKE '%Тяжесть трудового процесса%';";
 	$vResult = DbConnect::GetSqlQuery($sql);
 	
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
 		$sOborud ='<br /><br /><table width="100%" border="0.5" cellspacing="0" cellpadding="2" bordercolor="#000">
 		<tr>
@@ -52,7 +52,7 @@
 		</tr>';
 		//Счетчик
 		$iNum = 1;
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			if(strlen(trim($vRow[sMethodName]))>0) $sOborudMethod .= '<li>'.$vRow[sMethodName].'</li>';
 			$sOborud .='<tr>
@@ -75,21 +75,21 @@
 <td align="center"><h2><font face="calibrib">'.StringWork::CheckNullStrFull(UserControl::GetUserFieldValueFromId('sOrgName',$sSOUTORGid)).'</font></h2></td>
 </tr>
 <tr>
-<td align="center"><font face="calibrib">Юридический адрес: '.StringWork::CheckNullStrFull(UserControl::GetUserFieldValueFromId('sOrgPlace',$sSOUTORGid)).', Телефон: '.StringWork::CheckNullStrFull(UserControl::GetUserFieldValueFromId('sOrgPhone',$sSOUTORGid)).'.</font></td>
+<td align="center"><font face="calibrib">'.StringWork::CheckNullStrFull(UserControl::GetUserFieldValueFromId('sOrgPlace',$sSOUTORGid)).', Телефон: '.StringWork::CheckNullStrFull(UserControl::GetUserFieldValueFromId('sOrgPhone',$sSOUTORGid)).'.</font></td>
 </tr>
 <tr>
-<td align="center"><font face="calibrib">№ '.UserControl::GetUserFieldValueFromId('sOrgRegNum',$sSOUTORGid).' в реестре аккредитованных организаций, оказывающие услуги в области охраны труда от '.StringWork::StrToDateFormatLite(UserControl::GetUserFieldValueFromId('sOrgDate',$sSOUTORGid)).' г.</font></td>
+<td align="center"><font face="calibrib">№ '.UserControl::GetUserFieldValueFromId('sOrgRegNum',$sSOUTORGid).' в реестре аккредитованных организаций, проводящих специальную оценку условий труда от '.StringWork::StrToDateFormatLite(UserControl::GetUserFieldValueFromId('sOrgDate',$sSOUTORGid)).' г.</font></td>
 </tr>';
 
 	$sql = "SELECT * FROM `Arm_groupAcredit` WHERE `idGroup` = ".$target.";";
 	$vResult = DbConnect::GetSqlQuery($sql);
 	
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			
-			$html .='<tr><td align="center"><font face="calibrib">Аттестат аккредитации: '.$vRow[sName].' от '.StringWork::StrToDateFormatLite($vRow[dDateCreate]).', действителен до '.StringWork::StrToDateFormatLite($vRow[dDateFinish]).'.</font></td></tr>';		
+			$html .='<tr><td align="center"><font face="calibrib">Аттестат аккредитации: '.$vRow[sName].' от '.StringWork::StrToDateFormatLite($vRow[dDateCreate]).'.</font></td></tr>';		
 		}
 	}
 
@@ -104,7 +104,8 @@ $html .='<tr style="border-bottom:1px #000000 solid;">
 <tr><td align="Left">2. Место нахождения и место осуществления деятельности работодателя: <font face="calibrib">'.StringWork::CheckNullStrFull($agroup[sPlace]).'</font></td></tr>
 <tr><td align="Left">3. Дата проведения исследований, измерений: <font face="calibrib">'.StringWork::CheckNullStrFull($sDateIzm).'</font></td></tr>
 <tr><td align="Left">4. Сведения о применяемых средствах измерений: '.$sOborud.'</td></tr>
-<tr nobr="true"><td align="Left">5. Наименование примененных методов исследований, измерений, нормативно правовых актов регламентирующих нормативные уровни (ПДК/ПДУ): <font face="calibrib"><ul><li>Приказ Минтруда России №33н от 24 января 2014 г. "Об утверждении методики проведения специальной оценки условий труда, классификатора вредных и (или) опасных производственных факторов, формы отчета о проведении специальной оценки условий труда и инструкции по её заполнению"</li>'.$sOborudMethod.'</ul></font></td></tr>
+<tr style="border-bottom:1pt solid black;"><td align="center" valign="middle"><font face="calibrib">Протокол не может быть полностью или частично воспроизведен и распространен без разрешения заказчика или Испытательной лаборатории. Запрещается вносить дополнения или исправления в данный протокол.</font></td></tr>
+<tr nobr="true"><td align="Left">5. Наименование примененных методов исследований, измерений, нормативно правовых актов регламентирующих нормативные уровни (ПДК/ПДУ): <font face="calibrib"><ul>'.$sOborudMethod.'</ul></font></td></tr>
 </table>
 ';		
 	//====================================================================================================
@@ -119,30 +120,43 @@ $pdf->AddPage();
 
 $pdf->SetAutoPageBreak(True, 25);
 $pdf->SetFont($fontname, 'BI', 10, '', 'false');
-PDF_insert_RM($pdf, $target, $fontname, $fontname_bold);
+PDF_insert_RM($pdf, $target, $fontname, $fontname_bold, $sDateIzm);
 PDF_insert_Podpis_Protocol($pdf, $target);
 //PDF_insert_EndText($pdf, '', 25, 20, '1, 2, 3, 4', $target);
 $pdf->SetFont($fontname, 'BI', 10, '', 'false');
 $html ='';
 	
-function PDF_insert_EndText($inPDF, $sPrime, $iCountAll, $iCountDanger, $sWarningNum, $iTarget)
+function PDF_insert_EndText($inPDF, $sPrime, $iCountAll, $iCountDanger, $sWarningNum, $iTarget, $date)
 {	
+	$date = DateTime::createFromFormat('d.m.Y', str_replace('г.', '', $date));
+	$date_val = DateTime::createFromFormat('d.m.Y', '01.09.2019');
+
 	$html ='<table width="100%" border="0" cellspacing="0" cellpadding="0">';
 
-	if(strlen(trim($sPrime)) > 0)
+	if ($date <= $date_val)
 	{
-		$html .='<tr><td align="Left"><font face="calibrib">Примечание:</font> '.$sPrime.'</td></tr>';
+	$html .= 
+'<tr><td align="Left"><font face="calibrib">Примечание:</font>Значения оценки приведены по требованию заказчика в соответствии с требованиями Федерального закона от 28.12.2013 г. №426-ФЗ «О специальной оценке условий труда» и методикой проведения специальной оценки условий труда (утв. Приказ Минтруда России №817н от 21.11.2023 г.), и необходимы для толкования результатов испытаний в соответствии с п. 7.8.1.2 и п. 7.8.3.1 ГОСТ ISO/IEC 17025-2019
+<br>
+'.$sPrime.'</td></tr>';
+	}
+	else
+	{
+	$html .= 
+'<tr><td align="Left"><font face="calibrib">Примечание:</font>Значения оценки приведены по требованию заказчика в соответствии с требованиями Федерального закона от 28.12.2013 г. №426-ФЗ «О специальной оценке условий труда» и методикой проведения специальной оценки условий труда (утв. Приказ Минтруда России №817н от 21.11.2023 г.), и необходимы для толкования результатов испытаний в соответствии с п. 7.8.1.2 и п. 7.8.3.1 ГОСТ ISO/IEC 17025-2019.
+<br>
+'.$sPrime.'</td></tr>';		
 	}
 
 	if($iCountDanger == 0)
 	{
 		//Соответсвует
-		$html .='<tr><td align="Left"><font face="calibrib">Заключение:</font> По результатам исследования, измерения и оценки, условия труда на '.StringWork::Rms($iCountAll).' - соответствуют требованиям нормативных документов.</td></tr>';
+		$html .='<tr><td align="Left"> По результатам исследования, измерения и оценки, условия труда на '.StringWork::Rms($iCountAll).' - соответствуют требованиям нормативных документов.</td></tr>';
 	}
 	else
 	{
 		//Не соответсвует
-		$html .='<tr><td align="Left"><font face="calibrib">Заключение:</font> По результатам исследования, измерения и оценки, условия труда на '.$iCountDanger.' из '.StringWork::Rms($iCountAll).' р.м. (№ '.$sWarningNum.') не соответствует требованиям нормативных документов.</td></tr>';
+		$html .='<tr><td align="Left"> По результатам исследования, измерения и оценки, условия труда на '.$iCountDanger.' из '.StringWork::Rms($iCountAll).' р.м. (№ '.$sWarningNum.') не соответствует требованиям нормативных документов.</td></tr>';
 	}
 
 
@@ -160,7 +174,7 @@ function PDF_insert_EndText($inPDF, $sPrime, $iCountAll, $iCountDanger, $sWarnin
 	$inPDF->writeHTML($html, true, false, true, false, '');
 }
 
-function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold)
+function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold, $date)
 {
 	//Стандартные переменные
 	$iRmCount = 0;
@@ -185,13 +199,13 @@ function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold)
 	$sql = "SELECT `id`, `sName`, `idParent`, `iNumber`, `sNumAnalog`, `iAHeavyW`, `iAHeavyM`, `iAHeavy` FROM `Arm_workplace` WHERE `idGroup` = ".$idWorkGroup." AND `idParent` > -1 ORDER BY `iNumber`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
 	$bRow = false;
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = MYSQLI_FETCH_ASSOC($vResult))
 		{
 			$sql = "SELECT `Arm_rmFactors`.`idFactorGroup`,`Arm_rmFactors`.`idFactor`,`Arm_rmFactors`.`sName`, `Arm_rmFactors`.`var1`, `Arm_rmFactors`.`var2`, `Arm_rmFactors`.`var3`, `Arm_rmFactors`.`var4`, `Arm_rmFactors`.`var5`, `Arm_rmFactorsPdu`.`fPdu1`, `Arm_rmFactorsPdu`.`fPdu2`, `Arm_rmFactorsPdu`.`fPdu3`, `Arm_rmFactorsPdu`.`fPdu4`, `Arm_rmFactorsPdu`.`fPdu5`, `Arm_rmFactorsPdu`.`iAsset` FROM `Arm_rmFactors` LEFT JOIN `Arm_rmFactorsPdu` ON (`Arm_rmFactors`.`id` = `Arm_rmFactorsPdu`.`idFactor`) LEFT JOIN `Arm_workplace` ON (`Arm_workplace`.`id` = `Arm_rmFactorsPdu`.`idRm`) WHERE `Arm_workplace`.`id` = ".$vRow[id]." AND `Arm_rmFactors`.`idFactorGroup` = 37 ORDER BY `Arm_rmFactors`.`idFactor`;";
 			$vResultF = DbConnect::GetSqlQuery($sql);
-			if (mysql_num_rows($vResultF) > 0)
+			if (mysqli_num_rows($vResultF) > 0)
 			{
 				$bRow = true;
 				//Аналогичность
@@ -263,7 +277,7 @@ function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold)
 				$aHeavyTotalM = array(11=>0,12=>0,13=>0,21=>0,22=>0,23=>0,24=>0,31=>0,32=>0,41=>0,42=>0,43=>0,51=>0,61=>0,71=>0,72=>0);
 				$aHeavyTotalW = array(11=>0,12=>0,13=>0,21=>0,22=>0,23=>0,24=>0,31=>0,32=>0,41=>0,42=>0,43=>0,51=>0,61=>0,71=>0,72=>0);
 
-				while($vRowF = mysql_fetch_array($vResultF))
+				while($vRowF = MYSQLI_FETCH_ASSOC($vResultF))
 				{
 					//Подготовка
 					switch($vRowF[idFactor])
@@ -368,14 +382,14 @@ function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold)
 				PDF_InsertHeavy($inPDF, 21, $aHeavyTotal, $aHeavyTotalM, $aHeavyTotalW, 'Подъем и перемещение (разовое) тяжести при чередовании с другой работой (до 2 раз в час), кг.', 'до 30', 'до 10');
 				PDF_InsertHeavy($inPDF, 22, $aHeavyTotal, $aHeavyTotalM, $aHeavyTotalW, 'Подъем и перемещение тяжести постоянно в течение рабочего дня (смены) (более 2 раз в час), кг.', 'до 15', 'до 7');
 				PDF_InsertHeavy($inPDF, 23, $aHeavyTotal, $aHeavyTotalM, $aHeavyTotalW, 'Суммарная масса грузов, перемещаемых в течение каждого часа рабочего дня (смены) с рабочей поверхности, кг.', 'до 870', 'до 350');
-				PDF_InsertHeavy($inPDF, 24, $aHeavyTotal, $aHeavyTotalM, $aHeavyTotalW, 'Суммарная масса грузов, перемещаемых в течение каждого часа рабочего дня (смены) с поля, кг.', 'до 435', 'до 175');
+				PDF_InsertHeavy($inPDF, 24, $aHeavyTotal, $aHeavyTotalM, $aHeavyTotalW, 'Суммарная масса грузов, перемещаемых в течение каждого часа рабочего дня (смены) с пола, кг.', 'до 435', 'до 175');
 				PDF_InsertHeavy($inPDF, 31, $aHeavyTotal, $aHeavyTotalM, $aHeavyTotalW, 'Количество стереотипных рабочих движений работника при локальной нагрузке (с участием мышц кистей и пальцев рук), единиц.', 'до 40000', 'до 40000');
 				PDF_InsertHeavy($inPDF, 32, $aHeavyTotal, $aHeavyTotalM, $aHeavyTotalW, 'Количество стереотипных рабочих движений работника при региональной нагрузке (при работе с преимущественным участием мышц рук и плечевого пояса), единиц.', 'до 20000', 'до 20000');
 				PDF_InsertHeavy($inPDF, 41, $aHeavyTotal, $aHeavyTotalM, $aHeavyTotalW, 'Статическая нагрузка при удержании груза одной рукой, кгс*с.', 'до 36000', 'до 22000');
 				PDF_InsertHeavy($inPDF, 42, $aHeavyTotal, $aHeavyTotalM, $aHeavyTotalW, 'Статическая нагрузка при удержании груза двумя руками, кгс*с.', 'до 70000', 'до 42000');
 				PDF_InsertHeavy($inPDF, 43, $aHeavyTotal, $aHeavyTotalM, $aHeavyTotalW, 'Статическая нагрузка при удержании груза с участием мышц корпуса и ног, кгс*с.', 'до 100000', 'до 60000');
 				PDF_InsertHeavy($inPDF, 61, $aHeavyTotal, $aHeavyTotalM, $aHeavyTotalW, 'Наклоны корпуса тела работника более 30°, количество за рабочий день (смену).', '51-100', '51-100');
-				PDF_InsertHeavy($inPDF, 51, $aHeavyTotal, $aHeavyTotalM, $aHeavyTotalW, 'Рабочее положение тела работника в течение рабочего дня (смены)', 'Свободное удобное положение с возможностью смены рабочего положения тела (сидя, стоя). Нахождение в положении "стоя" до 40% времени рабочего дня (смены).', 'Свободное удобное положение с возможностью смены рабочего положения тела (сидя, стоя). Нахождение в положении "стоя" до 40% времени рабочего дня (смены).');
+				PDF_InsertHeavy($inPDF, 51, $aHeavyTotal, $aHeavyTotalM, $aHeavyTotalW, 'Рабочее положение тела работника в течение рабочего дня (смены)', 'До 25% неудобное, до 60% стоя.', 'До 25% неудобное, до 60% стоя.');
 				PDF_InsertHeavy($inPDF, 71, $aHeavyTotal, $aHeavyTotalM, $aHeavyTotalW, 'Перемещения работника в пространстве по горизонтали, обусловленные технологическим процессом, в течение рабочей смены, км.', 'до 8', 'до 8');
 				PDF_InsertHeavy($inPDF, 72, $aHeavyTotal, $aHeavyTotalM, $aHeavyTotalW, 'Перемещения работника в пространстве по вертикали, обусловленные технологическим процессом, в течение рабочей смены, км.', 'до 2,5', 'до 2,5');
 			}
@@ -389,10 +403,11 @@ function PDF_insert_RM($inPDF, $idWorkGroup, $infontname, $infontnamebold)
 	else
 	{
 		$inPDF->SetFont($infontname, 'BI', 12, '', 'false');
+
 		if($bHeavycomment)
-		PDF_insert_EndText($inPDF, $sHeavycomment, $iRmCount, $iRmCountWarning, $sRmCountWarning, $idWorkGroup);
+		PDF_insert_EndText($inPDF, $sHeavycomment, $iRmCount, $iRmCountWarning, $sRmCountWarning, $idWorkGroup, $date);
 		else
-		PDF_insert_EndText($inPDF, '', $iRmCount, $iRmCountWarning, $sRmCountWarning, $idWorkGroup);
+		PDF_insert_EndText($inPDF, '', $iRmCount, $iRmCountWarning, $sRmCountWarning, $idWorkGroup, $date);
 		$inPDF->SetFont($infontname, 'BI', 10, '', 'false');
 	}
 }
@@ -414,16 +429,16 @@ function PDF_InsertHeavyS($inPDF, $sName, $sVar, $sPdu, $sAsset)
 		switch($sVar)
 		{
 			case 0:
-				$sVar = 'Свободное удобное положение с возможностью смены рабочего положения тела (сидя, стоя). Нахождение в положении "стоя" до 40% времени рабочего дня (смены).';
+				$sVar = 'Свободное удобное.';
 			break;
 			case 1:
-				$sVar = 'Периодическое, до 25% времени смены, нахождение в неудобном  и (или) фиксированном  положении. Нахождение в положении "стоя" до 60% времени рабочего дня (смены).';
+				$sVar = 'До 25% неудобное, до 60% стоя.';
 			break;
 			case 2:
-				$sVar = 'Периодическое, до 50% времени смены, нахождение в неудобном и (или) фиксированном положении; периодическое, до 25% времени рабочего дня (смены), пребывание в вынужденном положении . Нахождение в положении "стоя" до 80% времени рабочего дня (смены). Нахождение в положении "сидя" без перерывов от 60 до 80% времени рабочего дня (смены).';
+				$sVar = 'До 50% неудобное, до 80% стоя, до 25% вынужденное, сидя без перерывов от 60 до 80%.';
 			break;
 			case 3:
-				$sVar = 'Периодическое, более 50% времени рабочего дня (смены), нахождение в неудобном и (или) фиксированном положении; периодическое, более 25% времени рабочего дня (смены), пребывание в вынужденном положении. Нахождение в положении "стоя" более 80% времени рабочего дня (смены). Нахождение в положении "сидя" без перерывов более 80% времени рабочего дня (смены).';
+				$sVar = 'Более 50% неудобное, более 80% стоя, более 25% вынужденное, сидя без перерывов более 80%.';
 			break;
 		}
 	}

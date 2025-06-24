@@ -41,7 +41,7 @@ class xmlData
 
     //Группа данных
     $result = DbConnect::GetSqlQuery('SELECT * FROM Arm_group WHERE id ='.$idGroup.';');
-    $this->dataGroup = mysql_fetch_row($result, MYSQL_ASSOC);
+    $this->dataGroup = MYSQLI_FETCH_ASSOC($result);
 
     //Владелец
     $this->idUser = $this->dataGroup['idParent'];
@@ -50,19 +50,27 @@ class xmlData
     $this->attestationOrganisation = array();
 
     //Експерты
-    $this->attestationExpert = DbConnect::GetSqlQuery('SELECT * FROM `Arm_groupStuff` WHERE `idGroup` = '.$this->dataGroup['id'].' AND `bExpert` = 1;');
-    $this->attestationStuff = DbConnect::GetSqlQuery('SELECT * FROM `Arm_groupStuff` WHERE `idGroup` = '.$this->dataGroup['id'].' AND `bExpert` = 0;');
+    $this->attestationExpert = DbConnect::GetSqlQuery('SELECT * FROM `Arm_groupStuff`
+      WHERE `idGroup` = '.$this->dataGroup['id'].' AND `bExpert` = 1;');
+    $this->attestationStuff = DbConnect::GetSqlQuery('SELECT * FROM `Arm_groupStuff`
+      WHERE `idGroup` = '.$this->dataGroup['id'].' AND `bExpert` = 0;');
 
     //Приборы
-    $this->attestationDevice = DbConnect::GetSqlQuery('SELECT * FROM `Arm_groupDevices` WHERE `idGroup` = '.$this->dataGroup['id'].';');
+    $this->attestationDevice = DbConnect::GetSqlQuery('SELECT * FROM `Arm_groupDevices`
+      WHERE `idGroup` = '.$this->dataGroup['id'].';');
 
     //Аттестат аккредитации
     $this->attestationAccreditOther = array();
-    $this->attestationAccredit = DbConnect::GetSqlQuery('SELECT * FROM `Arm_groupAcredit` WHERE `idGroup` = '.$this->dataGroup['id'].';');
+    $this->attestationAccredit = DbConnect::GetSqlQuery('SELECT * FROM `Arm_groupAcredit`
+      WHERE `idGroup` = '.$this->dataGroup['id'].';');
 
     $this->resultRm = DbConnect::GetSqlQuery('SELECT g.sName as `Division`,
-(SELECT GROUP_CONCAT(Arm_rmPoints.sName SEPARATOR ", ") FROM Arm_rmPoints LEFT JOIN Arm_rmPointsRm ON Arm_rmPointsRm.idPoint = Arm_rmPoints.id WHERE Arm_rmPointsRm.idRm = w.id AND Arm_rmPoints.iType=1 GROUP BY Arm_rmPointsRm.idRm) as Equipment,
-(SELECT GROUP_CONCAT(Arm_rmPoints.sName SEPARATOR ", ") FROM Arm_rmPoints LEFT JOIN Arm_rmPointsRm ON Arm_rmPointsRm.idPoint = Arm_rmPoints.id WHERE Arm_rmPointsRm.idRm = w.id AND Arm_rmPoints.iType=2 GROUP BY Arm_rmPointsRm.idRm) as Materials,
+(SELECT GROUP_CONCAT(Arm_rmPoints.sName SEPARATOR ", ")
+FROM Arm_rmPoints LEFT JOIN Arm_rmPointsRm ON Arm_rmPointsRm.idPoint = Arm_rmPoints.id
+WHERE Arm_rmPointsRm.idRm = w.id AND Arm_rmPoints.iType=1 GROUP BY Arm_rmPointsRm.idRm) as Equipment,
+(SELECT GROUP_CONCAT(Arm_rmPoints.sName SEPARATOR ", ")
+FROM Arm_rmPoints LEFT JOIN Arm_rmPointsRm ON Arm_rmPointsRm.idPoint = Arm_rmPoints.id
+WHERE Arm_rmPointsRm.idRm = w.id AND Arm_rmPoints.iType=2 GROUP BY Arm_rmPointsRm.idRm) as Materials,
 w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id WHERE w.`idGroup` = '.$this->idGroup.' AND w.idParent > -1;');
     $this->resultComitee = DbConnect::GetSqlQuery('SELECT `sName`, `sPost` FROM Arm_comiss WHERE idParent ='.$this->idGroup);
 
@@ -70,10 +78,17 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
 
   }
 
+  public function getDuration($fZzoneTime, $fTotalTime)
+  {
+    $fDuration = round($fZzoneTime/$fTotalTime,2);
+    if($fDuration > 1) $fDuration = 1;
+    return $fDuration;
+  }
+
   public function getRm()
   {
     $aRM = array();
-    while ($row = mysql_fetch_row($this->resultRm, MYSQL_ASSOC))
+    while ($row = mysqli_fetch_array($this->resultRm, MYSQL_ASSOC))
     {
       //Время смены
       $RMWorkDay = DbConnect::GetSqlCell("SELECT fWorkDay FROM Arm_workplace WHERE id =".$row['id'].";");
@@ -81,7 +96,7 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
       //Мероприятия
       $aRecomendations = array();
       $Recomendations = DbConnect::GetSqlQuery('SELECT * FROM `Arm_activity` WHERE `iRmId` = '.$row['id'].' AND `iType` = 0');
-      while ($aRow = mysql_fetch_row($Recomendations, MYSQL_ASSOC))
+      while ($aRow = mysqli_fetch_array($Recomendations, MYSQL_ASSOC))
       {
         $aRecomendations[] = $aRow;
       }
@@ -147,6 +162,7 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
 			$bTennese5 = false;
 
       $aPointList = WorkFactors::GetPointsList($row[id]); //Перечень зон
+	if(is_array($aPointList))
       foreach ($aPointList as $pkey => $pvalue) {
         $aFactorList = WorkFactors::GetFactorsList($pvalue[0],$row[id]);
         if(is_array($aFactorList))
@@ -163,7 +179,7 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
             $aRowTmp['factS'] = $fvalue[7];
             $aRowTmp['asset'] = $this->aClassPattern[$fvalue[18]];
             $aRowTmp['point'] = $pvalue[2];
-            $aRowTmp['pointTime'] = round($pvalue[3]/$RMWorkDay);
+            $aRowTmp['pointTime'] = $this->getDuration($pvalue[3],$RMWorkDay);
             $aRowTmp['nd'] = 'ГН 2.2.5.1313-03';
             $aRowTmp['dtControl'] = StringWork::StrToDateMysqlFormatLite($fvalue[19]);
             $aChem[] = $aRowTmp;
@@ -178,8 +194,8 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
             $aRowTmp['fact'] = 1;
             $aRowTmp['asset'] = $this->aClassPattern[$fvalue[18]];
             $aRowTmp['point'] = $pvalue[2];
-            $aRowTmp['pointTime'] = round($pvalue[3]/$RMWorkDay);
-            $aRowTmp['nd'] = 'Пр. №33н от 21.03.2014';
+            $aRowTmp['pointTime'] = $this->getDuration($pvalue[3],$RMWorkDay);
+            $aRowTmp['nd'] = 'Пр. №817н от 21.11.2023';
             $aRowTmp['dtControl'] = StringWork::StrToDateMysqlFormatLite($fvalue[19]);
             $aBioMP[] = $aRowTmp;
           }
@@ -191,8 +207,8 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
             $aRowTmp['fact'] = 1;
             $aRowTmp['asset'] = $this->aClassPattern[$fvalue[18]];
             $aRowTmp['point'] = $pvalue[2];
-            $aRowTmp['pointTime'] = round($pvalue[3]/$RMWorkDay);
-            $aRowTmp['nd'] = 'Пр. №33н от 21.03.2014';
+            $aRowTmp['pointTime'] = $this->getDuration($pvalue[3],$RMWorkDay);
+            $aRowTmp['nd'] = 'Пр. №817н от 21.11.2023';
             $aRowTmp['dtControl'] = StringWork::StrToDateMysqlFormatLite($fvalue[19]);
             $aBioPM[] = $aRowTmp;
           }
@@ -208,7 +224,7 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
             $aRowTmp['factS'] = $fvalue[7];
             $aRowTmp['asset'] = $this->aClassPattern[$fvalue[18]];
             $aRowTmp['point'] = $pvalue[2];
-            $aRowTmp['pointTime'] = round($pvalue[3]/$RMWorkDay);
+            $aRowTmp['pointTime'] = $this->getDuration($pvalue[3],$RMWorkDay);
             $aRowTmp['nd'] = 'ГН 2.2.5.1313-03';
             $aRowTmp['dtControl'] = StringWork::StrToDateMysqlFormatLite($fvalue[19]);
             $aAAPFD[] = $aRowTmp;
@@ -222,8 +238,17 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
             $aRowTmp['factM'] = $fvalue[3];
             $aRowTmp['asset'] = $this->aClassPattern[$fvalue[18]];
             $aRowTmp['point'] = $pvalue[2];
-            $aRowTmp['pointTime'] = round($pvalue[3]/$RMWorkDay);
-            $aRowTmp['nd'] = 'ГОСТ Р ИСО 9612-2013';
+            $aRowTmp['pointTime'] = $this->getDuration($pvalue[3],$RMWorkDay);
+            $aRowTmp['nd'] = '•	Приказ Минтруда России №817н от 21.11.2023 г. "Об утверждении методики проведения специальной оценки условий труда, классификатора
+вредных и (или) опасных производственных факторов, формы отчета о проведении специальной оценки условий труда и инструкции по её
+заполнению";
+•	Руководство по эксплуатации на средство измерения «Анализатор шума и вибрации «SVAN-947»;
+•	Руководство по эксплуатации БВЕК.438150.0052РЭ на средство измерения «Анализатор шума и вибрации «Ассистент». Методика выполнения
+измерений МИ ПКФ 12-006.1;
+•	ГОСТ Р ИСО 9612-2013;
+•	СН 2.2.4/2.1.8.562-96;
+•	СН 2.2.4/2.1.8.566-96;
+';
             $aRowTmp['dtControl'] = StringWork::StrToDateMysqlFormatLite($fvalue[19]);
             $aNOISE[] = $aRowTmp;
           }
@@ -236,9 +261,9 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
             $aRowTmp['factM'] = $fvalue[3];
             $aRowTmp['asset'] = $this->aClassPattern[$fvalue[18]];
             $aRowTmp['point'] = $pvalue[2];
-            $aRowTmp['pointTime'] = round($pvalue[3]/$RMWorkDay);
+            $aRowTmp['pointTime'] = $this->getDuration($pvalue[3],$RMWorkDay);
             //FIXME: Указать корректный НД
-            $aRowTmp['nd'] = 'Пр. 33н от 24.01.2014';
+            $aRowTmp['nd'] = 'Пр. 817н от 21.11.2023';
             $aRowTmp['dtControl'] = StringWork::StrToDateMysqlFormatLite($fvalue[19]);
             $aInfraNoise[] = $aRowTmp;
           }
@@ -251,9 +276,9 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
             $aRowTmp['factM'] = $fvalue[3];
             $aRowTmp['asset'] = $this->aClassPattern[$fvalue[18]];
             $aRowTmp['point'] = $pvalue[2];
-            $aRowTmp['pointTime'] = round($pvalue[3]/$RMWorkDay);
+            $aRowTmp['pointTime'] = $this->getDuration($pvalue[3],$RMWorkDay);
             //FIXME: Указать корректный НД
-            $aRowTmp['nd'] = 'Пр. 33н от 24.01.2014';
+            $aRowTmp['nd'] = 'Пр. 817н от 21.11.2023';
             $aRowTmp['dtControl'] = StringWork::StrToDateMysqlFormatLite($fvalue[19]);
             //FIXME: Октавные значения
             $aRowTmp['aOctave'] = array(
@@ -282,9 +307,9 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
             $aRowTmp['factZ'] = $fvalue[8];
             $aRowTmp['asset'] = $this->aClassPattern[$fvalue[18]];
             $aRowTmp['point'] = $pvalue[2];
-            $aRowTmp['pointTime'] = round($pvalue[3]/$RMWorkDay);
+            $aRowTmp['pointTime'] = $this->getDuration($pvalue[3],$RMWorkDay);
             //FIXME: Указать корректный НД
-            $aRowTmp['nd'] = 'Пр. 33н от 24.01.2014';
+            $aRowTmp['nd'] = 'Пр. 817н от 21.11.2023';
             $aRowTmp['dtControl'] = StringWork::StrToDateMysqlFormatLite($fvalue[19]);
             $aVibroL[] = $aRowTmp;
           }
@@ -301,9 +326,9 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
             $aRowTmp['factZ'] = $fvalue[8];
             $aRowTmp['asset'] = $this->aClassPattern[$fvalue[18]];
             $aRowTmp['point'] = $pvalue[2];
-            $aRowTmp['pointTime'] = round($pvalue[3]/$RMWorkDay);
+            $aRowTmp['pointTime'] = $this->getDuration($pvalue[3],$RMWorkDay);
             //FIXME: Указать корректный НД
-            $aRowTmp['nd'] = 'Пр. 33н от 24.01.2014';
+            $aRowTmp['nd'] = 'Пр. 817н от 21.11.2023';
             $aRowTmp['dtControl'] = StringWork::StrToDateMysqlFormatLite($fvalue[19]);
             $aVibroO[] = $aRowTmp;
           }
@@ -312,7 +337,6 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
           {
             //Забой
             $aRowTmp = array();
-
             $aRowTmp['factorId'] = (string) $fvalue[15];
             $aRowTmp['pdk'] = $this->aCatWorkPattern[$fvalue[5]];
             $aRowTmp['pdkMin'] = $this->aCatWorkPdu['min'][$fvalue[5]];
@@ -322,20 +346,24 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
             $aRowTmp['pdkHRI'] = 140;
             $aRowTmp['pdkTNS'] = $this->aCatWorkPduTNS[$fvalue[5]];
             $aRowTmp['pdkAirSpeed'] = $this->aCatWorkPduAirSpeed[$fvalue[5]];
-
+//echo("[$fvalue[3]; $fvalue[7]; $fvalue[8]; $fvalue[9];$fvalue[10];]<br>");
             $aRowTmp['fact'] = $fvalue[3];
+//echo($aRowTmp['fact']);
             $aRowTmp['asset'] = $this->aClassPattern[$fvalue[18]];
             $aRowTmp['point'] = $pvalue[2];
-            $aRowTmp['pointTime'] = round($pvalue[3]/$RMWorkDay);
+            $aRowTmp['pointTime'] = $this->getDuration($pvalue[3],$RMWorkDay);
             //FIXME: Указать корректно позу 0-стоя, 1-сидя
             $aRowTmp['posture'] = 0;
             $aRowTmp['h1'] = 1;
             $aRowTmp['h2'] = 1.5;
             $aRowTmp['h3'] = 0.5;
             //FIXME: Указать корректный НД
-            $aRowTmp['nd'] = 'Пр. 33н от 24.01.2014';
+            $aRowTmp['nd'] = '•	Приказ Минтруда России №817н от 21.11.2023 г. "Об утверждении методики проведения специальной оценки условий труда, классификатора
+вредных и (или) опасных производственных факторов, формы отчета о проведении специальной оценки условий труда и инструкции по её
+заполнению";
+•	Руководство по эксплуатации БВЕК.431110.00 РЭ на средство измерения «Метеоскоп»;
+•	Руководство по эксплуатации БВЕК.431110.04 РЭ на средство измерения «Метеоскоп-М»;';
             $aRowTmp['dtControl'] = StringWork::StrToDateMysqlFormatLite($fvalue[19]);
-            echo("[".max($fvalue[18], $aMicroclimat[$fvalue[1]]['zoneAsset'])."]");
             $aMicroclimat[$fvalue[1]]['zoneAsset'] = max($fvalue[18], $aMicroclimat[$fvalue[1]]['zoneAsset']);
             $aMicroclimat[$fvalue[1]][] = $aRowTmp;
           }
@@ -350,12 +378,19 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
             $aRowTmp['catLW'] = 4; //Разряд зрительной работы
             $aRowTmp['pdk'] = $fvalue[5];
             $aRowTmp['factAll'] = $fvalue[3];
-            $aRowTmp['fact'] = $fvalue[7];
+            $aRowTmp['fact'] = $fvalue[3];
             $aRowTmp['asset'] = $this->aClassPattern[$fvalue[18]];
             $aRowTmp['point'] = $pvalue[2];
-            $aRowTmp['pointTime'] = round($pvalue[3]/$RMWorkDay);
+            $aRowTmp['pointTime'] = $this->getDuration($pvalue[3],$RMWorkDay);
             //FIXME: Указать корректный НД
-            $aRowTmp['nd'] = 'ГОСТ Р ИСО 9612-2013';
+            $aRowTmp['nd'] = '•	Приказ Минтруда России №817н от 21.11.2023 г. "Об утверждении методики проведения специальной оценки условий труда, классификатора
+вредных и (или) опасных производственных факторов, формы отчета о проведении специальной оценки условий труда и инструкции по её
+заполнению";
+•	СанПиН 2.2.1/2.1.1.1278-03;
+•	СНиП 23-05-95;
+•	Руководство по эксплуатации на средство измерения «Mettro CONDTROL 60»;
+•	Руководство по эксплуатации ЮСУК 2.860.002 РЭ на средство измерения «ТКА-ПКМ»;
+•	Руководство по эксплуатации ЮСУК 2.860.002 РЭ на средство измерения «ТКА-ПКМ»;';
             $aRowTmp['dtControl'] = StringWork::StrToDateMysqlFormatLite($fvalue[19]);
             $aLight[$fvalue[1]][] = $aRowTmp;
           }
@@ -555,7 +590,13 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
       }
 
       $row['aAHeavy']['dHeavyDate'] = $dHeavyDate;
-      $row['aAHeavy']['nd'] = 'Пр. 33н от 24.01.2014';
+      $row['aAHeavy']['nd'] = '•	Приказ Минтруда России №817н от 21.11.2023 г. "Об утверждении методики проведения специальной оценки условий труда, классификатора
+вредных и (или) опасных производственных факторов, формы отчета о проведении специальной оценки условий труда и инструкции по её
+заполнению";
+•	Руководство по эксплуатации на средство измерения «ДПУ-5-2»;
+•	Руководство по эксплуатации на средство измерения «Mettro CONDTROL 60»;
+•	Руководство по эксплуатации на средство измерения «ШЭЭ-01»;
+';
 
       $row['aAHeavy']['aHeavyTotal'] = $aHeavyTotal;
       $row['aAHeavy']['aHeavyTotal'][51] = $this->aCatWorkHeavy[$row['aAHeavy']['aHeavyTotal'][51]];
@@ -582,7 +623,9 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
       }
 
       $row['aATennese']['dTenneseDate'] = $dTenneseDate;
-      $row['aATennese']['nd'] = 'Пр. 33н от 24.01.2014';
+      $row['aATennese']['nd'] = '•	Приказ Минтруда России № 817н от 21.11.2023 г. "Об утверждении методики проведения специальной оценки условий труда, классификатора
+вредных и (или) опасных производственных факторов, формы отчета о проведении специальной оценки условий труда и инструкции по её
+заполнению";';
       $row['aATennese']['aTenneseTotal'] = $aTenneseTotal;
       $row['aATennese']['aTenneseTotalAll'] = $aTenneseTotalAll;
 
@@ -617,7 +660,7 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
 
   public function getAttestationAccreditMy()
   {
-    $this->attestationAccreditMy = mysql_fetch_row($this->attestationAccredit, MYSQL_ASSOC);
+    $this->attestationAccreditMy = MYSQLI_FETCH_ASSOC($this->attestationAccredit);
     return $this->attestationAccreditMy;
   }
 
@@ -629,7 +672,7 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
   public function getAttestationAccreditOther()
   {
     $bFirst = true;
-    while ($row = mysql_fetch_row($this->attestationAccredit, MYSQL_ASSOC)) {
+    while ($row = mysqli_fetch_array($this->attestationAccredit)) {
       if($bFirst) $bFirst = false; else
       $this->attestationAccreditOther[] = $row;
     }
@@ -665,7 +708,7 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
   {
     //iRmTotalCount
     $rmTotalCount = $this->dataGroup['iRmTotalCount'];
-      $baseRmTotalCount = mysql_num_rows($this->resultRm);
+      $baseRmTotalCount = mysqli_num_rows($this->resultRm);
 
     if ($baseRmTotalCount>$rmTotalCount)
     {
@@ -676,7 +719,7 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
 
   public function getRmCount()
   {
-    return mysql_num_rows($this->resultRm);
+    return mysqli_num_rows($this->resultRm);
   }
 
   public function getRegion()
@@ -698,7 +741,7 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
     //Председатель
     $aComitee = array(array('sName' => $this->dataGroup['sPredsName'], 'sPost' => $this->dataGroup['sPredsPost']));
     //Комиссия
-    while ($ComiteeRow = mysql_fetch_array($this->resultComitee, MYSQL_ASSOC))
+    while ($ComiteeRow = mysqli_fetch_array($this->resultComitee, MYSQL_ASSOC))
     {
       $aComitee[] = $ComiteeRow;
     }
@@ -707,7 +750,7 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
   public function getExpert()
   {
     $aExpert = array();
-    while ($ExpertRow = mysql_fetch_array($this->attestationExpert, MYSQL_ASSOC))
+    while ($ExpertRow = mysqli_fetch_array($this->attestationExpert, MYSQL_ASSOC))
     {
       $aExpert[] = $ExpertRow;
     }
@@ -721,7 +764,7 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
     }
     else {
       $aStuff = array();
-      while ($StuffRow = mysql_fetch_array($this->attestationStuff, MYSQL_ASSOC))
+      while ($StuffRow = mysqli_fetch_array($this->attestationStuff, MYSQL_ASSOC))
       {
         $aStuff[] = $StuffRow;
       }
@@ -737,7 +780,7 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
     }
     else {
       $aDevice = array();
-      while ($DeviceRow = mysql_fetch_array($this->attestationDevice, MYSQL_ASSOC))
+      while ($DeviceRow = mysqli_fetch_array($this->attestationDevice, MYSQL_ASSOC))
       {
         $DeviceRow['dCheckDate'] = StringWork::StrToDateMysqlFormatLite($DeviceRow['dCheckDate']);
         if(!preg_match('/(\d{5}-\d{2})|(\d{4}-\d{2})|(\d{3}-\d{2})|(\d{2}-\d{2})|(Не сертифицируется)/', $DeviceRow['sReestrNum'])) $DeviceRow['sReestrNum'] = 'Не сертифицируется';

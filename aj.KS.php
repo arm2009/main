@@ -8,15 +8,15 @@
 	{
 		$sql ="SELECT `Nd_ok01694`.`sName`, `Nd_ok01694`.`sCode`, `Nd_ok01694`.`id`, (`Nd_Etks`.`sName`) AS `sfEtks`, `Nd_ok01694`.`sKch`, `Nd_ok01694`.`sRazr`, `Nd_ok01694`.`sOkz`, `Nd_ok01694`.`sKat`, `Nd_ok01694`.`sEtks`, `Nd_ok01694`.`sNoChild`, `Nd_ok01694`.`sNoWoman`, `Nd_ok01694`.`sBasePension` FROM `Nd_ok01694`, `Nd_Etks` WHERE (`Nd_ok01694`.`sCode` LIKE '%".DbConnect::ToBaseStr($_POST['find'])."%' OR `Nd_ok01694`.`sName` LIKE '%".DbConnect::ToBaseStr($_POST['find'])."%')  AND `Nd_ok01694`.`sEtks` = `Nd_Etks`.`iCode` ORDER BY `Nd_ok01694`.`iPrioritet`, `Nd_ok01694`.`sName`;";
 		$result = DbConnect::GetSqlQuery($sql);	
-		if (mysql_num_rows($result) > 0)
+		if (mysqli_num_rows($result) > 0)
 		{
-			while($vRow = mysql_fetch_array($result))
+			while($vRow = mysqli_fetch_array($result))
 			{
 //Получение доп. инфы по выпускам ЕТКС
 $sql = "SELECT `Nd_Etks`.`sName`, `Nd_Link_Ok01694_Etks`.`sRazdel`, `Nd_Link_Ok01694_Etks`.`sDolgnName` FROM `Nd_Link_Ok01694_Etks`, `Nd_Etks` WHERE `idOk01694` = ".$vRow[sCode]." AND `Nd_Link_Ok01694_Etks`.`idEtks` = `Nd_Etks`.`iCode` LIMIT 0, 30 ";
 $resulte = DbConnect::GetSqlQuery($sql);
 $tmpEtks = '';
-while($vRowe = mysql_fetch_array($resulte))
+while($vRowe = mysqli_fetch_array($resulte))
 {
 	if(strlen(trim($tmpEtks)) > 0) $tmpEtks.='<br /><br />';
 	$tmpEtks .= $vRowe[sName].', раздел: '.strtolower($vRowe[sRazdel]).' &#8212; '.$vRowe[sDolgnName].'.';

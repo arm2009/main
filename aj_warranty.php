@@ -8,9 +8,9 @@
 	/*$sql ="SELECT `sName` FROM `Nd_factors` WHERE `sName` LIKE '%".DbConnect::ToBaseStr($_GET['term'])."%' ORDER BY `sName`;";
  	$result = DbConnect::GetSqlQuery($sql);
 
-	if (mysql_num_rows($result) > 0)
+	if (mysqli_num_rows($result) > 0)
 	{
-		while($vRow = mysql_fetch_array($result))
+		while($vRow = mysqli_fetch_array($result))
 		{
 			$row['value']=$vRow[sName];
 			$aResult[] = $row;
@@ -24,9 +24,9 @@
 		
 		$sHtml = '';
 		
-		if (mysql_num_rows($resultPS1) > 0)
+		if (mysqli_num_rows($resultPS1) > 0)
 		{
-			while ($vRowPS1 = mysql_fetch_array($resultPS1))
+			while ($vRowPS1 = mysqli_fetch_array($resultPS1))
 			{
 				$sHtml = $sHtml.'<div id="header_h1_'.$vRowPS1['id'].'" onclick="RoollClick(\'h1_'.$vRowPS1['id'].'\')" class="rollDown" title="'.$vRowPS1['sInfo'].'"><strong>'.$vRowPS1['sName'].'</strong></div>        <div id="body_h1_'.$vRowPS1['id'].'" style="display:none;margin:10px; margin-left:30px;">';	
 				
@@ -34,9 +34,9 @@
 
 				$resultPS11 = DbConnect::GetSqlQuery($sqlPS11);
 				
-				if (mysql_num_rows($resultPS11) > 0)
+				if (mysqli_num_rows($resultPS11) > 0)
 				{
-					while ($vRowPS11 = mysql_fetch_array($resultPS11))
+					while ($vRowPS11 = mysqli_fetch_array($resultPS11))
 					{
 						$sStrong1 = '';
 						$sStrong2 = '';
@@ -61,9 +61,9 @@
 		
 		$sHtml = '';
 		
-		if (mysql_num_rows($resultPS1) > 0)
+		if (mysqli_num_rows($resultPS1) > 0)
 		{
-			while ($vRowPS1 = mysql_fetch_array($resultPS1))
+			while ($vRowPS1 = mysqli_fetch_array($resultPS1))
 			{
 				$sHtml = $sHtml.'<div id="header_h1_'.$vRowPS1['id'].'" onclick="RoollClick(\'h1_'.$vRowPS1['id'].'\')" class="rollDown" title="'.$vRowPS1['sInfo'].'"><strong>'.$vRowPS1['sName'].'</strong></div>        <div id="body_h1_'.$vRowPS1['id'].'" style="display:none;margin:10px; margin-left:30px;">';	
 				
@@ -71,9 +71,9 @@
 
 				$resultPS11 = DbConnect::GetSqlQuery($sqlPS11);
 				
-				if (mysql_num_rows($resultPS11) > 0)
+				if (mysqli_num_rows($resultPS11) > 0)
 				{
-					while ($vRowPS11 = mysql_fetch_array($resultPS11))
+					while ($vRowPS11 = mysqli_fetch_array($resultPS11))
 					{
 						$sStrong1 = '';
 						$sStrong2 = '';
@@ -99,9 +99,9 @@
 		$sql1 = 'SELECT * FROM Nd_pensFz WHERE iState = 27 ORDER BY id';
 		$result1 = DbConnect::GetSqlQuery($sql1);
 		
-		if (mysql_num_rows($result1) > 0)
+		if (mysqli_num_rows($result1) > 0)
 				{
-					while ($vRow1 = mysql_fetch_array($result1))
+					while ($vRow1 = mysqli_fetch_array($result1))
 					{
 						$sHtml = $sHtml.'<label><input type="checkbox" name="pensFz" value="'.$vRow1['id'].'" id="pensFz_'.$vRow1['id'].'" />'.$vRow1['sNum'].' '.$vRow1['sName'].'</label><br />';
 					}
@@ -115,9 +115,9 @@
 		$sql2 = 'SELECT * FROM Nd_pensFz WHERE iState = 28 ORDER BY id';
 		$result2 = DbConnect::GetSqlQuery($sql2);
 		
-		if (mysql_num_rows($result2) > 0)
+		if (mysqli_num_rows($result2) > 0)
 				{
-					while ($vRow2 = mysql_fetch_array($result2))
+					while ($vRow2 = mysqli_fetch_array($result2))
 					{
 						$sHtml = $sHtml.'<label><input type="checkbox" name="pensFz" value="'.$vRow2['id'].'" id="pensFz_'.$vRow2['id'].'" />'.$vRow2['sNum'].' '.$vRow2['sName'].'</label><br />';
 					}
@@ -137,14 +137,14 @@
 			$sql1 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "1.1%" AND sPer LIKE "";';
 			$result1 = DbConnect::GetSqlQuery($sql1);
 			
-			while ($vRow1 = mysql_fetch_array($result1))
+			while ($vRow1 = mysqli_fetch_array($result1))
 					{
 						$sHtml = $sHtml.'<div id="header_h3_'.$vRow1['id'].'" onclick="RoollClick(\'h3_'.$vRow1['id'].'\')" class="rollDown" title=""><strong>'.$vRow1['sPunkt'].$vRow1['sName'].'</strong></div><div id="body_h3_'.$vRow1['id'].'" style="display:none;margin:10px; margin-left:30px;">';
 						
 						$sql2 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "'.$vRow1['sPunkt'].'%" AND id <> '.$vRow1['id'].' AND sPunkt NOT LIKE "";';
 						$result2 = DbConnect::GetSqlQuery($sql2);
 					
-						while ($vRow2 = mysql_fetch_array($result2))
+						while ($vRow2 = mysqli_fetch_array($result2))
 						{
 							$sHtml = $sHtml.'<label><input type="checkbox" name="med1" value="'.$vRow2['id'].'" id="med1_'.$vRow2['id'].'" />'.$vRow2['sPunkt'].' '.$vRow2['sName'].'</label><br />';
 						}
@@ -160,14 +160,14 @@
 			$sql4 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "1.2%" AND sPer LIKE "" AND length(sPunkt) < 8;';
 			$result4 = DbConnect::GetSqlQuery($sql4);
 			
-			while ($vRow4 = mysql_fetch_array($result4))
+			while ($vRow4 = mysqli_fetch_array($result4))
 						{
 							$sHtml = $sHtml.'<div id="header_h3_'.$vRow4['id'].'" onclick="RoollClick(\'h3_'.$vRow4['id'].'\')" class="rollDown" title=""><strong>'.$vRow4['sPunkt'].$vRow4['sName'].':</strong></div><div id="body_h3_'.$vRow4['id'].'" style="display:none;margin:10px; margin-left:30px;">';
 							
 							$sql5 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "'.$vRow4['sPunkt'].'%" AND sPer NOT LIKE "";';
 							$result5 = DbConnect::GetSqlQuery($sql5);
 			
-							while ($vRow5 = mysql_fetch_array($result5))
+							while ($vRow5 = mysqli_fetch_array($result5))
 							{
 								$sHtml = $sHtml.'<label><input type="checkbox" name="med1" value="'.$vRow5['id'].'" id="med1_'.$vRow5['id'].'" />'.$vRow5['sPunkt'].' '.$vRow5['sName'].'</label><br />';
 							}
@@ -178,7 +178,7 @@
 			$sql3 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "1.2%" AND sPer NOT LIKE "" AND length(sPunkt) < 8;';
 			$result3 = DbConnect::GetSqlQuery($sql3);
 			
-			while ($vRow3 = mysql_fetch_array($result3))
+			while ($vRow3 = mysqli_fetch_array($result3))
 						{
 							$sHtml = $sHtml.'<label><input type="checkbox" name="med1" value="'.$vRow3['id'].'" id="med1_'.$vRow3['id'].'" />'.$vRow3['sPunkt'].' '.$vRow3['sName'].'</label><br />';
 						}
@@ -190,14 +190,14 @@
 			$sql4 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "1.3%" AND sPer LIKE "" AND length(sPunkt) < 8;';
 			$result4 = DbConnect::GetSqlQuery($sql4);
 			
-			while ($vRow4 = mysql_fetch_array($result4))
+			while ($vRow4 = mysqli_fetch_array($result4))
 						{
 							$sHtml = $sHtml.'<div id="header_h3_'.$vRow4['id'].'" onclick="RoollClick(\'h3_'.$vRow4['id'].'\')" class="rollDown" title=""><strong>'.$vRow4['sPunkt'].$vRow4['sName'].':</strong></div><div id="body_h3_'.$vRow4['id'].'" style="display:none;margin:10px; margin-left:30px;">';
 							
 							$sql5 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "'.$vRow4['sPunkt'].'%" AND sPer NOT LIKE "";';
 							$result5 = DbConnect::GetSqlQuery($sql5);
 			
-							while ($vRow5 = mysql_fetch_array($result5))
+							while ($vRow5 = mysqli_fetch_array($result5))
 							{
 								$sHtml = $sHtml.'<label><input type="checkbox" name="med1" value="'.$vRow5['id'].'" id="med1_'.$vRow5['id'].'" />'.$vRow5['sPunkt'].' '.$vRow5['sName'].'</label><br />';
 							}
@@ -208,7 +208,7 @@
 			$sql3 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "1.3%" AND sPer NOT LIKE "" AND length(sPunkt) < 8;';
 			$result3 = DbConnect::GetSqlQuery($sql3);
 			
-			while ($vRow3 = mysql_fetch_array($result3))
+			while ($vRow3 = mysqli_fetch_array($result3))
 						{
 							$sHtml = $sHtml.'<label><input type="checkbox" name="med1" value="'.$vRow3['id'].'" id="med1_'.$vRow3['id'].'" />'.$vRow3['sPunkt'].' '.$vRow3['sName'].'</label><br />';
 						}
@@ -222,14 +222,14 @@
 			$sql8 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "2.%" AND sPer LIKE "" AND length(sPunkt) < 8;';
 			$result8 = DbConnect::GetSqlQuery($sql8);
 			
-			while ($vRow8 = mysql_fetch_array($result8))
+			while ($vRow8 = mysqli_fetch_array($result8))
 						{
 							$sHtml = $sHtml.'<div id="header_h4_'.$vRow8['id'].'" onclick="RoollClick(\'h4_'.$vRow8['id'].'\')" class="rollDown" title=""><strong>'.$vRow8['sPunkt'].$vRow8['sName'].':</strong></div><div id="body_h4_'.$vRow8['id'].'" style="display:none;margin:10px; margin-left:30px;">';
 							
 							$sql9 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "'.$vRow8['sPunkt'].'%" AND sPer NOT LIKE "";';
 							$result9 = DbConnect::GetSqlQuery($sql9);
 			
-							while ($vRow9 = mysql_fetch_array($result9))
+							while ($vRow9 = mysqli_fetch_array($result9))
 							{
 								$sHtml = $sHtml.'<label><input type="checkbox" name="med1" value="'.$vRow9['id'].'" id="med1_'.$vRow9['id'].'" />'.$vRow9['sPunkt'].' '.$vRow9['sName'].'</label><br />';
 							}
@@ -240,7 +240,7 @@
 			$sql7 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "2.%" AND sPer NOT LIKE "" AND length(sPunkt) < 6;';
 			$result7 = DbConnect::GetSqlQuery($sql7);
 			
-			while ($vRow7 = mysql_fetch_array($result7))
+			while ($vRow7 = mysqli_fetch_array($result7))
 						{
 							$sHtml = $sHtml.'<label><input type="checkbox" name="med1" value="'.$vRow7['id'].'" id="med1_'.$vRow7['id'].'" />'.$vRow7['sPunkt'].' '.$vRow7['sName'].'</label><br />';
 						}
@@ -252,14 +252,14 @@
 		$sql8 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "3.%" AND sPer LIKE "" AND length(sPunkt) < 6;';
 			$result8 = DbConnect::GetSqlQuery($sql8);
 			
-			while ($vRow8 = mysql_fetch_array($result8))
+			while ($vRow8 = mysqli_fetch_array($result8))
 						{
 							$sHtml = $sHtml.'<div id="header_h4_'.$vRow8['id'].'" onclick="RoollClick(\'h4_'.$vRow8['id'].'\')" class="rollDown" title=""><strong>'.$vRow8['sPunkt'].$vRow8['sName'].':</strong></div><div id="body_h4_'.$vRow8['id'].'" style="display:none;margin:10px; margin-left:30px;">';
 							
 							$sql9 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "'.$vRow8['sPunkt'].'%" AND sPer NOT LIKE "";';
 							$result9 = DbConnect::GetSqlQuery($sql9);
 			
-							while ($vRow9 = mysql_fetch_array($result9))
+							while ($vRow9 = mysqli_fetch_array($result9))
 							{
 								$sHtml = $sHtml.'<label><input type="checkbox" name="med1" value="'.$vRow9['id'].'" id="med1_'.$vRow9['id'].'" />'.$vRow9['sPunkt'].' '.$vRow9['sName'].'</label><br />';
 							}
@@ -270,7 +270,7 @@
 			$sql7 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "3.%" AND sPer NOT LIKE "" AND length(sPunkt) < 6;';
 			$result7 = DbConnect::GetSqlQuery($sql7);
 			
-			while ($vRow7 = mysql_fetch_array($result7))
+			while ($vRow7 = mysqli_fetch_array($result7))
 						{
 							$sHtml = $sHtml.'<label><input type="checkbox" name="med1" value="'.$vRow7['id'].'" id="med1_'.$vRow7['id'].'" />'.$vRow7['sPunkt'].' '.$vRow7['sName'].'</label><br />';
 						}
@@ -282,14 +282,14 @@
 		$sql8 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "4.%" AND sPer LIKE "" AND length(sPunkt) < 6;';
 			$result8 = DbConnect::GetSqlQuery($sql8);
 			
-			while ($vRow8 = mysql_fetch_array($result8))
+			while ($vRow8 = mysqli_fetch_array($result8))
 						{
 							$sHtml = $sHtml.'<div id="header_h4_'.$vRow8['id'].'" onclick="RoollClick(\'h4_'.$vRow8['id'].'\')" class="rollDown" title=""><strong>'.$vRow8['sPunkt'].$vRow8['sName'].':</strong></div><div id="body_h4_'.$vRow8['id'].'" style="display:none;margin:10px; margin-left:30px;">';
 							
 							$sql9 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "'.$vRow8['sPunkt'].'%" AND sPer NOT LIKE "";';
 							$result9 = DbConnect::GetSqlQuery($sql9);
 			
-							while ($vRow9 = mysql_fetch_array($result9))
+							while ($vRow9 = mysqli_fetch_array($result9))
 							{
 								$sHtml = $sHtml.'<label><input type="checkbox" name="med1" value="'.$vRow9['id'].'" id="med1_'.$vRow9['id'].'" />'.$vRow9['sPunkt'].' '.$vRow9['sName'].'</label><br />';
 							}
@@ -300,7 +300,7 @@
 			$sql7 = 'SELECT * FROM Nd_med1 WHERE sPunkt LIKE "4.%" AND sPer NOT LIKE "" AND length(sPunkt) < 6;';
 			$result7 = DbConnect::GetSqlQuery($sql7);
 			
-			while ($vRow7 = mysql_fetch_array($result7))
+			while ($vRow7 = mysqli_fetch_array($result7))
 						{
 							$sHtml = $sHtml.'<label><input type="checkbox" name="med1" value="'.$vRow7['id'].'" id="med1_'.$vRow7['id'].'" />'.$vRow7['sPunkt'].' '.$vRow7['sName'].'</label><br />';
 						}
@@ -316,7 +316,7 @@
 		$sql7 = 'SELECT * FROM Nd_med2;';
 			$result7 = DbConnect::GetSqlQuery($sql7);
 			
-			while ($vRow7 = mysql_fetch_array($result7))
+			while ($vRow7 = mysqli_fetch_array($result7))
 						{
 							$sHtml = $sHtml.'<label><input type="checkbox" name="med2" value="'.$vRow7['id'].'" id="med2_'.$vRow7['id'].'" />'.$vRow7['sPunkt'].' '.$vRow7['sName'].'</label><br />';
 						}
@@ -331,9 +331,9 @@
 		
 		$sRes = 'Федеральный закон №173 "О трудовых пенсиях в Российской Федерации" от 17.12.2001, ';
 		
-		if (mysql_num_rows($result) > 0)
+		if (mysqli_num_rows($result) > 0)
 				{
-					while ($vRow = mysql_fetch_array($result))
+					while ($vRow = mysqli_fetch_array($result))
 					{
 						switch ($vRow['iState'])
 						{

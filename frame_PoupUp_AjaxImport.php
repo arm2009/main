@@ -27,9 +27,9 @@ if (count($aGroups) > 0)
 		$sql = "SELECT `id`, `iNumber`, `idGroup`, `sName` FROM `Arm_workplace` WHERE `idGroup` = ".$aGroup[0]." AND `idParent` <> -1 ORDER BY `iNumber`";
 		$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
 		
-		if (mysql_num_rows($vResult) > 0)
+		if (mysqli_num_rows($vResult) > 0)
 		{
-			while($vRow = mysql_fetch_array($vResult))
+			while($vRow = mysqli_fetch_array($vResult))
 			{
 				echo('<label><input type="checkbox" name="rm" value="'.$vRow[id].'" id="rm_'.$vRow[id].'" />'.$vRow[iNumber].'. '.$vRow[sName].'</label><br />');
 			}

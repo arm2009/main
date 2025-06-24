@@ -16,7 +16,7 @@
 	$pdf->SetFillColor(217,217,217);
 	$pdf->SetAutoPageBreak(True, 25);
 
-	$sqlZone = "SELECT Arm_rmPoints.id, Arm_rmPoints.sName FROM Arm_workplace, Arm_rmPointsRm, Arm_rmPoints WHERE idGroup = ".$target." AND Arm_rmPointsRm.idRm = Arm_workplace.id AND Arm_rmPoints.id = Arm_rmPointsRm.idPoint GROUP BY Arm_rmPoints.id ORDER BY `Arm_rmPoints`.`iType`, Arm_rmPoints.sName;";
+	$sqlZone = "SELECT Arm_rmPoints.id, Arm_rmPoints.sName FROM Arm_workplace, Arm_rmPointsRm, Arm_rmPoints WHERE idGroup = ".$target." AND Arm_rmPointsRm.idRm = Arm_workplace.id AND Arm_rmPoints.id = Arm_rmPointsRm.idPoint GROUP BY Arm_rmPoints.id ORDER BY Arm_rmPoints.sName;";
 	$vResultZ = DbConnect::GetSqlQuery($sqlZone);
 
 	$aNamesPoints = array();
@@ -47,20 +47,20 @@
 
 
 	$counter = 1;
-	if (mysql_num_rows($vResultZ) > 0)
+	if (mysqli_num_rows($vResultZ) > 0)
 	{	
 		
 		$lines = 0;
 		
-		while($vRowZ = mysql_fetch_array($vResultZ))
+		while($vRowZ = MYSQLI_FETCH_ASSOC($vResultZ))
 		{
 			$sqlRm = "SELECT Arm_workplace.sName, Arm_workplace.iNumber FROM Arm_rmPointsRm, Arm_workplace WHERE Arm_rmPointsRm.idPoint = ".$vRowZ[id]." AND Arm_rmPointsRm.idRm = Arm_workplace.id GROUP BY Arm_workplace.sName";
 			$vResultRM = DbConnect::GetSqlQuery($sqlRm);
 			$sRmNames = 0;
 			$aRmNames = array();
-			if (mysql_num_rows($vResultRM) > 0)
+			if (mysqli_num_rows($vResultRM) > 0)
 			{	
-				while($vRowRM = mysql_fetch_array($vResultRM))
+				while($vRowRM = MYSQLI_FETCH_ASSOC($vResultRM))
 				{
 					array_push($aRmNames, $vRowRM[iNumber].' '.$vRowRM[sName]);
 				}
@@ -83,9 +83,9 @@
 			$vResultF = DbConnect::GetSqlQuery($sqlFactors);
 
 			$bWasDraw = false;
-//			if (mysql_num_rows($vResultF) > 0)
+//			if (mysqli_num_rows($vResultF) > 0)
 //			{	
-				while($vRowF = mysql_fetch_array($vResultF))
+				while($vRowF = MYSQLI_FETCH_ASSOC($vResultF))
 				{       
 					$pdf->SetFont($infontname, '', 8, '', 'false');
 					$lines = $lines + $pdf->MultiCell(100,7,$vRowF[sName],1,'L',0,0,'','',1,0,0,1,7,'M');
@@ -110,7 +110,7 @@
 				}
 
 
-				for ($ii=0; $ii<6 - mysql_num_rows($vResultF); $ii++)
+				for ($ii=0; $ii<6 - mysqli_num_rows($vResultF); $ii++)
 				{			
 					$lines = $lines + $pdf->MultiCell(100,7,'',1,'R',0,0,'','',1,0,0,1,7,'M');
 					$pdf->MultiCell(15,7,'',1,'R',0,0,'','',1,0,0,1,7,'M');

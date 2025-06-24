@@ -9,7 +9,7 @@
 		{
 			$vReturn = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'INSERT INTO Arm_calendar (idParent, idWorkGroup, sName, sInfo, sSerial, dDateStart, dDateEnd) VALUES ('.UserControl::GetUserLoginId().',"'.$idWorkGroup.'","'.$sName.'","'.$sInfo.'","'.$sSerial.'","'.date('Y-m-d 00:00:00', strtotime($dDateStart)).'","'.date('Y-m-d 00:00:00', strtotime($dDateEnd)).'");');
 			
-			return mysql_insert_id();
+			return $vReturn;
 		}
 		
 		public static function Remove_Event($idEvent)
@@ -26,7 +26,7 @@
 		{
 			$sql = "SELECT * FROM Arm_calendar WHERE `id` = ".$id.";";
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				//Формирование листа для передачи
 				$aList[] = array($vRow['id'], $vRow['idParent'],$vRow['idWorkGroup'],$vRow['sName'],$vRow['sInfo'],$vRow['sSerial'],StringWork::StrToDateFormatLite($vRow['dDateStart']),StringWork::StrToDateFormatLite($vRow['dDateEnd']));

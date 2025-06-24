@@ -3,7 +3,6 @@
 	include_once "UserControl/userControl.php";
 	include_once "LowLevel/userValidator.php";
 	include_once "Util/String.php";
-
 	$bExitButtonView = false;
 
 	if (isset($_GET['do']))
@@ -16,11 +15,11 @@
 
 	if (UserControl::IsLogin() && !isset($_GET['do']))
 	{
-
 		$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), "SELECT DECODE(sName, '04022009') FROM Arm_users WHERE id = ".UserControl::GetUserLoginId());
 		if ($vResult != null)
 		{
-			$sUserName = mysql_result($vResult, 0, 0);
+      $res = MYSQLI_FETCH_ASSOC($vResult);
+			$sUserName = $res[array_keys($res)[0]];
 			//$sUserName = UserControl::GetUserFieldValue('sName');
 			$bExitButtonView = true;
 		}
@@ -161,13 +160,13 @@ body {background:url(Grph/bkg/pattern_texture_b.jpg);}
 	<div style="width:715px;display:inline-block;text-align:left;margin-top:3em;margin-bottom:3em;">
 <h1>АРМ 2009 - стал открытым!</h1>
 <p>
-	С 1 октября 2017 года, единогласным решением дружного коллектива разработчиков<br>АРМ 2009 - становится программным обеспечением с открытым исходным кодом.
+	С 1 октября 2016 года, единогласным решением дружного коллектива разработчиков<br>АРМ 2009 - становится программным обеспечением с открытым исходным кодом.
 </p>
 <p>
 	Что это значит для Вас?
 </p>
 <p>
-	Если вы являетесь экспертом или просто заинтересованы в оформлении материалов специальной оценки условий труда, то с 1 октября 2017 года - Вы можете использовать АРМ 2009 совершенно бесплатно и без каких-либо ограничений.
+	Если вы являетесь экспертом или просто заинтересованы в оформлении материалов специальной оценки условий труда, то с 1 октября 2016 года - Вы можете использовать АРМ 2009 совершенно бесплатно и без каких-либо ограничений.
 </p>
 <p>
 	Если вы разработчик, то Вы можете присоединится к работе над проектом на <a href="https://github.com/arm2009/main" target="_blank">GitHub</a>!
@@ -324,7 +323,7 @@ body {background:url(Grph/bkg/pattern_texture_b.jpg);}
       <tr>
         <td valign="top"><div class="button button_download shawdow_min"></div></td>
         <td><div class="button_text button_active shawdow_min" title="Загрузить на локальный диск" onclick="addstatistic('arm2009.ru_PR_33n_24.01.2014_Methodology.pdf'); window.open('download/arm2009.ru_PR_33n_24.01.2014_Methodology.pdf', '_blank');window.focus();">Об утверждении методики проведения специальной  оценки условий труда, классификатора вредных и (или) опасных производственных факторов, формы отчета  о проведении специальной оценки условий труда  и инструкции по её заполнению<br />
-          <span class="comment">1 177 kb | Приказ Минтруда России № 33н от 21.03.2014 г.</span></div></td>
+          <span class="comment">1 177 kb | Приказ Минтруда России № 817н от 21.11.2023 г.</span></div></td>
       </tr>
       <tr>
         <td height="35" valign="top">&nbsp;</td>
@@ -395,15 +394,15 @@ body {background:url(Grph/bkg/pattern_texture_b.jpg);}
           <?
 		$sQuery = "SELECT `id` FROM `Arm_workplace` WHERE `idParent` <> -1;";
 		$vResult = DbConnect::GetSqlQuery($sQuery);
-		inject_counter(mysql_num_rows($vResult), 9, morph(mysql_num_rows($vResult), 'рабочее место','рабочих места','рабочих мест')); ?><br />
+		inject_counter(mysqli_num_rows($vResult), 9, morph(mysqli_num_rows($vResult), 'рабочее место','рабочих места','рабочих мест')); ?><br />
           <?
 		$sQuery = "SELECT `id` FROM `Arm_group`;";
 		$vResult = DbConnect::GetSqlQuery($sQuery);
-		inject_counter(mysql_num_rows($vResult), 6, morph(mysql_num_rows($vResult), 'работодатель','работодателя','работодателей')); ?><br />
+		inject_counter(mysqli_num_rows($vResult), 6, morph(mysqli_num_rows($vResult), 'работодатель','работодателя','работодателей')); ?><br />
           <?
 		$sQuery = "SELECT `id` FROM `Arm_users`;";
 		$vResult = DbConnect::GetSqlQuery($sQuery);
-		inject_counter(mysql_num_rows($vResult), 4, morph(mysql_num_rows($vResult), 'эксперт','эксперта','экспертов')); ?></td>
+		inject_counter(mysqli_num_rows($vResult), 4, morph(mysqli_num_rows($vResult), 'эксперт','эксперта','экспертов')); ?></td>
       </tr>
     </table></td>
   </tr>

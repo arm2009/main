@@ -27,10 +27,10 @@
 	
 	$sql = "SELECT * FROM `Arm_stuff` WHERE `idParent` = ".$sSOUTORGid." ORDER BY `sName`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
 		$isEmty = false;
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			echo('<label><input type="checkbox" name="expert_gr" value="'.$vRow[id].'" id="expert_gr_'.$vRow[id].'" tag="'.$vRow[id].'" />'.$vRow[sName].'</label><br />');
 		}

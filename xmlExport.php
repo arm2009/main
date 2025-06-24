@@ -552,7 +552,7 @@ class xmlExport
     {
       $noiseFactor = $this->insertElement($factors, 'Noise');
       $this->insertElement($noiseFactor, 'Value', $rmData['dEqNoise']);
-      $this->insertElement($noiseFactor, 'Uncertainty', $rmData['dSuspNoise']));
+      $this->insertElement($noiseFactor, 'Uncertainty', $rmData['dSuspNoise']);
       $this->insertElement($noiseFactor, 'NormValue', $rmData['aNOISE'][0]['pdkM']);
       $this->insertElement($noiseFactor, 'WorkingConditions', $rmData['iANoise']);
       $this->insertElement($noiseFactor, 'NormativeAct', $rmData['aNOISE'][0]['nd']);

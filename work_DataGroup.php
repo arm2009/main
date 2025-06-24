@@ -3,7 +3,7 @@
 	include_once "UserControl/userControl.php";
 	include_once "LowLevel/userValidator.php";
 	include_once "MainWork/GroupWork.php";
-    $version = '0.0.36';
+    $version = '0.0.38';
 
 	UserControl::isUserValidExit();
 	if (isset($_GET['id']))

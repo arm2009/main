@@ -6,9 +6,9 @@
 	include_once "Payu/PayU.cls.php";
 
 	UserControl::isUserValidExit();
-	
-	  
-	  
+
+
+
 	  	//Вывод информации о выбранных параметрах
 	if(isset($_POST[RadioGroup1]))
 	{
@@ -38,19 +38,19 @@
 				$sTarif .= 'Сетевой тариф<br /><span class="comment">Совместная работа без ограничений</span>';
 				$iSum = round($_POST[RadioGroup2] * 4500 - UserTariff::GetTariffMoneys(),0);
 				//UserTariff::ChangeTariffData($_POST[RadioGroup2], 4500, $_POST[RadioGroup1], 100);
-			break;									
+			break;
 		}
-		
+
 		switch($_POST[RadioGroup2])
 		{
 			case 1:
 				$sTime .= $_POST[RadioGroup2].' месяц';
 				$sSum = $iSum .' рублей';
-			break;			
+			break;
 			case 3:
 				$sTime .= $_POST[RadioGroup2].' месяца';
 				$sSum = $iSum .' рублей';
-			break;			
+			break;
 			case 6:
 				$sTime .= $_POST[RadioGroup2].' месяцев';
 				$sSum = $iSum .' рублей';
@@ -59,15 +59,13 @@
 				$sTime .= '1 год';
 				$sSum = $iSum * 0.95 .' рублей';
 				$iSum = $iSum * 0.95;
-			break;									
+			break;
 		}
 	}
 
-	
-	
-	
+$uemail = UserControl::GetUserFieldValue('sName');
 	//Формируем форму
-$option  = array( 'merchant' => 'armndkma', 
+$option  = array( 'merchant' => 'armndkma',
                   'secretkey' => 'Fw16k2^1S5?@K6?!h9|n'
                 );
 $forSend = array (
@@ -80,21 +78,18 @@ $forSend = array (
       'ORDER_VAT' => array( 0),  # Массив с указанием НДС для каждого товара
       'ORDER_SHIPPING' => 0 , # Стоимость доставки
       'PRICES_CURRENCY' => "RUB",  # Валюта мерчанта (Внимание! Должно соответствовать валюте мерчанта. )
-	'TESTORDER' => 'TRUE',
-      'LANGUAGE' => "RU",  
+//			'TESTORDER' => 'TRUE',
+      'LANGUAGE' => "RU",
       'BILL_EMAIL' => $uemail,
-	  'BILL_COUNTRYCODE' => "RU",
-	  'BACK_REF' => 'http://arm2009.ru/work_Space.php?pay=1',
-	  'ORDER_REF' => UserControl::GetUserLoginId()
-	
+	  	'BILL_COUNTRYCODE' => "RU",
+	  	'BACK_REF' => 'http://arm2009.ru/work_Space.php?pay=1',
+	  	'ORDER_REF' => UserControl::GetUserLoginId()
+
       #.. все остальные параметры
       );
-	  			
 	  ?>
-      
 
 
-  
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -116,7 +111,7 @@ $forSend = array (
         </tr>
         <tr>
 			<td class="nowBlock">
-            
+
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td><? echo($sTarif); ?></td>
@@ -143,12 +138,10 @@ $forSend = array (
             <tr>
               <td>&nbsp;</td>
             </tr>
-            <td>      <? $pay = PayU::getInst()->setOptions( $option )->setData( $forSend )->LU();
-echo $pay;
-?></td>
-            </tr>        
+            <td>      <? $pay = PayU::getInst()->setOptions( $option )->setData( $forSend )->LU(); echo $pay;?></td>
+            </tr>
       </table>
-<? 
+<?
 /*Установка нижнего фрейма*/
 include('Frame/frame_Bottom.php');
 ?>

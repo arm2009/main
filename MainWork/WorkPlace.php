@@ -19,7 +19,7 @@
 				{
 					$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT id, idParent, iNumber, sName, sOk, sPrefix FROM Arm_workplace WHERE idGroup = '.$idGroup.' AND idParent <> -1 ORDER BY iNumber DESC;');
 				}
-						while ($vRow = mysql_fetch_assoc($vResult))
+						while ($vRow = MYSQLI_FETCH_ASSOC($vResult))
 						{
 							$aList[] = array($vRow['id'], $vRow['idParent'],$vRow['iNumber'], $vRow['sName'], $vRow['sOk'], $vRow['sPrefix']);
 						}
@@ -34,9 +34,10 @@
 				setlocale(LC_ALL, 'rus');
 				if ($id != 0)
 				{
-					$sDate = date_create(mysql_result($vResult,0,14));
+					$result = MYSQLI_FETCH_ASSOC($vResult);
+					$sDate = date_create($result[array_keys($result)[14]]);
 					$sDate = StringWork::DateFormatLite($sDate);
-					$aWorkPlace = array(mysql_result($vResult,0,0), mysql_result($vResult,0,1), mysql_result($vResult,0,2), mysql_result($vResult,0,3), mysql_result($vResult,0,4), mysql_result($vResult,0,5), mysql_result($vResult,0,6), mysql_result($vResult,0,7), mysql_result($vResult,0,8), mysql_result($vResult,0,9), mysql_result($vResult,0,10), mysql_result($vResult,0,11), mysql_result($vResult,0,12), mysql_result($vResult,0,13), $sDate, mysql_result($vResult,0,15));
+					$aWorkPlace = array($result[array_keys($result)[0]], $result[array_keys($result)[1]], $result[array_keys($result)[2]], $result[array_keys($result)[3]], $result[array_keys($result)[4]], $result[array_keys($result)[5]], $result[array_keys($result)[6]], $result[array_keys($result)[7]], $result[array_keys($result)[8]], $result[array_keys($result)[9]], $result[array_keys($result)[10]], $result[array_keys($result)[11]], $result[array_keys($result)[12]], $result[array_keys($result)[13]], $sDate, $result[array_keys($result)[15]]);
 				}
 
 			return $aWorkPlace;
@@ -104,7 +105,8 @@
 		public static function GetMaxNumber($idGroup)
 		{
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT MAX(iNumber) FROM Arm_workplace WHERE idGroup = '.$idGroup);
-			return mysql_result($vResult, 0, 0);
+			$res = MYSQLI_FETCH_ASSOC($vResult);
+			return $res[array_keys($res)[0]];
 		}
 		
 		public static function SaveWarranty($idRm, $iCompSurcharge, $sCompBaseSurcharge, $sCompFactSurcharge, $iCompVacation, $sCompBaseVacation, $sCompFactVacation, $iCompShortWorkDay, $sCompBaseShortWorkDay, $sCompFactShortWorkDay, $iCompMilk, $sCompBaseMilk, $sCompFactMilk, $iCompFood, $sCompBaseFood, $sCompFactFood, $iCompPension, $sCompBasePension, $sCompFactPension, $iCompPhysical, $sCompBasePhysical, $sCompFactPhysical)
@@ -121,7 +123,7 @@
 			$sql = "SELECT * FROM `Arm_activity` WHERE `iRmId` = ".$idRm.";";
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
 			
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				//Формирование листа для передачи
 				$aList[] = array($vRow['id'], $vRow['sActivityName'],$vRow['sActivityTarget'],$vRow['sTerm'],$vRow['sInvolved'],$vRow['sMark'],$vRow['iType']);
@@ -133,7 +135,7 @@
 		{	
 			$sql = "SELECT * FROM `Arm_activity` WHERE `id` = ".$id.";";
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				//Формирование листа для передачи
 				$aList[] = array($vRow['id'], $vRow['sActivityName'],$vRow['sActivityTarget'],$vRow['sTerm'],$vRow['sInvolved'],$vRow['sMark'],$vRow['iType']);
@@ -149,12 +151,12 @@
 			$sql2 = 'SELECT * FROM Arm_activity WHERE sActivityName LIKE "'.$sActivityName.'" AND iRmId ='.$idRm.';';
 			$vResult2 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql2);
 			
-			if (mysql_num_rows($vResult2) == 0)
+			if (mysqli_num_rows($vResult2) == 0)
 			{
 				$sql = "INSERT INTO `Arm_activity` (`id`, `iRmId`, `sActivityName`, `sActivityTarget`, `sTerm`, `sInvolved`, `sMark`, `iType`) VALUES (NULL, '".$idRm."', '".$sActivityName."', '".$sActivityTarget."', '".$sTerm."', '".$sInvolved."', '".$sMark."', '".$iType."');";
 				$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
 				GroupWork::SetLastChangeStamp(-1, $idRm);
-				return mysql_insert_id();
+				return $vResult;
 			}
 		}
 		
@@ -190,7 +192,7 @@
 			$sql = "SELECT * FROM `Arm_Siz` WHERE `rmId` = ".$idRm." ORDER BY SizName;";
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
 			
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = MYSQLI_FETCH_ASSOC($vResult))
 			{
 				//Формирование листа для передачи
 				$aList[] = array($vRow['id'], $vRow['SizName'],$vRow['Fact'],$vRow['Sert'],$vRow['protectFactor']);
@@ -201,7 +203,7 @@
 		{	
 			$sql = "SELECT * FROM `Arm_Siz` WHERE `id` = ".$id.";";
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				//Формирование листа для передачи
 				$aList[] = array($vRow['id'], $vRow['SizName'],$vRow['Fact'],$vRow['Sert'],$vRow['protectFactor']);
@@ -254,7 +256,7 @@
 			//Импорт основной информации
 			$sql = "SELECT `sSIZbase`, `dSizDate`, `iSIZCard`,`iSIZEffect` ,`iSIZOFact` ,`iSIZOProtect` ,`iSIZOEffect` FROM `Arm_workplace` WHERE `id` = ".$idDonor.";";
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				$sql = "UPDATE `Arm_workplace` SET `sSIZbase` = '".$vRow[sSIZbase]."', `dSizDate` = '".$vRow[dSizDate]."', `iSIZCard` = '".$vRow[iSIZCard]."', `iSIZEffect` = '".$vRow[iSIZEffect]."', `iSIZOFact` = '".$vRow[iSIZOFact]."', `iSIZOProtect` = '".$vRow[iSIZOProtect]."', `iSIZOEffect` = '".$vRow[iSIZOEffect]."' WHERE `Arm_workplace`.`id` = ".$idRecepient.";";
 				UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
@@ -265,7 +267,7 @@
 			//Импорт перечня сиз
 			$sql = "SELECT * FROM `Arm_Siz` WHERE `rmId` = ".$idDonor.";";
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				$sql = "INSERT INTO `Arm_Siz` (`id`, `rmId`, `SizName`, `Fact`, `Sert`, `protectFactor`) VALUES (NULL, '".$idRecepient."', '".$vRow[SizName]."', '".$vRow[Fact]."', '".$vRow[Sert]."', '".$vRow[protectFactor]."');";
 				UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
@@ -278,7 +280,7 @@
 			//Импорт основной информации
 			$sql = "SELECT * FROM `Arm_workplace` WHERE `id` = ".$idDonor.";";
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				$sql = "UPDATE `Arm_workplace` SET `iCompSurcharge` = '".$vRow[iCompSurcharge]."', `sCompBaseSurcharge` = '".$vRow[sCompBaseSurcharge]."', `sCompFactSurcharge` = '".$vRow[sCompFactSurcharge]."', `iCompVacation` = '".$vRow[iCompVacation]."', `sCompBaseVacation` = '".$vRow[sCompBaseVacation]."', `sCompFactVacation` = '".$vRow[sCompFactVacation]."', `iCompShortWorkDay` = '".$vRow[iCompShortWorkDay]."', `sCompBaseShortWorkDay` = '".$vRow[sCompBaseShortWorkDay]."', `sCompFactShortWorkDay` = '".$vRow[sCompFactShortWorkDay]."', `iCompMilk` = '".$vRow[iCompMilk]."', `sCompBaseMilk` = '".$vRow[sCompBaseMilk]."', `sCompFactMilk` = '".$vRow[sCompFactMilk]."', `iCompFood` = '".$vRow[iCompFood]."', `sCompBaseFood` = '".$vRow[sCompBaseFood]."', `sCompFactFood` = '".$vRow[sCompFactFood]."', `iCompPension` = '".$vRow[iCompPension]."', `sCompBasePension` = '".$vRow[sCompBasePension]."', `sCompFactPension` = '".$vRow[sCompFactPension]."', `iCompPhysical` = '".$vRow[iCompPhysical]."', `sCompBasePhysical` = '".$vRow[sCompBasePhysical]."', `sCompFactPhysical` = '".$vRow[sCompFactPhysical]."' WHERE `Arm_workplace`.`id` = ".$idRecepient.";";
 				echo($sql);
@@ -295,7 +297,7 @@
 			//Импорт перечня сиз
 			$sql = "SELECT * FROM `Arm_activity` WHERE `iRmId` = ".$idDonor.";";
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				$sql = "INSERT INTO `Arm_activity` (`id`, `iRmId`, `sActivityName`, `sActivityTarget`, `sTerm`, `sInvolved`, `sMark`, `iType`) VALUES (NULL, '".$idRecepient."', '".$vRow[sActivityName]."', '".$vRow[sActivityTarget]."', '".$vRow[sTerm]."', '".$vRow[sInvolved]."', '".$vRow[sMark]."', '".$vRow[iType]."');";
 				UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
@@ -339,7 +341,7 @@
 			
 			$sReturn = "";
 			
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				if ($vRow['iATotal'] > 2)
 				{
@@ -348,7 +350,7 @@
 					{
 					$vResult2 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql2);
 					
-					while ($vRow2 = mysql_fetch_assoc($vResult2))
+					while ($vRow2 = mysqli_fetch_assoc($vResult2))
 					{
 
 							$sReturn = WorkPlace::GetFullNamePens($vRow2['sBasePension']);
@@ -386,9 +388,9 @@
 				
 		
 		
-		if (mysql_num_rows($result) > 0)
+		if (mysqli_num_rows($result) > 0)
 				{
-					while($vRow = mysql_fetch_array($result))
+					while($vRow = mysqli_fetch_array($result))
 					{		
 						//$vRow['sNum'][0]				
 						$sResult = 'п. '.$vRow['sNum'].', "'.trim($vRow['sName']).'"';
@@ -397,9 +399,9 @@
 						{
 							$sql2 = "SELECT * FROM Nd_pens WHERE id = ".$vRow['idParent'].";";
 							$result2 = DbConnect::GetSqlQuery($sql2);
-							if (mysql_num_rows($result2) > 0)
+							if (mysqli_num_rows($result2) > 0)
 							{
-								while($vRow2 = mysql_fetch_array($result2))
+								while($vRow2 = mysqli_fetch_array($result2))
 								{
 									$sResult = trim($vRow2['sName']).', '.$sResult;
 									
@@ -444,9 +446,9 @@
 			
 			$sTemp = 'err';
 			
-				if (mysql_num_rows($result) > 0)
+				if (mysqli_num_rows($result) > 0)
 				{
-					while($vRow = mysql_fetch_array($result))
+					while($vRow = mysqli_fetch_array($result))
 					{
 							$sql3 = '';
 							
@@ -462,7 +464,7 @@
 							}
 							
 							$result3 = DbConnect::GetSqlQuery($sql3);
-							while($vRow3 = mysql_fetch_array($result3))
+							while($vRow3 = mysqli_fetch_array($result3))
 							{	
 								array_push($aIdMeds, $vRow3['idMed']);	
 							}
@@ -472,9 +474,9 @@
 				
 				$sSql = "SELECT iAion FROM Arm_workplace WHERE id = ".$idRm;
 				$result2 = DbConnect::GetSqlQuery($sSql);
-				if (mysql_num_rows($result2) > 0)
+				if (mysqli_num_rows($result2) > 0)
 				{
-					while($vRow = mysql_fetch_array($result2))
+					while($vRow = mysqli_fetch_array($result2))
 					{
 						if ($vRow['iAion'] > 2) { array_push($aIdMeds, '186');}
 					}
@@ -502,7 +504,7 @@
                 $bFirst = true;
 				$sql = "SELECT * FROM Nd_med1 WHERE id IN (".$idMed1.");";
 				$result = DbConnect::GetSqlQuery($sql);
-				while($vRow = mysql_fetch_array($result))
+				while($vRow = mysqli_fetch_array($result))
 					{
                         if($bFirst)
                         {
@@ -517,13 +519,14 @@
 			if ($idMed2 != '')
 			{
                 $bFirst = true;
+                $sResult = $sResult.' Приложение №2';
 				$sql2 = "SELECT * FROM Nd_med2 WHERE id IN (".$idMed2.");";
 				$result2 = DbConnect::GetSqlQuery($sql2);
-				while($vRow2 = mysql_fetch_array($result2))
+				while($vRow2 = mysqli_fetch_array($result2))
 					{
                         if($bFirst)
                         {
-                            $sResult = $sResult.' Приложение №2';
+                            $sResult = $sResult.' Приложение №1';
                             $bFirst = false;
                         }
                         $sResult = $sResult.' п.п. '.$vRow2['sPunkt'].';';
@@ -563,7 +566,7 @@
 			if(strlen($createCardDate[sNoWoman])>0){WorkPlace::AddActivity($idRm, 'Применение труда женщин - запрещено (Постановление Правительства Российской Федерации от 25 февраля 2000 года N 162, '.$createCardDate[sNoWoman].').', '', '', '', '', 1);}
 			
 			//Перебор выборки по факторам.
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				$sMero = '';
 				switch($vRow[idFactorGroup])
@@ -600,7 +603,7 @@
 			//Мероприятие на ионизирующее
 			$sSql = "SELECT iAion FROM Arm_workplace WHERE id = ".$idRm;
 			$vResult2 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sSql);
-			while ($vRow = mysql_fetch_assoc($vResult2))
+			while ($vRow = mysqli_fetch_assoc($vResult2))
 			{
 			   if ($vRow[iAion] > 2) {WorkPlace::AddActivity($idRm, 'Снижение до регламентированных уровней ионизирующих излучений на рабочих местах в соответствии с требованиями нормативных документов.', 'Cнижение вредного воздействия производственного фактора "Ионизирующие излучение".', '', 'Все структурные подразделения.', '', 0);}
 			}
@@ -608,7 +611,7 @@
             //Мероприятие на неверное именование рабочего места
             $sSql = "SELECT `sName`, `sOk` FROM `Arm_workplace` WHERE `id` = $idRm";
             $vResult1 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sSql);
-			while ($vRow1 = mysql_fetch_assoc($vResult1))
+			while ($vRow1 = mysqli_fetch_assoc($vResult1))
 			{
                 $aRMData = $vRow1;
 
@@ -618,7 +621,7 @@
                 $sSql = "SELECT Nd_ok01694.`sCode`, Nd_ok01694.`sName`, Nd_Etks.sName as sNameEtks FROM `Nd_ok01694` LEFT JOIN Nd_Etks ON Nd_Etks.iCode = Nd_ok01694.sEtks WHERE `sCode` = $vRow1[sOk]";
 
                 $vResult2 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sSql);
-                while ($vRow2 = mysql_fetch_assoc($vResult2))
+                while ($vRow2 = mysqli_fetch_assoc($vResult2))
                 {
                     $aOkData = $vRow2;
                 }
@@ -642,7 +645,7 @@
 			
 			$sql = "SELECT `iATotal` FROM `Arm_workplace` WHERE `id` = ".$idRm.";";
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sql);
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				switch($vRow[iATotal])
 				{
@@ -676,7 +679,7 @@ $sql = "UPDATE `Arm_workplace` SET `iCompSurcharge` = '1', `sCompBaseSurcharge` 
 		public static function SetAllCreateAction($inIdGroup)
 		{
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT id FROM Arm_workplace WHERE idGroup = '.$inIdGroup.' AND idParent <> -1 ORDER BY iNumber DESC;');
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				WorkPlace::FastActions($vRow[id]);
 			}
@@ -685,7 +688,7 @@ $sql = "UPDATE `Arm_workplace` SET `iCompSurcharge` = '1', `sCompBaseSurcharge` 
 		public static function SetAllCreateWarranty($inIdGroup)
 		{
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT id FROM Arm_workplace WHERE idGroup = '.$inIdGroup.' AND idParent <> -1 ORDER BY iNumber DESC;');
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				WorkPlace::FastWarranty($vRow[id]);
 
@@ -695,7 +698,7 @@ $sql = "UPDATE `Arm_workplace` SET `iCompSurcharge` = '1', `sCompBaseSurcharge` 
 		public static function SetAllNums($inIdGroup, $sFirstNum)
 		{
 			$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT `id` FROM Arm_workplace WHERE idGroup = '.$inIdGroup.' AND idParent <> -1 ORDER BY idParent,iNumber;');
-			while ($vRow = mysql_fetch_assoc($vResult))
+			while ($vRow = mysqli_fetch_assoc($vResult))
 			{
 				DbConnect::GetSqlQuery("UPDATE `Arm_workplace` SET `iNumber` = ".$sFirstNum." WHERE `id` = ".$vRow[id].";");
 				$sFirstNum++;

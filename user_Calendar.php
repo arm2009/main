@@ -107,13 +107,13 @@ $selfSpace = 'button button_folder shawdow_min';
 $otherSpace = 'button button_sharefolder shawdow_min';
 
 $FirstRow = true;
-if (mysql_num_rows($aGroups) > 0)
+if (mysqli_num_rows($aGroups) > 0)
 {
 	echo '<table width="100%" border="0" cellpadding="10" cellspacing="0"><tr class="table_header">
 		<td width="96" class="comment">Дата</td>
 		<td class="comment" colspan="2">Событие</td></tr>
 ';
-	while($row = mysql_fetch_array($aGroups))
+	while($row = mysqli_fetch_array($aGroups))
 	{
 		if($rowStyle == 'table_odd') $rowStyle = 'table_even'; else $rowStyle = 'table_odd';
 		echo('

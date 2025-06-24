@@ -1,14 +1,14 @@
 <?
 	include('../kcapi/api.php');
 	require_once 'tcpdf/tcpdf.php';
-	
-	
+
+
 	if(isset($_POST[sch_contsuim]))
 	{
 		//Информация в систему
 		$sql = "SELECT MAX(`pay_num`) FROM `ae_pay_data` WHERE `user_id` = ".ClearSqlVarInteger($_POST[sch_contsuim]).";";
 		$numtmp = SQLString($sql);
-		
+
 		if($numtmp == null)
 		{
 			$numtmp = 1;
@@ -17,42 +17,42 @@
 		{
 			$numtmp++;
 		}
-		
+
 		$date = date('d.m.Y');
 		$schsum = $_POST[sch_sum];
-		
+
 		$sql = "SELECT * FROM `ae_users` WHERE `id` = ".ClearSqlVarInteger($_SESSION[us_id]).";";
 		$result = SQLquery($sql);
 		if($result->num_rows > 0)
-		{	
+		{
 			$row = mysqli_fetch_array($result);
 		}
-		
+
 		$sql = "INSERT INTO `ae_pay_data` (`user_id`, `pay_num`, `pay_state`, `pay_sum`, `pay_name`, `pay_adres`, `pay_inn`, `pay_kpp`, `pay_sch`, `pay_bank`, `pay_bik`, `pay_crsch`) VALUES ('".$row[id]."', '".$numtmp."', '0', '".$_POST[sch_sum]."', '".$row[workout]."', '".$row[adress]."', '".$row[inn]."', '".$row[kpp]."', '".$row[rs]."', '".$row[bank]."', '".$row[bik]."', '".$row[ks]."');";
 		SQLquery($sql);
 	}
-	
+
 	if(isset($_GET[payid]))
 	{
 		$sql = "SELECT * FROM `ae_pay_data` WHERE `id` = ".ClearSqlVarInteger($_GET[payid]).";";
 		$result = SQLquery($sql);
 		if($result->num_rows > 0)
-		{	
+		{
 			$rowpay = mysqli_fetch_array($result);
 		}
-		
+
 		$sql = "SELECT * FROM `ae_users` WHERE `id` = ".ClearSqlVarInteger($rowpay[user_id]).";";
 		$result = SQLquery($sql);
 		if($result->num_rows > 0)
-		{	
+		{
 			$row = mysqli_fetch_array($result);
 		}
-		
+
 		$date = date('d.m.Y', strtotime($rowpay[crtime]));
 		$schsum = $rowpay[pay_sum];
 		$numtmp = $rowpay[pay_num];
 	}
-	
+
 	// создаем объект TCPDF - документ с размерами формата A4
 	// ориентация - книжная
 	// единицы измерения - миллиметры
@@ -62,14 +62,14 @@
 	$pdf->SetAuthor('ООО "Консалтинговый центр "Труд"');
 	$pdf->SetTitle('Счет на оплату.');
 	$pdf->SetSubject('Счет на оплату.');
-	
+
 	$fontname = $pdf->addTTFfont('tcpdf/fonts/utils/CALIBRI.TTF', 'UTF-8', 'UTF-8', 32, '', 3, 1);
 
 	$pdf->SetMargins(15, 25, 15, 15); // устанавливаем отступы (20 мм - слева, 25 мм - сверху, 25 мм - справа)
 	$pdf->SetHeaderMargin(5);
 //	$pdf->SetFooterMargin(10);
 	$pdf->setPrintFooter(false);
-	
+
 	$pdf->SetHeaderData('testlogo.jpg', '50', '', '');
 
 	$pdf->setHeaderFont(Array($fontname, '', 10));
@@ -80,7 +80,7 @@
 	$pdf->AddPage(); // создаем первую страницу, на которой будет содержимое
 
 	$html = '
-<p>ООО «Консалтинговый центр «Труд», Адрес: 660032, г. Красноярск, ул. Дубенского, 4-219<br />тел.: (391) 252-47-14, 202-01-79<br>
+<p>ООО «Консалтинговый центр «Труд», Адрес: 660032, г. Красноярск, ул. Дубенского, 4-219<br />тел.: (391) 228-73-58<br>
 Образец заполнения платежного поручения:</p>
 <table width="100%" border="1" cellspacing="0" cellpadding="5" style="border:1px solid #666666;">
   <tr>

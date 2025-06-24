@@ -11,9 +11,9 @@ if(isset($_GET[iGrId]))
 
  	$result = DbConnect::GetSqlQuery($sql);	
 
-	if (mysql_num_rows($result) > 0)
+	if (mysqli_num_rows($result) > 0)
 	{
-		while($vRow = mysql_fetch_array($result))
+		while($vRow = mysqli_fetch_array($result))
 		{
 			$row['value']=htmlspecialchars($vRow[sName]);
 			$aResult[] = $row;

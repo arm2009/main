@@ -17,9 +17,9 @@
 <?
 	$sql = "SELECT `id`, `sName`, `sPP`, `tScribe` FROM `Arm_factors` WHERE `idParent` = 1 ORDER BY `sPP`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			echo('<label title="'.$vRow[tScribe].'"><input type="checkbox" onclick="" name="factors_class" value="'.$vRow[id].'" id="factors_class_'.$vRow[id].'"/>'.$vRow[sPP].' '.$vRow[sName].'</label><br />');
 		}
@@ -31,9 +31,9 @@
 <?
 	$sql = "SELECT `id`, `sName` FROM `Arm_gn1313` WHERE `bFirstSelect` = 1 AND `sFeat` LIKE '%Ф%' ORDER BY `sName`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			echo('<label><input type="checkbox" name="factors_gn" value="'.$vRow[id].'" id="factors_gn'.$vRow[id].'" />'.$vRow[sName].'</label><br />');
 		}
@@ -46,9 +46,9 @@
 <?
 	$sql = "SELECT `id`, `sName`, `sPP`, `tScribe` FROM `Arm_factors` WHERE `idParent` = 10 ORDER BY `sPP`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			echo('<label title="'.$vRow[tScribe].'"><input type="checkbox" name="factors_class" value="'.$vRow[id].'" id="factors_class_'.$vRow[id].'"/>'.$vRow[sPP].' '.$vRow[sName].'</label><br />');
 		}
@@ -60,9 +60,9 @@
 <?
 	$sql = "SELECT `id`, `sName`, `sPP`, `tScribe` FROM `Arm_factors` WHERE `idParent` = 17 ORDER BY `sPP`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			echo('<label title="'.$vRow[tScribe].'"><input type="checkbox" name="factors_class" value="'.$vRow[id].'" id="factors_class_'.$vRow[id].'"/>'.$vRow[sPP].' '.$vRow[sName].'</label><br />');
 		}
@@ -74,9 +74,9 @@
 <?
 	$sql = "SELECT `id`, `sName`, `sPP`, `tScribe` FROM `Arm_factors` WHERE `idParent` = 21 ORDER BY `sPP`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			echo('<label title="'.$vRow[tScribe].'"><input type="checkbox" name="factors_class" value="'.$vRow[id].'" id="factors_class_'.$vRow[id].'"/>'.$vRow[sPP].' '.$vRow[sName].'</label><br />');
 		}
@@ -88,9 +88,9 @@
 <?
 	$sql = "SELECT `id`, `sName`, `sPP`, `tScribe` FROM `Arm_factors` WHERE `idParent` = 28 ORDER BY `sPP`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			echo('<label title="'.$vRow[tScribe].'"><input type="checkbox" name="factors_class" value="'.$vRow[id].'" id="factors_class_'.$vRow[id].'"/>'.$vRow[sPP].' '.$vRow[sName].'</label><br />');
 		}
@@ -104,9 +104,9 @@
 <?
 	$sql = "SELECT `id`, `sName` FROM `Arm_gn1313` WHERE `bFirstSelect` = 1 AND `sFeat` NOT LIKE '%Ф%' ORDER BY `sName`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			echo('<label><input type="checkbox" name="factors_gn" value="'.$vRow[id].'" id="factors_gn'.$vRow[id].'" />'.$vRow[sName].'</label><br />');
 		}
@@ -119,9 +119,9 @@
 <?
 	$sql = "SELECT `id`, `sName`, `sPP`, `tScribe` FROM `Arm_factors` WHERE `idParent` = 33 ORDER BY `sPP`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			echo('<label title="'.$vRow[tScribe].'"><input type="checkbox" name="factors_class" value="'.$vRow[id].'" id="factors_class_'.$vRow[id].'"/>'.$vRow[sPP].' '.$vRow[sName].'</label><br />');
 		}
@@ -133,9 +133,9 @@
 <?
 	$sql = "SELECT `id`, `sName`, `sPP`, `tScribe` FROM `Arm_factors` WHERE `idParent` = 37 ORDER BY `sPP`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			echo('<label title="'.$vRow[tScribe].'"><input type="checkbox" name="factors_class" value="'.$vRow[id].'" id="factors_class_'.$vRow[id].'"/>'.$vRow[sPP].' '.$vRow[sName].'</label><br />');
 		}
@@ -147,9 +147,9 @@
 <?
 	$sql = "SELECT `id`, `sName`, `sPP`, `tScribe` FROM `Arm_factors` WHERE `idParent` = 46 ORDER BY `sPP`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			echo('<label title="'.$vRow[tScribe].'"><input type="checkbox" name="factors_class" value="'.$vRow[id].'" id="factors_class_'.$vRow[id].'"/>'.$vRow[sPP].' '.$vRow[sName].'</label><br />');
 		}

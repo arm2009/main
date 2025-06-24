@@ -199,9 +199,9 @@ function PDF_insert_Podpis($inPDF, $idWorkGroup)
 	$sql = "SELECT * FROM `Arm_comiss` WHERE `idParent` = ".$idWorkGroup.";";
 	$vResult = DbConnect::GetSqlQuery($sql);
 
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			$html .= '
 			<tr>
@@ -239,15 +239,15 @@ function PDF_insert_Podpis($inPDF, $idWorkGroup)
 	$sql = "SELECT * FROM `Arm_groupStuff` WHERE `idGroup` = ".$idWorkGroup." AND `bExpert` = 1;";
 	$vResult = DbConnect::GetSqlQuery($sql);
 
-	if(mysql_num_rows($vResult) > 1) $sTmpI = 'ы';
+	if(mysqli_num_rows($vResult) > 1) $sTmpI = 'ы';
 
 	$html .= '
 	<p><font face="calibrib" size="+2">Эксперт'.$sTmpI.' организации, проводившей специальную оценку условий труда:</font></p>
 	<table border="0" cellspacing="0" cellpadding="2" width="150mm">';
 
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			if(strlen(trim($vRow[sReestrNum])) == 0) $vRow[sReestrNum] = $vRow[sPost]; else $vRow[sReestrNum] = 'В реестре экспертов за № '.$vRow[sReestrNum];
 			$html .= '
@@ -295,15 +295,15 @@ function PDF_insert_Podpis_Protocol($inPDF, $idWorkGroup)
 	$sql = "SELECT * FROM `Arm_groupStuff` WHERE `idGroup` = ".$idWorkGroup." AND `bExpert` = 0;";
 	$vResult = DbConnect::GetSqlQuery($sql);
 
-	if(mysql_num_rows($vResult) > 1) $sTmpI = 'ы';
+	if(mysqli_num_rows($vResult) > 1) $sTmpI = 'ы';
 
 	$html .= '
 	<p><font face="calibrib" size="+2">Исследования, измерения провел:</font></p>
 	<table border="0" cellspacing="0" cellpadding="2" width="150mm">';
 
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			$html .= '
 				<tr>
@@ -340,15 +340,15 @@ function PDF_insert_Podpis_Protocol($inPDF, $idWorkGroup)
 	$sql = "SELECT * FROM `Arm_groupStuff` WHERE `idGroup` = ".$idWorkGroup." AND `bExpert` = 1;";
 	$vResult = DbConnect::GetSqlQuery($sql);
 
-	if(mysql_num_rows($vResult) > 1) $sTmpI = 'ы';
+	if(mysqli_num_rows($vResult) > 1) $sTmpI = 'ы';
 
 	$html .= '
 	<p><font face="calibrib" size="+2">Оценку выполнил:</font></p>
 	<table border="0" cellspacing="0" cellpadding="2" width="150mm">';
 
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			if(strlen(trim($vRow[sReestrNum])) != 0) $vRow[sReestrNum] = 'В реестре экспертов за № '.$vRow[sReestrNum];
 
@@ -403,30 +403,6 @@ function PDF_insert_Podpis_Protocol($inPDF, $idWorkGroup)
 	';
 	$html .= '</td></tr><tr><td align="left" valign="top" style="color:#999;"><font face="calibril" size="-2">(должность, подпись, ФИО, дата)</font></td></tr></table>';
 
-	$html .= '
-	<p><font face="calibrib" size="+2">При измерениях присутствовал:</font></p>
-	<table border="0" cellspacing="0" cellpadding="2" width="150mm">';
-	$html .= '
-	<tr><td valign="top" style="border-bottom:#000 solid 2px;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-	  <tr>
-		<td width="50%">&nbsp;</td>
-		<td width="5%">&nbsp;</td>
-		<td>&nbsp;</td>
-		<td width="5%">&nbsp;</td>
-	  </tr>
-	</table></td></tr><tr><td align="left" valign="top" style="color:#999;"><font face="calibril" size="-2">(должность, подпись, ФИО, дата)</font></td></tr>
-	';
-	$html .= '
-	<tr><td valign="top" style="border-bottom:#000 solid 2px;"><table width="100%" border="0" cellspacing="0" cellpadding="0">
-	  <tr>
-		<td width="50%">&nbsp;</td>
-		<td width="5%">&nbsp;</td>
-		<td>&nbsp;</td>
-		<td width="5%">&nbsp;</td>
-	  </tr>
-	</table></td></tr><tr><td align="left" valign="top" style="color:#999;"><font face="calibril" size="-2">(должность, подпись, ФИО, дата)</font></td></tr>
-	';
-	$html .= '</table>';
 
 
 	$html .= '</td></tr></table>';

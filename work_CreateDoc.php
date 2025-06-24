@@ -19,9 +19,9 @@
 			$sDiapazone = '';
 			$sql = "SELECT `id` FROM `Arm_workplace` WHERE `idGroup` = ".$iGrId." AND `idParent` <> -1 ORDER BY `iNumber`;";
 			$vResult = DbConnect::GetSqlQuery($sql);
-			if (mysql_num_rows($vResult) > 0)
+			if (mysqli_num_rows($vResult) > 0)
 			{
-				while($vRow = mysql_fetch_array($vResult))
+				while($vRow = mysqli_fetch_array($vResult))
 				{
 					$sDiapazone .= '#'.$vRow[id];
 				}
@@ -47,9 +47,9 @@
 							//Выбор из базы и добавление айди-рм
 							$sql = "SELECT `id` FROM `Arm_workplace` WHERE `iNumber` = ".$i." AND `idGroup` = ".$_GET[first].";";
 							$vResult = DbConnect::GetSqlQuery($sql);
-							if (mysql_num_rows($vResult) > 0)
+							if (mysqli_num_rows($vResult) > 0)
 							{
-								while($vRow = mysql_fetch_array($vResult))
+								while($vRow = mysqli_fetch_array($vResult))
 								{
 									$sDiapazone .= '#'.$vRow[id];
 								}
@@ -61,9 +61,9 @@
 						//Выбор из базы и добавление айди-рм
 						$sql = "SELECT `id` FROM `Arm_workplace` WHERE `iNumber` = ".$Value." AND `idGroup` = ".$_GET[first].";";
 						$vResult = DbConnect::GetSqlQuery($sql);
-						if (mysql_num_rows($vResult) > 0)
+						if (mysqli_num_rows($vResult) > 0)
 						{
-							while($vRow = mysql_fetch_array($vResult))
+							while($vRow = mysqli_fetch_array($vResult))
 							{
 								$sDiapazone .= '#'.$vRow[id];
 							}
@@ -135,7 +135,7 @@
 						//Проверка на наличие СИЗ
 						$sql = "SELECT `id` FROM `Arm_Siz` WHERE `rmId` = ".$Rm.";";
 						$vResult = DbConnect::GetSqlQuery($sql);
-						if (mysql_num_rows($vResult) > 0)
+						if (mysqli_num_rows($vResult) > 0)
 						{
 							$sDocArray .= ', \''. $Value .'\'';
 							$sTargetArray.= ', \''. $Rm .'\'';
@@ -151,8 +151,7 @@
 
 		//Внесение сессии
 		$sql = "INSERT INTO `CreateDoc_Session` (`id`, `iUserId`, `dBegin`, `sPath`, `iState`, `iDocCount`) VALUES (NULL, ".UserControl::GetUserLoginId().", NOW(), '', 0, ".$iDocCount.");";
-		DbConnect::GetSqlQuery($sql);
-		$SessionId = mysql_insert_id();
+		$SessionId = DbConnect::GetSqlQuery($sql);
 		$ThisPath = UserControl::GetUserLoginId().'_'.$SessionId.'_'.date("Y-m-d_H-i-s");
 		$sql = "UPDATE `CreateDoc_Session` SET `sPath` = '".$ThisPath."' WHERE `CreateDoc_Session`.`id` = ".$SessionId.";";
 		DbConnect::GetSqlQuery($sql);
@@ -249,7 +248,8 @@ function PrintBegin()
 		{
 			//alert(data);
 			var filename = data.substr(data.lastIndexOf("/") + 1);
-			SaveToDisk(data, filename);
+			saveFile(data);
+			//SaveToDisk(data, filename);
 			//Переход к формированию следующего элемента
 			iNowPosition++;
 			setTimeout('PrintBegin()',1500);
@@ -264,5 +264,24 @@ function PrintEnd()
 {
 	$('#print_text').html('Формирование документов завершено<br /><span id="print_comment" class="comment">Вкладка закроется автоматически</span>');
 	setTimeout('window.close()',5000);
+}
+
+// Download a file form a url.
+function saveFile(url) {
+  // Get file name from url.
+  var filename = url.substring(url.lastIndexOf("/") + 1).split("?")[0];
+  var xhr = new XMLHttpRequest();
+  xhr.responseType = 'blob';
+  xhr.onload = function() {
+    var a = document.createElement('a');
+    a.href = window.URL.createObjectURL(xhr.response); // xhr.response is a blob
+    a.download = filename; // Set the file name.
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    delete a;
+  };
+  xhr.open('GET', url);
+  xhr.send();
 }
 </script>

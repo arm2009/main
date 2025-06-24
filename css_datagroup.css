@@ -16,6 +16,8 @@
 /*Кнопки 16 синий фон*/
 .button16b{width:32px;height:32px;background-repeat:no-repeat;background-position:center;border:solid #FFFFFF 1px;cursor:pointer;display:inline-block;margin-right:6px;}
 .button16b:hover{background-color:#FFFFFF;}
+.button16b_akot{background-image:url(Grph/akot/akot16w.png);}
+.button16b_akot:hover{background-image:url(Grph/akot/akot16.png);}
 .button16b_print{background-image:url(Grph/print/print16w.png);}
 .button16b_print:hover{background-image:url(Grph/print/print16.png);}
 .button16b_info{background-image:url(Grph/info/info16w.png);}

@@ -27,11 +27,11 @@
 	
 	$sql = "SELECT * FROM `Arm_acredit` WHERE `idParent` = ".$sSOUTORGid." ORDER BY `sName`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
 		$isEmty = false;
 		echo('<div id="header_accreditation" onclick="RoollClick(\'accreditation\');" class="rollDown">Аккредитация</div><div id="body_accreditation" style="display:none;margin:10px; margin-left:30px;">');
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			echo('<label><input type="checkbox" name="accreditation_gr" value="'.$vRow[id].'" id="accreditation_gr_'.$vRow[id].'" tag="'.$vRow[id].'" />'.$vRow[sName].'</label><br />');
 		}
@@ -40,11 +40,11 @@
 
 	$sql = "SELECT * FROM `Arm_stuff` WHERE `idParent` = ".$sSOUTORGid." ORDER BY `sName`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
 		$isEmty = false;
 		echo('<div id="header_expert" onclick="RoollClick(\'expert\');" class="rollDown">Эксперты и работники</div><div id="body_expert" style="display:none;margin:10px; margin-left:30px;">');
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			echo('<label><input type="checkbox" name="expert_gr" value="'.$vRow[id].'" id="expert_gr_'.$vRow[id].'" tag="'.$vRow[id].'" />'.$vRow[sName].'</label><br />');
 		}
@@ -53,12 +53,12 @@
 	
 	$sql = "SELECT * FROM `Arm_devices` WHERE `idParent` = ".$sSOUTORGid." ORDER BY `sName`;";
 	$vResult = DbConnect::GetSqlQuery($sql);
-	if (mysql_num_rows($vResult) > 0)
+	if (mysqli_num_rows($vResult) > 0)
 	{
 		$isEmty = false;
 		$dNowDate = strtotime(date("d.m.Y"));		
 		echo('<div id="header_sredstva" onclick="RoollClick(\'sredstva\');" class="rollDown">Средства измерения</div><div id="body_sredstva" style="display:none;margin:10px; margin-left:30px;">');
-		while($vRow = mysql_fetch_array($vResult))
+		while($vRow = mysqli_fetch_array($vResult))
 		{
 			$dNextDate = strtotime($vRow[dCheckDate]);
 			if($dNowDate > $dNextDate) $sRedStyle = 'class="red" title="Срок поверки истек '.StringWork::StrToDateFormatFull($vRow[dCheckDate]).'"'; else $sRedStyle = '';
