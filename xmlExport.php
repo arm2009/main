@@ -239,11 +239,13 @@ class xmlExport
     if (!preg_match('/\d{5}|\d{7}/',$dataGroup['sOkogu'])) $dataGroup['sOkogu'] = '00000';
     $this->insertElement($enterprise, 'OKOGU', $dataGroup['sOkogu']);
     $okved = $this->insertElement($enterprise, 'OKVED');
-    $okvedCodes = explode(',',$dataGroup['sOkved']);
+    // Разбиваем по запятой или точке с запятой с возможными пробелами
+    $okvedCodes = preg_split('/[;,]\s*/', trim($dataGroup['sOkved']));
     foreach ($okvedCodes as $key => $value) {//TODO: Написать в потдержку не верные ОКВЕД
-      if (!preg_match_all('/\d{2}|\d{2}.\d{1}|\d{2}.\d{2}|\d{2}.\d{2}.\d{1}|\d{2}.\d{2}.\d{2}/',trim($value)))
+      $value = trim($value);
+      if (!preg_match('/^\d{2}$|^\d{2}\.\d{1}$|^\d{2}\.\d{2}$|^\d{2}\.\d{2}\.\d{1}$|^\d{2}\.\d{2}\.\d{2}$/', $value))
       { $value = '00'; }
-        $this->insertElement($okved, 'Kod', trim($value));
+        $this->insertElement($okved, 'Kod', $value);
     }
     //if (count($okvedCodes) == 1){$this->insertElement($okved, 'Kod', '00');}
     if (!preg_match('/\d{2}|\d{5}|\d{8}|\d{11}/',$dataGroup['sOkato'])) $dataGroup['sOkato'] = '00';

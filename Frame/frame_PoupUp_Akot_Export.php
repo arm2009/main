@@ -26,7 +26,7 @@
 <td>&nbsp;</td>
 </tr>
 <tr>
-<td align="right"><div id="PoupUpButton"><input type="submit" class="input_button" id="buttonOk" value="Экспортировать" onclick="window.open('xmlExport.php?grid=<? echo($_GET['grid']); ?>','_blank');"/><input type="submit" class="input_button" id="buttonClose" value="Закрыть" onclick="return PoupUpMessgeClose();"/></div></td>
+<td align="right"><div id="PoupUpButton"><input type="submit" class="input_button" id="buttonOk" value="Экспортировать" onclick="window.open('export_sout.php?grid=<? echo($_GET['grid']); ?>','_blank');"/><input type="submit" class="input_button" id="buttonClose" value="Закрыть" onclick="return PoupUpMessgeClose();"/></div></td>
 </tr>
 </table>
 <script>
