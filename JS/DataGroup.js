@@ -772,19 +772,20 @@ function ClickSaveRm()
 	{
 		fWorkDay = fWorkDay.replace(',','.');
 	}
-	SaveRm(id, sName, sOk, sPrefix, sNum, sNumAnalog, sETKS, sCount, sCountWoman, sCountYouth, sCountDisabled, sSnils, sDate, fWorkDay);
+	var sOkType = $("#sOkType").val();
+	SaveRm(id, sName, sOk, sPrefix, sNum, sNumAnalog, sETKS, sCount, sCountWoman, sCountYouth, sCountDisabled, sSnils, sDate, fWorkDay, sOkType);
 	$(".structure_active.structure_rm").html(sNum+" . "+sName);
 	$(".structure_active.structure_folder").html(sName);
 
 
 }
 
-function SaveRm(id, sName, sOk, sPrefix, sNum, sNumAnalog, sETKS, sCount, sCountWoman, sCountYouth, sCountDisabled, sSnils, sDate, fWorkDay)
+function SaveRm(id, sName, sOk, sPrefix, sNum, sNumAnalog, sETKS, sCount, sCountWoman, sCountYouth, sCountDisabled, sSnils, sDate, fWorkDay, sOkType)
 {
 	$.ajax({
 				type:'post',//тип запроса: get,post либо head
 				url:'ajax.php',//url адрес файла обработчика
-				data:{'action': 'saveWorkPlace', 'id':id, 'sName':sName, 'sOk':sOk, 'sPrefix':sPrefix, 'sNum':sNum, 'sNumAnalog':sNumAnalog, 'sETKS':sETKS, 'sCount':sCount, 'sCountWoman':sCountWoman, 'sCountYouth':sCountYouth, 'sCountDisabled':sCountDisabled, 'sSnils':sSnils, 'sDateCreate':sDate, 'fWorkDay':fWorkDay},//параметры запроса
+				data:{'action': 'saveWorkPlace', 'id':id, 'sName':sName, 'sOk':sOk, 'sPrefix':sPrefix, 'sNum':sNum, 'sNumAnalog':sNumAnalog, 'sETKS':sETKS, 'sCount':sCount, 'sCountWoman':sCountWoman, 'sCountYouth':sCountYouth, 'sCountDisabled':sCountDisabled, 'sSnils':sSnils, 'sDateCreate':sDate, 'fWorkDay':fWorkDay, 'sOkType':sOkType},//параметры запроса
 				//dataType: 'json',
 				response:'text',
 				success:function (data)

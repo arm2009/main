@@ -84,7 +84,8 @@
 				if (isset($_POST['id']))
 				{
 					echo($_POST['fWorkDay']);
-					WorkPlace::ChangeWorkPlaceAll($_POST['id'], $_POST['sName'], $_POST['sOk'], $_POST['sPrefix'], $_POST['sNum'], $_POST['sNumAnalog'], $_POST['sETKS'], $_POST['sCount'], $_POST['sCountWoman'], $_POST['sCountYouth'], $_POST['sCountDisabled'], $_POST['sSnils'], $_POST['sDateCreate'], $_POST['fWorkDay']);
+					$sOkType = isset($_POST['sOkType']) ? $_POST['sOkType'] : '';
+					WorkPlace::ChangeWorkPlaceAll($_POST['id'], $_POST['sName'], $_POST['sOk'], $_POST['sPrefix'], $_POST['sNum'], $_POST['sNumAnalog'], $_POST['sETKS'], $_POST['sCount'], $_POST['sCountWoman'], $_POST['sCountYouth'], $_POST['sCountDisabled'], $_POST['sSnils'], $_POST['sDateCreate'], $_POST['fWorkDay'], $sOkType);
 				}
 				break;
 			}

@@ -14,5 +14,5 @@
 <script language="javascript" type="text/javascript" src="JS/InputValidate.js"></script>
 <script language="javascript" type="text/javascript" src="JS/ui.js"></script>
 <script language="javascript" type="text/javascript" src="JS/progress.js"></script>
-<script language="javascript" type="text/javascript" src="JS/DataGroup.js"></script>
+<script language="javascript" type="text/javascript" src="JS/DataGroup.js?v=1"></script>
 <script language="javascript" type="text/javascript" src="JS/ChangeMessage.js"></script>

@@ -30,14 +30,14 @@
 		public static function ReadWorkPlace($id)
 		{	
 
-				$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT id, idParent, iNumber, sName, sOk, sPrefix, dDate, sNumAnalog, sETKS, iCount, iCountWoman, iCountYouth, iCountDisabled, sSnils, dCreateDate, fWorkDay FROM Arm_workplace WHERE id='.$id);
+				$vResult = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT id, idParent, iNumber, sName, sOk, sPrefix, dDate, sNumAnalog, sETKS, iCount, iCountWoman, iCountYouth, iCountDisabled, sSnils, dCreateDate, fWorkDay, sOkType FROM Arm_workplace WHERE id='.$id);
 				setlocale(LC_ALL, 'rus');
 				if ($id != 0)
 				{
 					$result = MYSQLI_FETCH_ASSOC($vResult);
 					$sDate = date_create($result[array_keys($result)[14]]);
 					$sDate = StringWork::DateFormatLite($sDate);
-					$aWorkPlace = array($result[array_keys($result)[0]], $result[array_keys($result)[1]], $result[array_keys($result)[2]], $result[array_keys($result)[3]], $result[array_keys($result)[4]], $result[array_keys($result)[5]], $result[array_keys($result)[6]], $result[array_keys($result)[7]], $result[array_keys($result)[8]], $result[array_keys($result)[9]], $result[array_keys($result)[10]], $result[array_keys($result)[11]], $result[array_keys($result)[12]], $result[array_keys($result)[13]], $sDate, $result[array_keys($result)[15]]);
+					$aWorkPlace = array($result[array_keys($result)[0]], $result[array_keys($result)[1]], $result[array_keys($result)[2]], $result[array_keys($result)[3]], $result[array_keys($result)[4]], $result[array_keys($result)[5]], $result[array_keys($result)[6]], $result[array_keys($result)[7]], $result[array_keys($result)[8]], $result[array_keys($result)[9]], $result[array_keys($result)[10]], $result[array_keys($result)[11]], $result[array_keys($result)[12]], $result[array_keys($result)[13]], $sDate, $result[array_keys($result)[15]], $result[array_keys($result)[16]]);
 				}
 
 			return $aWorkPlace;
@@ -77,7 +77,7 @@
 			}
 		}
 		
-		public static function ChangeWorkPlaceAll($id, $sName, $sOk, $sPrefix, $sNum,$sNumAnalog, $sETKS, $sCount, $sCountWoman, $sCountYouth, $sCountDisabled, $sSnils, $sDateCreate, $fWorkDay)
+		public static function ChangeWorkPlaceAll($id, $sName, $sOk, $sPrefix, $sNum,$sNumAnalog, $sETKS, $sCount, $sCountWoman, $sCountYouth, $sCountDisabled, $sSnils, $sDateCreate, $fWorkDay, $sOkType = '')
 		{
 			$dDateCreate = date_create($sDateCreate);
 			$sDateCreate = $dDateCreate->format('Y-m-d');
@@ -95,7 +95,8 @@
 			iCountDisabled = "'.DbConnect::ToBaseStr($sCountDisabled).'",
 			dCreateDate = "'.$sDateCreate.'",
 			sSnils = "'.DbConnect::ToBaseStr($sSnils).'",
-			fWorkDay = "'.DbConnect::ToBaseStr($fWorkDay).'"
+			fWorkDay = "'.DbConnect::ToBaseStr($fWorkDay).'",
+			sOkType = "'.DbConnect::ToBaseStr($sOkType).'"
 			WHERE id = '.$id.';';
 
 			UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), $sSql);

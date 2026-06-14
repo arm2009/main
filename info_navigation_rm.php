@@ -23,9 +23,15 @@
 </tr>
 <tr>
 <td class="table_even">
-    <div class="datablock" style="width:500px;">Наименование профессии / должности<br /><input type="text" name="sNameRM" id="sNameRM" class="datablock_input" value="<?php echo $aWorkPlace[3]; ?>" onchange="ChangeMessageChange();" onkeypress="ChangeMessageChange();"/></div>
-    <div class="datablock" style="width:150px;"><a href="KS.php" target="_blank" title="Открыть справочник ОК 016-94, ЕТКС, КС в новом окне">код по классификатору</a><br /><input type="text" name="sNameRM2" id="sNameRM2" class="datablock_input" value="<?php echo $aWorkPlace[4].$aWorkPlace[5]; ?>" onchange="ChangeMessageChange();" onkeypress="ChangeMessageChange();"/></div><br />
-    <div class="datablock" style="width:684px;">Выпуск ЕТКС, ЕКС<br />
+    <div class="datablock" style="width:335px;">Наименование профессии / должности<br /><input type="text" name="sNameRM" id="sNameRM" class="datablock_input" value="<?php echo $aWorkPlace[3]; ?>" onchange="ChangeMessageChange();" onkeypress="ChangeMessageChange();"/></div>
+    <div class="datablock" style="width:150px;"><a href="KS.php" target="_blank" title="Открыть справочник ОК 016-94, ЕТКС, КС в новом окне">Код</a><br /><input type="text" name="sNameRM2" id="sNameRM2" class="datablock_input" value="<?php echo $aWorkPlace[4].$aWorkPlace[5]; ?>" onchange="ChangeMessageChange();" onkeypress="ChangeMessageChange();"/></div>
+    <div class="datablock" style="width:172px;">Классификатор<br />
+      <select name="sOkType" id="sOkType" class="datablock_input" onchange="ChangeMessageChange();">
+        <option value="ОК 016-94"<?php echo ($aWorkPlace[16] === 'ОК 016-94' || empty($aWorkPlace[16])) ? ' selected' : ''; ?>>ОК 016-94</option>
+        <option value="ОК 016-2025"<?php echo ($aWorkPlace[16] === 'ОК 016-2025') ? ' selected' : ''; ?>>ОК 016-2025</option>
+      </select>
+    </div><br />
+    <div class="datablock" style="width:704px;">Выпуск ЕТКС, ЕКС<br />
       <textarea name="sETKS" rows="3" class="datablock_input" id="sETKS" onchange="ChangeMessageChange();" onkeypress="ChangeMessageChange();"><?php echo $aWorkPlace[8]; ?></textarea>
     </div></td>
 </tr>
