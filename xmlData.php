@@ -101,7 +101,9 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
         $aRecomendations[] = $aRow;
       }
       //Данные
-      $row['sOk'] = sprintf("%05d", (int) substr($row['sOk'],0,5));
+      if ($row['sOk'] !== 'Отсутствует') {
+          $row['sOk'] = preg_replace('/\D/', '', $row['sOk']);
+      }
 
       //СНИЛС
       //TODO: Указать в форме заполнения ниаболее подходящий вариант разделения снилс, в поле

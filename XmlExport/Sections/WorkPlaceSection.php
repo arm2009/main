@@ -131,7 +131,10 @@ class WorkPlaceSection
         $this->builder->insertElement($workPlaceDeclared, 'Id', $rmData['id']);
         $this->builder->insertElement($workPlaceDeclared, 'Position', $rmData['sName']);
         $this->builder->insertElement($workPlaceDeclared, 'SubUnit', $rmData['Division']);
-        $this->builder->insertElement($workPlaceDeclared, 'Profession', $rmData['sOk']);
+        $professionEl = $this->builder->insertElement($workPlaceDeclared, 'Profession', $rmData['sOk']);
+        if (!empty($rmData['sOkType']) && $rmData['sOkType'] === 'ОК 016-2025') {
+            $professionEl->setAttribute('Classifier', 'ОК 016-2025');
+        }
         $this->builder->insertElement($workPlaceDeclared, 'WorkersQuantity', $rmData['iCount']);
         $this->builder->insertElement($workPlaceDeclared, 'WomansQuantity', $rmData['iCountWoman']);
         $this->builder->insertElement($workPlaceDeclared, 'TeenagersQuantity', $rmData['iCountYouth']);
@@ -159,7 +162,10 @@ class WorkPlaceSection
         $this->builder->insertElement($workPlaceAttested, 'SheetDate', $rmData['dCreateDate']);
         $this->builder->insertElement($workPlaceAttested, 'Id', $rmData['id']);
         $this->builder->insertElement($workPlaceAttested, 'Position', $rmData['sName']);
-        $this->builder->insertElement($workPlaceAttested, 'Profession', $rmData['sOk']);
+        $professionEl = $this->builder->insertElement($workPlaceAttested, 'Profession', $rmData['sOk']);
+        if (!empty($rmData['sOkType']) && $rmData['sOkType'] === 'ОК 016-2025') {
+            $professionEl->setAttribute('Classifier', 'ОК 016-2025');
+        }
         $this->builder->insertElement($workPlaceAttested, 'ETKS_EKS_Issue', $rmData['sETKS']);
         $this->builder->insertElement($workPlaceAttested, 'SubUnit', $rmData['Division']);
         $this->builder->insertElement($workPlaceAttested, 'WorkersQuantity', $rmData['iCount']);
