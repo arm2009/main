@@ -48,9 +48,15 @@ class ChemicalFactor extends FactorSection
             $this->builder->insertElement($chemicalAgent, 'WorkingConditions', $value['asset']);
             $this->builder->insertElement($chemicalAgent, 'NormativeAct', $value['nd']);
 
-            $measuringPlace = $this->builder->insertMeasuringPlace($chemicalAgent, $value, $devices, $stuff);
+            $measuringPlace = $this->builder->insertElement($chemicalAgent, 'MeasuringPlace');
+            $this->builder->insertElement($measuringPlace, 'Name', $value['point']);
+            $this->builder->insertElement($measuringPlace, 'Date', $value['dtControl']);
             $this->builder->insertElement($measuringPlace, 'ConcentrationMax', $value['factM']);
             $this->builder->insertElement($measuringPlace, 'ConcentrationAvg', $value['factS']);
+            $this->builder->insertElement($measuringPlace, 'Duration', $value['pointTime']);
+            $this->builder->insertElement($measuringPlace, 'FactorSource', $value['point']);
+            $this->builder->insertToolsId($devices, $measuringPlace);
+            $this->builder->insertStuffId($stuff, $measuringPlace);
         }
     }
 }

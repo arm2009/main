@@ -40,12 +40,20 @@ class MicroclimateFactor extends FactorSection
             $this->builder->insertElement($measuringPlace, 'WorkCategory', $value[0]['pdk']);
             $this->builder->insertElement($measuringPlace, 'Posture', $value[0]['posture']);
 
+            $factorsById = array();
             foreach ($value as $key2 => $value2) {
                 if (strval($key2) === 'zoneAsset') {
                     continue;
                 }
+                $factorsById[$value2['factorId']] = $value2;
+            }
 
-                $factorId = $value2['factorId'];
+            $order = array('2', '6', '5', '56', '7');
+            foreach ($order as $factorId) {
+                if (!isset($factorsById[$factorId])) {
+                    continue;
+                }
+                $value2 = $factorsById[$factorId];
 
                 if ($factorId === '2') {
                     $this->insertAirTemperature($measuringPlace, $value2, $devices, $stuff);

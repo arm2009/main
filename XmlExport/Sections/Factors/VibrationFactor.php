@@ -48,11 +48,17 @@ class VibrationFactor extends FactorSection
 
         if (is_array($vibroData)) {
             foreach ($vibroData as $value) {
-                $measuringPlace = $this->builder->insertMeasuringPlace($vibration, $value, $devices, $stuff);
+                $measuringPlace = $this->builder->insertElement($vibration, 'MeasuringPlace');
+                $this->builder->insertElement($measuringPlace, 'Name', $value['point']);
+                $this->builder->insertElement($measuringPlace, 'Date', $value['dtControl']);
                 $this->builder->insertElement($measuringPlace, 'TimeBehavior', '1');
                 $this->builder->insertElement($measuringPlace, 'ValueX', $value['factX']);
                 $this->builder->insertElement($measuringPlace, 'ValueY', $value['factY']);
                 $this->builder->insertElement($measuringPlace, 'ValueZ', $value['factZ']);
+                $this->builder->insertElement($measuringPlace, 'Duration', $value['pointTime']);
+                $this->builder->insertElement($measuringPlace, 'FactorSource', $value['point']);
+                $this->builder->insertToolsId($devices, $measuringPlace);
+                $this->builder->insertStuffId($stuff, $measuringPlace);
             }
         }
     }
@@ -88,11 +94,17 @@ class VibrationFactor extends FactorSection
 
         if (is_array($vibroData)) {
             foreach ($vibroData as $value) {
-                $measuringPlace = $this->builder->insertMeasuringPlace($vibration, $value, $devices, $stuff);
+                $measuringPlace = $this->builder->insertElement($vibration, 'MeasuringPlace');
+                $this->builder->insertElement($measuringPlace, 'Name', $value['point']);
+                $this->builder->insertElement($measuringPlace, 'Date', $value['dtControl']);
                 $this->builder->insertElement($measuringPlace, 'TimeBehavior', '1');
                 $this->builder->insertElement($measuringPlace, 'ValueX', $value['factX']);
                 $this->builder->insertElement($measuringPlace, 'ValueY', $value['factY']);
                 $this->builder->insertElement($measuringPlace, 'ValueZ', $value['factZ']);
+                $this->builder->insertElement($measuringPlace, 'Duration', $value['pointTime']);
+                $this->builder->insertElement($measuringPlace, 'FactorSource', $value['point']);
+                $this->builder->insertToolsId($devices, $measuringPlace);
+                $this->builder->insertStuffId($stuff, $measuringPlace);
             }
         }
     }

@@ -37,9 +37,15 @@ class InfrasoundFactor extends FactorSection
 
         if (is_array($infraData)) {
             foreach ($infraData as $value) {
-                $measuringPlace = $this->builder->insertMeasuringPlace($infrasound, $value, $devices, $stuff);
+                $measuringPlace = $this->builder->insertElement($infrasound, 'MeasuringPlace');
+                $this->builder->insertElement($measuringPlace, 'Name', $value['point']);
+                $this->builder->insertElement($measuringPlace, 'Date', $value['dtControl']);
                 $this->builder->insertElement($measuringPlace, 'TimeBehavior', '1');
                 $this->builder->insertElement($measuringPlace, 'Value', $value['factM']);
+                $this->builder->insertElement($measuringPlace, 'Duration', $value['pointTime']);
+                $this->builder->insertElement($measuringPlace, 'FactorSource', $value['point']);
+                $this->builder->insertToolsId($devices, $measuringPlace);
+                $this->builder->insertStuffId($stuff, $measuringPlace);
             }
         }
     }

@@ -33,8 +33,12 @@ class UltrasoundFactor extends FactorSection
 
         if (is_array($ultraData)) {
             foreach ($ultraData as $value) {
-                $measuringPlace = $this->builder->insertMeasuringPlace($ultrasound, $value, $devices, $stuff);
+                $measuringPlace = $this->builder->insertElement($ultrasound, 'MeasuringPlace');
+                $this->builder->insertElement($measuringPlace, 'Name', $value['point']);
+                $this->builder->insertElement($measuringPlace, 'Date', $value['dtControl']);
                 $this->builder->insertElement($measuringPlace, 'TimeBehavior', '0');
+                $this->builder->insertElement($measuringPlace, 'Duration', $value['pointTime']);
+                $this->builder->insertElement($measuringPlace, 'FactorSource', $value['point']);
                 $this->builder->insertElement($measuringPlace, 'WorkingConditions', $value['asset']);
 
                 $octaves = $value['aOctave'];
@@ -46,6 +50,9 @@ class UltrasoundFactor extends FactorSection
                         $this->builder->insertElement($soundPressureOctave, 'NormValue', $value2['NormValue']);
                     }
                 }
+
+                $this->builder->insertToolsId($devices, $measuringPlace);
+                $this->builder->insertStuffId($stuff, $measuringPlace);
             }
         }
     }
