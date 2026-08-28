@@ -367,10 +367,16 @@
 			}
 			else
 			{
-				$vResult1 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT sName, sFeat,sPdk, sFeatCode FROM Nd_gn1313 WHERE id ='.$sIdFactor.';');
+				$vResult1 = UserValidator::GetSqlQuerySafe(UserControl::GetUserLoginIdCrypt(), UserControl::GetUserHash2(), 'SELECT sName, sFeat,sPdk, sFeatCode, sNum FROM Nd_gn1313 WHERE id ='.$sIdFactor.';');
 				$res = MYSQLI_FETCH_ASSOC($vResult1);
 				$sPdu1 = $res[array_keys($res)[2]];
 				$sFeat = $res[array_keys($res)[1]];
+				$sNum = $res[array_keys($res)[4]];
+				//Запрет на добавление веществ без кода (приводит к ошибке валидации АКОТ: Kod=0)
+				if ($sNum === null || trim($sNum) === '')
+				{
+					return null;
+				}
 				//echo ($sFeat.':'.strpos($sFeat,'Ф'));
 				if (strpos($sFeat,"Ф") > -1 || strpos($sFeat,"ф") > -1)
 				{

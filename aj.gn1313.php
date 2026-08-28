@@ -5,8 +5,8 @@ include_once "LowLevel/userValidator.php";
 
 if(isset($_GET[sType]))
 {
-	if($_GET[sType]==31) $sql = "SELECT `id`, `sName` FROM `Nd_gn1313` WHERE `sFeat` NOT LIKE 'Ф' AND Nd_gn1313.gnversion = 1 ORDER BY `sName`;";
-	if($_GET[sType]==8) $sql = "SELECT `id`, `sName` FROM `Nd_gn1313` WHERE `sFeat` LIKE '%Ф%' AND Nd_gn1313.gnversion = 1 ORDER BY `sName`;";
+	if($_GET[sType]==31) $sql = "SELECT `id`, `sName` FROM `Nd_gn1313` WHERE `sFeat` NOT LIKE 'Ф' AND Nd_gn1313.gnversion = 1 AND `sNum` IS NOT NULL AND `sNum` <> '' ORDER BY `sName`;";
+	if($_GET[sType]==8) $sql = "SELECT `id`, `sName` FROM `Nd_gn1313` WHERE `sFeat` LIKE '%Ф%' AND Nd_gn1313.gnversion = 1 AND `sNum` IS NOT NULL AND `sNum` <> '' ORDER BY `sName`;";
  	$result = DbConnect::GetSqlQuery($sql);	
 
 	if (mysqli_num_rows($result) > 0)
