@@ -24,7 +24,7 @@ class LightFactor extends FactorSection
         $this->builder->insertElement($lightEnvironment, 'WorkingConditions', $rmData['iALight']);
 
         $devices = $this->data->getDevice();
-        $stuff = $this->data->getStuff();
+        $stuff = $this->data->getWorkers();
 
         $lightData = $rmData['aALight'];
         if (!is_array($lightData)) {

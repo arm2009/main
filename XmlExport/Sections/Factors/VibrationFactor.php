@@ -44,7 +44,7 @@ class VibrationFactor extends FactorSection
         }
 
         $devices = $this->data->getDevice();
-        $stuff = $this->data->getStuff();
+        $stuff = $this->data->getWorkers();
 
         if (is_array($vibroData)) {
             foreach ($vibroData as $value) {
@@ -90,7 +90,7 @@ class VibrationFactor extends FactorSection
         }
 
         $devices = $this->data->getDevice();
-        $stuff = $this->data->getStuff();
+        $stuff = $this->data->getWorkers();
 
         if (is_array($vibroData)) {
             foreach ($vibroData as $value) {

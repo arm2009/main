@@ -49,7 +49,7 @@ class LabourSeverity extends FactorSection
         $this->builder->insertElement($child, 'NormativeAct', $data['nd']);
 
         $devices = $this->data->getDevice();
-        $stuff = $this->data->getStuff();
+        $stuff = $this->data->getWorkers();
         $this->builder->insertToolsId($devices, $child);
         $this->builder->insertStuffId($stuff, $child);
     }
@@ -108,7 +108,7 @@ class LabourSeverity extends FactorSection
         $this->builder->insertElement($workingPose, 'NormativeAct', $data['nd']);
 
         $devices = $this->data->getDevice();
-        $stuff = $this->data->getStuff();
+        $stuff = $this->data->getWorkers();
         $this->builder->insertToolsId($devices, $workingPose);
         $this->builder->insertStuffId($stuff, $workingPose);
     }
@@ -122,7 +122,7 @@ class LabourSeverity extends FactorSection
         $this->builder->insertElement($bodyBending, 'NormativeAct', $data['nd']);
 
         $devices = $this->data->getDevice();
-        $stuff = $this->data->getStuff();
+        $stuff = $this->data->getWorkers();
         $this->builder->insertToolsId($devices, $bodyBending);
         $this->builder->insertStuffId($stuff, $bodyBending);
     }
@@ -138,7 +138,7 @@ class LabourSeverity extends FactorSection
         $this->builder->insertElement($horizontalTravelling, 'NormativeAct', $data['nd']);
 
         $devices = $this->data->getDevice();
-        $stuff = $this->data->getStuff();
+        $stuff = $this->data->getWorkers();
         $this->builder->insertToolsId($devices, $horizontalTravelling);
         $this->builder->insertStuffId($stuff, $horizontalTravelling);
 

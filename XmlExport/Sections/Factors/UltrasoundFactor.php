@@ -29,7 +29,7 @@ class UltrasoundFactor extends FactorSection
         }
 
         $devices = $this->data->getDevice();
-        $stuff = $this->data->getStuff();
+        $stuff = $this->data->getWorkers();
 
         if (is_array($ultraData)) {
             foreach ($ultraData as $value) {

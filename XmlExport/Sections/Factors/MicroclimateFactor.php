@@ -24,7 +24,7 @@ class MicroclimateFactor extends FactorSection
         $this->builder->insertElement($microclimate, 'WorkingConditions', $rmData['iAMicroclimat']);
 
         $devices = $this->data->getDevice();
-        $stuff = $this->data->getStuff();
+        $stuff = $this->data->getWorkers();
 
         $microData = $rmData['aAMicroclimat'];
         if (!is_array($microData)) {

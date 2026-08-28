@@ -29,7 +29,7 @@ class AerosolFactor extends FactorSection
         }
 
         $devices = $this->data->getDevice();
-        $stuff = $this->data->getStuff();
+        $stuff = $this->data->getWorkers();
 
         foreach ($apfd as $value) {
             $chemicalAgent = $this->builder->insertElement($apfdFactors, 'ChemicalAgent');

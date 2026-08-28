@@ -32,7 +32,7 @@ class ChemicalFactor extends FactorSection
     private function insertChemicalAgent($chemicalFactors, $chem)
     {
         $devices = $this->data->getDevice();
-        $stuff = $this->data->getStuff();
+        $stuff = $this->data->getWorkers();
 
         foreach ($chem as $value) {
             $chemicalAgent = $this->builder->insertElement($chemicalFactors, 'ChemicalAgent');

@@ -24,7 +24,7 @@ class BiologicalFactor extends FactorSection
         $this->builder->insertElement($bioFactors, 'WorkingConditions', $rmData['iABio']);
 
         $devices = $this->data->getDevice();
-        $stuff = $this->data->getStuff();
+        $stuff = $this->data->getWorkers();
 
         // Микроорганизмы-продуценты
         $bioMP = $rmData['aBioMP'];

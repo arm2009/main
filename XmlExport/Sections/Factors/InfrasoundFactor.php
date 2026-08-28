@@ -33,7 +33,7 @@ class InfrasoundFactor extends FactorSection
         }
 
         $devices = $this->data->getDevice();
-        $stuff = $this->data->getStuff();
+        $stuff = $this->data->getWorkers();
 
         if (is_array($infraData)) {
             foreach ($infraData as $value) {

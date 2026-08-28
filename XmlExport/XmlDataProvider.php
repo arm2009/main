@@ -102,6 +102,16 @@ class XmlDataProvider
     }
 
     /**
+     * Получить всех работников (эксперты + сотрудники).
+     *
+     * @return array
+     */
+    public function getWorkers()
+    {
+        return $this->xmlData->getWorkers();
+    }
+
+    /**
      * @return array
      */
     public function getDevice()

@@ -43,7 +43,7 @@ class LabourIntensity extends FactorSection
         $this->builder->insertElement($child, 'WorkingConditions', $data['aTenneseTotalAll'][$razdel]);
         $this->builder->insertElement($child, 'NormativeAct', $data['nd']);
 
-        $stuff = $this->data->getStuff();
+        $stuff = $this->data->getWorkers();
 
         if ($name !== 'OperationMonotony' && $name !== 'ObjectsUnderControl') {
             $devices = $this->data->getDevice();

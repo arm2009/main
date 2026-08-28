@@ -12,6 +12,7 @@ class xmlData
   public $attestationExpert;
   public $attestationStuff;
   public $attestationCacheStuff;
+  public $attestationCacheExpert;
   public $attestationDevice;
   public $attestationCacheDevice;
   public $attestationAccredit;
@@ -755,12 +756,21 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
   }
   public function getExpert()
   {
+    if (is_array($this->attestationCacheExpert)) {
+      return $this->attestationCacheExpert;
+    }
     $aExpert = array();
     while ($ExpertRow = mysqli_fetch_array($this->attestationExpert, MYSQL_ASSOC))
     {
       $aExpert[] = $ExpertRow;
     }
+    $this->attestationCacheExpert = $aExpert;
     return $aExpert;
+  }
+
+  public function getWorkers()
+  {
+    return array_merge($this->getExpert(), $this->getStuff());
   }
   public function getStuff()
   {
