@@ -756,8 +756,19 @@ function ClickSaveRm()
 {
 	var id = $(".structure_active").attr("id");
 	var sName = $("#sNameRM").val();
-	var sOk = $("#sNameRM2").val();
+	var sOkType = $("#sOkType").val();
+	var sOkFull = $("#sNameRM2").val();
+	var sOk = sOkFull;
 	var sPrefix = '';
+	if (sOkFull != null && sOkFull != 'Отсутствует' && sOkFull != '')
+	{
+		var codeLen = (sOkType == 'ОК 016-2025') ? 6 : 5;
+		if (sOkFull.length > codeLen)
+		{
+			sOk = sOkFull.substring(0, codeLen);
+			sPrefix = sOkFull.substring(codeLen);
+		}
+	}
 	var sNum = $("#sNumRM").val();
 	var sNumAnalog = $("#sNumAnalog").val();
 	var sETKS = $("#sETKS").val();
@@ -772,7 +783,6 @@ function ClickSaveRm()
 	{
 		fWorkDay = fWorkDay.replace(',','.');
 	}
-	var sOkType = $("#sOkType").val();
 	SaveRm(id, sName, sOk, sPrefix, sNum, sNumAnalog, sETKS, sCount, sCountWoman, sCountYouth, sCountDisabled, sSnils, sDate, fWorkDay, sOkType);
 	$(".structure_active.structure_rm").html(sNum+" . "+sName);
 	$(".structure_active.structure_folder").html(sName);
