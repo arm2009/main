@@ -102,7 +102,11 @@ w.*  FROM `Arm_workplace` as w LEFT JOIN Arm_workplace as g ON w.idParent = g.id
       }
       //Данные
       if ($row['sOk'] !== 'Отсутствует') {
-          $row['sOk'] = preg_replace('/\D/', '', $row['sOk']);
+          $sOkDigits = preg_replace('/\D/', '', $row['sOk']);
+          // Извлекаем код по типу классификатора (5 для ОК 016-94, 6 для ОК 016-2025),
+          // отбрасывая префикс (разряд/категорию), который может храниться в sOk через разделитель
+          $iCodeLen = (isset($row['sOkType']) && $row['sOkType'] === 'ОК 016-2025') ? 6 : 5;
+          $row['sOk'] = substr($sOkDigits, 0, $iCodeLen);
       }
 
       //СНИЛС

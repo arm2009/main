@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema elementFormDefault ="qualified " xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema elementFormDefault ="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 	<!-- Версия 1.0.21 (от 12.04.2023) -->
 	<!-- Месонахождение в ТэСОУТ Source\Modules\Module.DataExchange.DomainModel\AkotXml\Export\AkotXmlExport.xsd -->
 	<!-- Месонахождение в АКОТ v2014_v2\Source\Acot.Reestr.Web.UI\App_Data\Xsd\Sout_v1_0.xsd -->
