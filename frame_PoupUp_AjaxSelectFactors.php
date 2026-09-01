@@ -24,7 +24,7 @@
 			{
 				//Химия
 				if($vRow[sPP] == '1.2.')
-				$sql = "SELECT `id`, `sName`, sClass, sFeat FROM `Nd_gn1313` WHERE `sFeat` LIKE '%Ф%' AND `gnversion` = '1' AND `sNum` IS NOT NULL AND `sNum` <> '' ORDER BY `sName`;";
+				$sql = "SELECT `id`, `sName`, sClass, sFeat FROM `Nd_gn1313` WHERE `sFeat` LIKE '%Ф%' AND ((`gnversion` = '1' AND `sNum` IS NOT NULL AND `sNum` <> '') OR `id` IN (8681,8682,8683,8684,8685)) ORDER BY `sName`;";
 				else
 				$sql = "SELECT `id`, `sName`, sClass, sFeat FROM `Nd_gn1313` WHERE `bFirstSelect` > 0 AND `sFeat` NOT LIKE 'Ф' AND `gnversion` = '1' AND `sNum` IS NOT NULL AND `sNum` <> '' ORDER BY `sName`;";
 				

@@ -371,12 +371,8 @@
 				$res = MYSQLI_FETCH_ASSOC($vResult1);
 				$sPdu1 = $res[array_keys($res)[2]];
 				$sFeat = $res[array_keys($res)[1]];
-				$sNum = $res[array_keys($res)[4]];
-				//Запрет на добавление веществ без кода (приводит к ошибке валидации АКОТ: Kod=0)
-				if ($sNum === null || trim($sNum) === '')
-				{
-					return null;
-				}
+				//Вещества без кода разрешены для внутреннего использования,
+				//но при экспорте (AerosolFactor/ChemicalFactor) они будут пропущены, т.к. Kod=0 недопустим для АКОТ
 				//echo ($sFeat.':'.strpos($sFeat,'Ф'));
 				if (strpos($sFeat,"Ф") > -1 || strpos($sFeat,"ф") > -1)
 				{

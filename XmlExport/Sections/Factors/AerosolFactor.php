@@ -32,6 +32,11 @@ class AerosolFactor extends FactorSection
         $stuff = $this->data->getWorkers();
 
         foreach ($apfd as $value) {
+            // Пропуск веществ без кода (Kod=0 недопустим для АКОТ)
+            if (empty($value['code'])) {
+                continue;
+            }
+
             $chemicalAgent = $this->builder->insertElement($apfdFactors, 'ChemicalAgent');
             $this->builder->insertElement($chemicalAgent, 'Kod', $value['code']);
             $this->builder->insertElement($chemicalAgent, 'ConcentrationAvg', $value['factS']);

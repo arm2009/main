@@ -35,6 +35,11 @@ class ChemicalFactor extends FactorSection
         $stuff = $this->data->getWorkers();
 
         foreach ($chem as $value) {
+            // Пропуск веществ без кода (Kod=0 недопустим для АКОТ)
+            if (empty($value['code'])) {
+                continue;
+            }
+
             $chemicalAgent = $this->builder->insertElement($chemicalFactors, 'ChemicalAgent');
             $this->builder->insertElement($chemicalAgent, 'Kod', $value['code']);
 
